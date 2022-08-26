@@ -8,6 +8,7 @@ abstract class CommonMessageHandler : MessageHandler() {
 
     override suspend fun handleMessage(message: Message) {
         val commonMessage = message.asCommonMessage() ?: return
+
         if (!filter(commonMessage)) {
             return
         }

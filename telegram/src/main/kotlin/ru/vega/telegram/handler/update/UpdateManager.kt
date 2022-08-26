@@ -24,6 +24,7 @@ class UpdateManager(
     }
 
     override suspend fun handle(update: Update) {
+        logger.debug("Handling update with id {}: {}", update.updateId, update)
         return handlers.forEach {
             it.handle(update)
         }

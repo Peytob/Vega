@@ -8,20 +8,24 @@ import dev.inmo.tgbotapi.types.message.content.TextContent
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import org.springframework.stereotype.Component
+import ru.vega.telegram.service.CommandService
 
 @Component
-class CommandMessageHandler: CommonMessageHandler() {
+class CommandMessageHandler(
+    private val commandService: CommandService
+) : CommonMessageHandler() {
 
     companion object {
         private val logger: Logger = LogManager.getLogger()
     }
 
     override suspend fun handleMessage(message: CommonMessage<*>): Boolean {
+        logger.debug("Handling common message update with message id {}", message.messageId)
         val textMessage = message.withContent<TextContent>() ?: return false
-        logger.info("Handled message: {}", textMessage)
+        val command = textMessage.content.text.trim()
+        commandService.executeCommand(command, message)
         return true
     }
-
 
     override fun filter(message: Message): Boolean {
         if (message !is CommonMessage<*>) {
