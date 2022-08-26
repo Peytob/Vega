@@ -8,10 +8,13 @@ import kotlinx.coroutines.launch
 import org.apache.logging.log4j.LogManager
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.stereotype.Component
+import ru.vega.telegram.handler.update.UpdateManager
 
 @Component
 @ConditionalOnProperty(prefix = "telegram.bot", name = ["receiver-type"], havingValue = "pool")
-class LongPollingReceiverInitializer() : ReceiverInitializer {
+class LongPollingReceiverInitializer(
+    private val updateManager: UpdateManager
+) : ReceiverInitializer {
 
     companion object {
         private val logger = LogManager.getLogger()
@@ -23,7 +26,7 @@ class LongPollingReceiverInitializer() : ReceiverInitializer {
         logger.info("Initialization telegram bot with long polling strategy")
         target.startGettingOfUpdatesByLongPolling {
             scope.launch {
-                logger.info(it.data)
+                updateManager.handle(it)
             }
         }
     }
