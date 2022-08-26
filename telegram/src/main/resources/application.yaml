@@ -1,0 +1,7 @@
+telegram:
+  bot:
+#    token:
+    receiver-type: pool # Тип прослушивания телеги: через вебхук (webhook) или через пул (poll)
+#  webhook: # Если webhook, то нужно задать эти проперти
+#    url:
+#    port:
