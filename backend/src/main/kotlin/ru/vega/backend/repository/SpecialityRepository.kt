@@ -6,4 +6,6 @@ import ru.vega.backend.entity.SpecialityEntity
 import java.util.UUID
 
 @Repository
-interface SpecialityRepository : JpaRepository<SpecialityEntity, UUID>
+interface SpecialityRepository : JpaRepository<SpecialityEntity, UUID> {
+    fun findByExternalId(id: String): SpecialityEntity?
+}

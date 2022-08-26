@@ -12,7 +12,7 @@ abstract class AbstractEntity(
     id: UUID? = null,
 
     @get:Column(unique = true, nullable = false)
-    open var menuId: String? = null
+    open var externalId: String? = null
 ) {
     @get:Id
     @get:GeneratedValue
@@ -20,7 +20,7 @@ abstract class AbstractEntity(
     open var id = id
         set(value) {
             field = value
-            menuId = value.toString().substring(19..22)
+            externalId = value.toString().substring(19..22)
         }
 
     override fun equals(other: Any?): Boolean {
@@ -29,14 +29,14 @@ abstract class AbstractEntity(
 
         other as AbstractEntity
 
-        if (menuId != other.menuId) return false
+        if (externalId != other.externalId) return false
         if (id != other.id) return false
 
         return true
     }
 
     override fun hashCode(): Int {
-        var result = menuId?.hashCode() ?: 0
+        var result = externalId?.hashCode() ?: 0
         result = 31 * result + (id?.hashCode() ?: 0)
         return result
     }
