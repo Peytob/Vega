@@ -25,7 +25,7 @@ class DisciplineController(
 
     @GetMapping("/{id}")
     fun get(@PathVariable id: String): ResponseEntity<DisciplineDto> {
-        val discipline = disciplineCrudService.getByExternal(id) ?: throw EntityNotFoundException(id, "discipline")
+        val discipline = disciplineCrudService.getByExternalId(id) ?: throw EntityNotFoundException(id, "discipline")
         return ResponseEntity.ok(disciplineMapper.toDisciplineDto(discipline))
     }
 }

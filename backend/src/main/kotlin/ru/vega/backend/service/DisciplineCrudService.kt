@@ -6,5 +6,5 @@ interface DisciplineCrudService {
 
     fun getAll(): Collection<DisciplineEntity>
 
-    fun getByExternal(id: String): DisciplineEntity?
+    fun getByExternalId(id: String): DisciplineEntity?
 }

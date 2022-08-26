@@ -1,6 +1,7 @@
 package ru.vega.model.dto.discipline
 
 data class DisciplineDto(
+    val externalId: String,
     val title: String,
     val description: String,
     val fipiLink: String,

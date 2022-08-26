@@ -7,5 +7,5 @@ import java.util.UUID
 
 @Repository
 interface SpecialityRepository : JpaRepository<SpecialityEntity, UUID> {
-    fun findByExternalId(id: String): SpecialityEntity?
+    fun findByExternalId(externalId: String): SpecialityEntity?
 }
