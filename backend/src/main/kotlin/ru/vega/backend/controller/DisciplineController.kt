@@ -1,5 +1,6 @@
 package ru.vega.backend.controller
 
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
@@ -18,14 +19,14 @@ class DisciplineController(
 ) {
 
     @GetMapping
-    fun getAll(): Collection<DisciplineDto> {
+    fun getAll(): ResponseEntity<Collection<DisciplineDto>> {
         val disciplines = disciplineCrudService.getAll()
-        return disciplineMapper.toDisciplineDto(disciplines)
+        return ResponseEntity.ok(disciplineMapper.toDisciplineDto(disciplines))
     }
 
     @GetMapping("/{id}")
-    fun get(@PathVariable id: UUID): DisciplineDto {
+    fun get(@PathVariable id: UUID): ResponseEntity<DisciplineDto> {
         val discipline = disciplineCrudService.getById(id) ?: throw EntityNotFoundException(id, "discipline")
-        return disciplineMapper.toDisciplineDto(discipline)
+        return ResponseEntity.ok(disciplineMapper.toDisciplineDto(discipline))
     }
 }

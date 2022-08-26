@@ -2,8 +2,8 @@ package ru.vega.backend.repository
 
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
-import ru.vega.backend.entity.DisciplineEntity
-import java.util.*
+import ru.vega.backend.entity.SpecialityEntity
+import java.util.UUID
 
 @Repository
-interface DisciplineRepository : JpaRepository<DisciplineEntity, UUID>
+interface SpecialityRepository : JpaRepository<SpecialityEntity, UUID>
