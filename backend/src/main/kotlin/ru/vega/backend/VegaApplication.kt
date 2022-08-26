@@ -1,4 +1,4 @@
-package ru.vega
+package ru.vega.backend
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
