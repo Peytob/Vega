@@ -12,5 +12,5 @@ interface SpecialityMapper {
 
     fun toSpecialityDto(speciality: SpecialityEntity): SpecialityDto
 
-    fun toSpecialityDto(speciality: Collection<SpecialityEntity>): Collection<SpecialityDto>
+    fun toSpecialityDto(specialities: Collection<SpecialityEntity>): Collection<SpecialityDto>
 }
