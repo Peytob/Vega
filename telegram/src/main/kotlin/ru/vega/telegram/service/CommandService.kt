@@ -4,5 +4,5 @@ import dev.inmo.tgbotapi.types.message.abstracts.CommonMessage
 
 interface CommandService {
 
-    fun executeCommand(command: String, message: CommonMessage<*>)
+    suspend fun executeCommand(command: String, message: CommonMessage<*>)
 }

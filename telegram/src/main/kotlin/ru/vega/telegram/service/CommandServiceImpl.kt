@@ -24,7 +24,7 @@ class CommandServiceImpl(
         logger.info("Commands list: {}", handlersList)
     }
 
-    override fun executeCommand(command: String, message: CommonMessage<*>) {
+    override suspend fun executeCommand(command: String, message: CommonMessage<*>) {
         logger.debug("Executing command {}", command)
         val executableCommand = commands[command]
 
