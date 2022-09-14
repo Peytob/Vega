@@ -20,7 +20,7 @@ class StartMenu : MenuHandler {
 
             matrix {
                 row(
-                    CallbackDataInlineKeyboardButton("Университеты", "1")
+                    CallbackDataInlineKeyboardButton("Университеты", "otm;")
                 )
                 row(
                     CallbackDataInlineKeyboardButton("Предметы", "2"),

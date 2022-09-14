@@ -14,4 +14,6 @@ class SessionRefresherMessageHandler(
     }
 
     override fun filter(message: Message): Boolean = true
+
+    override fun getOrder(): Int = Int.MIN_VALUE
 }
