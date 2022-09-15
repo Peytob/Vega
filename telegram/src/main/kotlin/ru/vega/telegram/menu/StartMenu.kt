@@ -1,26 +1,33 @@
 package ru.vega.telegram.menu
 
-import com.fasterxml.jackson.databind.JsonNode
-import dev.inmo.tgbotapi.types.CallbackQuery.MessageCallbackQuery
 import dev.inmo.tgbotapi.types.buttons.InlineKeyboardButtons.CallbackDataInlineKeyboardButton
 import dev.inmo.tgbotapi.utils.matrix
 import dev.inmo.tgbotapi.utils.row
 import org.springframework.stereotype.Component
 import ru.vega.telegram.model.menu.Menu
+import ru.vega.telegram.service.MenuService
 
 @Component
-class StartMenu : MenuHandler {
+class StartMenu(
+    private val menuService: MenuService
+) : StaticMenuHandler {
 
     companion object {
-        val MENU = Menu(
+        const val ID = "s"
+    }
+
+    override val id: String = ID
+
+    override val menu: Menu
+        get() = Menu(
             """
-                |Приветствую! Меня зовут Vega 💫
-                |Я хочу помочь тебе в выборе твоей будущей специальности и ВУЗа! Что ты хочешь узнать?
-            """.trimMargin(),
+            |Приветствую! Меня зовут Vega 💫
+            |Я хочу помочь тебе в выборе твоей будущей специальности и ВУЗа! Что ты хочешь узнать?
+        """.trimMargin(),
 
             matrix {
                 row(
-                    CallbackDataInlineKeyboardButton("Университеты", "otm;")
+                    menuService.makeGenericNextMenuButton("Университеты", OtherTestMenu.ID)
                 )
                 row(
                     CallbackDataInlineKeyboardButton("Предметы", "2"),
@@ -34,9 +41,4 @@ class StartMenu : MenuHandler {
                 )
             }
         )
-    }
-
-    override val id: String = "st"
-
-    override fun handle(message: MessageCallbackQuery, callback: JsonNode): Menu = MENU
 }

@@ -2,8 +2,9 @@ package ru.vega.telegram.service
 
 import dev.inmo.tgbotapi.types.ChatId
 import dev.inmo.tgbotapi.types.MessageIdentifier
+import dev.inmo.tgbotapi.types.buttons.InlineKeyboardButtons.CallbackDataInlineKeyboardButton
 import ru.vega.telegram.model.menu.Menu
-import ru.vega.telegram.model.menu.NextMenuData
+import ru.vega.telegram.model.menu.MenuCallbackCommand
 
 interface MenuService {
 
@@ -11,7 +12,9 @@ interface MenuService {
 
     suspend fun replaceMenu(chatId: ChatId, messageId: MessageIdentifier, menu: Menu)
 
-    fun encodeNextMenuMessage(nextMenuData: NextMenuData): String
+    fun encodeNextMenuMessage(menuCallbackCommand: MenuCallbackCommand): String
 
-    fun decodeNextMenuMessage(menuDataString: String): NextMenuData
+    fun decodeNextMenuMessage(menuDataString: String): MenuCallbackCommand
+
+    fun makeGenericNextMenuButton(text: String, nextMenuId: String, callbackMenuData: Any? = null): CallbackDataInlineKeyboardButton
 }

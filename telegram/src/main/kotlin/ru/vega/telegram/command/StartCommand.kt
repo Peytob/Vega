@@ -11,7 +11,8 @@ import ru.vega.telegram.service.MessageService
 @Component
 class StartCommand(
     private val messageService: MessageService,
-    private val menuService: MenuService
+    private val menuService: MenuService,
+    private val startMenu: StartMenu
 ) : Command {
 
     companion object {
@@ -20,7 +21,7 @@ class StartCommand(
 
     override suspend fun execute(message: CommonMessage<*>) {
         logger.info("Start command from {}", message.from?.username)
-        menuService.showMenu(message.chat.id, StartMenu.MENU)
+        menuService.showMenu(message.chat.id, startMenu.menu)
     }
 
     override fun getCommandString() = "/start"

@@ -25,8 +25,12 @@ class NextMenuCallbackHandler(
         val queryText = query.data ?: return
 
         val decodeNextMenuMessage = menuService.decodeNextMenuMessage(queryText)
-        val menuHandler = menuManager.getMenuHandler(decodeNextMenuMessage.nextMenuId) ?: return // TODO 404 menu
-        val menu = menuHandler.handle(query, objectMapper.nullNode())
-        menuService.replaceMenu(query.message.chat.id, query.message.messageId, menu)
+
+        if (decodeNextMenuMessage.nextMenuId != null) {
+            val nextMenuData = decodeNextMenuMessage.menuData ?: objectMapper.nullNode()
+            val menuHandler = menuManager.getMenuHandler(decodeNextMenuMessage.nextMenuId) ?: return // TODO 404 menu
+            val menu = menuHandler.handle(query, nextMenuData)
+            menuService.replaceMenu(query.message.chat.id, query.message.messageId, menu)
+        }
     }
 }
