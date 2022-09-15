@@ -5,3 +5,6 @@ telegram:
 #  webhook: # Если webhook, то нужно задать эти проперти
 #    url:
 #    port:
+
+backend:
+  url: http://localhost:8080/

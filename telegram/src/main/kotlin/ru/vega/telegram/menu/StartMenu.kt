@@ -30,7 +30,7 @@ class StartMenu(
                     menuService.makeGenericNextMenuButton("Университеты", OtherTestMenu.ID)
                 )
                 row(
-                    CallbackDataInlineKeyboardButton("Предметы", "2"),
+                    menuService.makeGenericNextMenuButton("Предметы", DisciplinesDetailsSelectMenuHandler.ID),
                     CallbackDataInlineKeyboardButton("Специальности", "3")
                 )
                 row(
