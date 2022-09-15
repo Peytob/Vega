@@ -5,6 +5,7 @@ import dev.inmo.tgbotapi.extensions.api.edit.text.editMessageText
 import dev.inmo.tgbotapi.extensions.api.send.sendMessage
 import dev.inmo.tgbotapi.types.ChatId
 import dev.inmo.tgbotapi.types.MessageIdentifier
+import dev.inmo.tgbotapi.types.ParseMode.MarkdownParseMode
 import dev.inmo.tgbotapi.types.buttons.InlineKeyboardMarkup
 import dev.inmo.tgbotapi.types.buttons.KeyboardMarkup
 import dev.inmo.tgbotapi.types.message.abstracts.ContentMessage
@@ -23,6 +24,7 @@ class MessageServiceImpl(
     ): ContentMessage<TextContent> =
         requestsExecutor.sendMessage(
             chatId = chatId,
+            parseMode = MarkdownParseMode,
             text = text,
             replyMarkup = replyMarkup)
 
@@ -35,6 +37,7 @@ class MessageServiceImpl(
         requestsExecutor.editMessageText(
             chatId = chatId,
             messageId = messageId,
+            parseMode = MarkdownParseMode,
             text = text,
             replyMarkup = replyMarkup)
 }

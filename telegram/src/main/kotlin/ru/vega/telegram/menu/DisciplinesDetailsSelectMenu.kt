@@ -12,7 +12,7 @@ import ru.vega.telegram.service.DisciplinesService
 import ru.vega.telegram.service.MenuService
 
 @Component
-class DisciplinesDetailsSelectMenuHandler(
+class DisciplinesDetailsSelectMenu(
     private val menuService: MenuService,
     private val disciplinesService: DisciplinesService
 ) : MenuHandler {
@@ -29,7 +29,7 @@ class DisciplinesDetailsSelectMenuHandler(
             disciplinesService.getAll().map {
                 menuService.makeGenericNextMenuButton(
                     it.title,
-                    "todo",
+                    DisciplineDetailsMenu.ID,
                     DisciplineDetailsMenuArguments(it.externalId))
             }.chunked(3)
             .forEach { row(*it.toTypedArray()) }
