@@ -24,7 +24,7 @@ class OtherTestMenu(
 
             matrix {
                 row(
-                    menuService.makeGenericNextMenuButton("Back", StartMenu.ID)
+                    menuService.makeGenericNextMenuButton(RETURN_BUTTON_TEXT, StartMenu.ID)
                 )
             }
         )

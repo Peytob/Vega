@@ -27,11 +27,14 @@ class DisciplinesDetailsSelectMenuHandler(
     override fun handle(message: MessageCallbackQuery, callback: JsonNode): Menu {
         val menuMatrix = matrix<CallbackDataInlineKeyboardButton> {
             disciplinesService.getAll().map {
-                menuService.makeGenericNextMenuButton(it.title, "todo", DisciplineDetailsMenuArguments(it.externalId))
+                menuService.makeGenericNextMenuButton(
+                    it.title,
+                    "todo",
+                    DisciplineDetailsMenuArguments(it.externalId))
             }.chunked(3)
             .forEach { row(*it.toTypedArray()) }
 
-            row(menuService.makeGenericNextMenuButton("Назад", StartMenu.ID))
+            row(menuService.makeGenericNextMenuButton(RETURN_BUTTON_TEXT, StartMenu.ID))
         }
 
         return Menu("Какая дисциплина тебя интересует?", menuMatrix)

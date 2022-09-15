@@ -8,3 +8,7 @@ telegram:
 
 backend:
   url: http://localhost:8080/
+
+cache.duration: # Duration of caches.
+  session: 10m
+  backend-data: 1h

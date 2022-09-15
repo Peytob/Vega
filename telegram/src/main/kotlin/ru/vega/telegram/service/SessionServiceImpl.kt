@@ -5,22 +5,25 @@ import com.github.benmanes.caffeine.cache.LoadingCache
 import dev.inmo.tgbotapi.types.UserId
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
+import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.stereotype.Service
+import ru.vega.telegram.configuration.CacheProperties
 import ru.vega.telegram.model.entity.Session
-import java.util.concurrent.TimeUnit
 
 @Service
-class SessionServiceImpl : SessionService {
+@EnableConfigurationProperties(CacheProperties::class)
+class SessionServiceImpl(
+    cacheProperties: CacheProperties
+) : SessionService {
 
     companion object {
         private val logger: Logger = LogManager.getLogger()
-        private const val SESSION_CACHE_TIME: Long = 10L
     }
 
     // Or just use Spring Starter Cache?
     private val cache: LoadingCache<UserId, Session> = Caffeine.newBuilder()
         .initialCapacity(100)
-        .expireAfterAccess(SESSION_CACHE_TIME, TimeUnit.MINUTES)
+        .expireAfterAccess(cacheProperties.session)
         .build {
             logger.info("Creating new session for $it")
             Session(it)
