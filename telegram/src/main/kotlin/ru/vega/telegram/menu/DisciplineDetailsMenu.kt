@@ -38,9 +38,9 @@ class DisciplineDetailsMenu(
             """
                 |Предмет: **${discipline.title}**
                 |${discipline.description}
-                |Экзамен состоит из ${discipline.questionsNumber} вопросов разного уровня сложности. В ${discipline.descriptionYear}} году минимальный проходной балл для успешной сдачи экзамена - ${discipline.passingScore}, при среднем балле в прошлом году, равном ${discipline.lastMiddleScore}.
+                |Экзамен состоит из ${discipline.questionsNumber} вопросов разного уровня сложности. В ${discipline.descriptionYear} году минимальный проходной балл для успешной сдачи экзамена - ${discipline.passingScore}, при среднем балле, равном ${discipline.lastMiddleScore}.
                 |Прочитать подробности (демоверсии, спецификации и кодификаторы) можно на официальном сайте [ФИПИ](${discipline.fipiLink}).
-                |На сайте [Сдам ГИА](${discipline.sdamGiaLink}) вы можете ознакомиться с историей проходных баллов, узнать расписание ЕГЭ, ознакомиться с официальной шкалой первичных и тестовых баллов.
+                |На сайте [Сдам ГИА](${discipline.sdamGiaLink}) можно ознакомиться с историей проходных баллов, узнать расписание ЕГЭ, ознакомиться с официальной шкалой первичных и тестовых баллов.
             """.trimMargin(),
 
             matrix {
