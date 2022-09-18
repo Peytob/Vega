@@ -9,4 +9,6 @@ import java.util.*
 interface DisciplineRepository : JpaRepository<DisciplineEntity, UUID> {
 
     fun findByExternalId(externalId: String): DisciplineEntity
+
+    fun findAllByExternalIdIn(externalIds: Collection<String>): Collection<DisciplineEntity>
 }

@@ -28,6 +28,7 @@ dependencies {
 
     implementation("org.hibernate:hibernate-core:5.6.5.Final")
     implementation("com.h2database:h2:2.1.210")
+    implementation("com.google.guava:guava:11.0.2")
 
     testImplementation("org.junit.jupiter:junit-jupiter:5.7.0")
     testImplementation("org.springframework.boot:spring-boot-starter-test")

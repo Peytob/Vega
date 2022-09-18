@@ -14,4 +14,7 @@ class DisciplineCrudServiceImpl(
 
     override fun getByExternalId(id: String): DisciplineEntity? =
         disciplineRepository.findByExternalId(id)
+
+    override fun getAllByExternalId(disciplinesExternalIds: Collection<String>): Collection<DisciplineEntity> =
+        disciplineRepository.findAllByExternalIdIn(disciplinesExternalIds)
 }
