@@ -9,6 +9,7 @@ import dev.inmo.tgbotapi.utils.matrix
 import dev.inmo.tgbotapi.utils.row
 import org.springframework.stereotype.Component
 import ru.vega.telegram.model.menu.Menu
+import ru.vega.telegram.model.menu.PageSelectArguments
 import ru.vega.telegram.model.menu.SpecialitySelectMenuArgument
 import ru.vega.telegram.service.DisciplinesService
 import ru.vega.telegram.service.MenuService
@@ -48,7 +49,10 @@ class SpecialityDisciplinesSelectMenu(
 
             if (selectedDisciplinesIds.size != 0) {
                 row(
-                    menuService.makeGenericNextMenuButton("Дальше", "TODO")
+                    menuService.makeGenericNextMenuButton(
+                        "Найти специальности!",
+                        SpecialitiesSearchResult.ID,
+                        PageSelectArguments(0))
                 )
             }
 
