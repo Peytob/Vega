@@ -1,6 +1,7 @@
 package ru.vega.telegram.menu
 
-import org.apache.logging.log4j.LogManager
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import javax.annotation.PostConstruct
 
@@ -10,11 +11,11 @@ class MenuManager(
 ) {
 
     companion object {
-        private val logger = LogManager.getLogger()
+        private val logger: Logger = LoggerFactory.getLogger(MenuManager::class.java)
     }
 
-    private val menus =
-        menus.associateBy(MenuHandler::id)
+    private val menus = menus
+        .associateBy(MenuHandler::id)
 
     @PostConstruct
     private fun logMenus() {

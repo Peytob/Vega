@@ -15,7 +15,8 @@ class CommandServiceImpl(
         private val logger = LoggerFactory.getLogger(CommandServiceImpl::class.java)
     }
 
-    private val commands = commands.associateBy { it.getCommandString() }
+    private val commands = commands
+        .associateBy(Command::getCommandString)
 
     @PostConstruct
     private fun logCommandsList() {

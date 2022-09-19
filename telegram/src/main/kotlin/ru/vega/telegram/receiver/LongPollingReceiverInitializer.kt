@@ -5,7 +5,7 @@ import dev.inmo.tgbotapi.extensions.utils.updates.retrieving.startGettingOfUpdat
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.apache.logging.log4j.LogManager
+import org.slf4j.LoggerFactory
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.stereotype.Component
 import ru.vega.telegram.handler.update.UpdateManager
@@ -17,7 +17,7 @@ class LongPollingReceiverInitializer(
 ) : ReceiverInitializer {
 
     companion object {
-        private val logger = LogManager.getLogger()
+        private val logger = LoggerFactory.getLogger(LongPollingReceiverInitializer::class.java)
     }
 
     private val scope = CoroutineScope(Dispatchers.Default)

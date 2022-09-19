@@ -3,8 +3,8 @@ package ru.vega.telegram.service
 import com.github.benmanes.caffeine.cache.Caffeine
 import com.github.benmanes.caffeine.cache.LoadingCache
 import dev.inmo.tgbotapi.types.UserId
-import org.apache.logging.log4j.LogManager
-import org.apache.logging.log4j.Logger
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.stereotype.Service
 import ru.vega.telegram.configuration.CacheProperties
@@ -17,7 +17,7 @@ class SessionServiceImpl(
 ) : SessionService {
 
     companion object {
-        private val logger: Logger = LogManager.getLogger()
+        private val logger: Logger = LoggerFactory.getLogger(SessionServiceImpl::class.java)
     }
 
     // Or just use Spring Starter Cache?
@@ -29,7 +29,9 @@ class SessionServiceImpl(
             Session(it)
         }
 
-    override fun getOrStartSession(userId: UserId) = cache[userId]!!
+    override fun getOrStartSession(userId: UserId) =
+        cache[userId]!!
 
-    override fun isSessionActive(userId: UserId) = cache.getIfPresent(userId) != null
+    override fun isSessionActive(userId: UserId) =
+        cache.getIfPresent(userId) != null
 }

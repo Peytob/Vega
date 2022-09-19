@@ -1,7 +1,5 @@
 package ru.vega.telegram.service
 
-import com.fasterxml.jackson.annotation.JsonInclude
-import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import dev.inmo.tgbotapi.types.ChatId
@@ -15,11 +13,8 @@ import ru.vega.telegram.model.menu.MenuCallbackCommand
 @Service
 class MenuServiceImpl(
     private val messageService: MessageService,
+    private val objectMapper: ObjectMapper
 ) : MenuService {
-
-    private val objectMapper: ObjectMapper = ObjectMapper()
-        .setSerializationInclusion(JsonInclude.Include.NON_NULL)
-        .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
 
     override suspend fun showMenu(chatId: ChatId, menu: Menu) {
         messageService.sendMessage(

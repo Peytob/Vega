@@ -2,21 +2,20 @@ package ru.vega.telegram.command
 
 import dev.inmo.tgbotapi.extensions.utils.extensions.raw.from
 import dev.inmo.tgbotapi.types.message.abstracts.CommonMessage
-import org.apache.logging.log4j.LogManager
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import ru.vega.telegram.menu.StartMenu
 import ru.vega.telegram.service.MenuService
-import ru.vega.telegram.service.MessageService
 
 @Component
 class StartCommand(
-    private val messageService: MessageService,
     private val menuService: MenuService,
     private val startMenu: StartMenu
 ) : Command {
 
     companion object {
-        private val logger = LogManager.getLogger()
+        private val logger: Logger = LoggerFactory.getLogger(StartCommand::class.java)
     }
 
     override suspend fun execute(message: CommonMessage<*>) {

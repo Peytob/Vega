@@ -1,7 +1,8 @@
 package ru.vega.telegram.handler.update
 
 import dev.inmo.tgbotapi.types.update.abstracts.Update
-import org.apache.logging.log4j.LogManager
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import javax.annotation.PostConstruct
 
@@ -11,10 +12,11 @@ class UpdateManager(
 ) : UpdateHandler {
 
     companion object {
-        private val logger = LogManager.getLogger()
+        private val logger: Logger = LoggerFactory.getLogger(UpdateManager::class.java)
     }
 
-    private val handlers = handlers.sortedBy { it.getOrder() }
+    private val handlers = handlers
+        .sortedBy(UpdateHandler::getOrder)
 
     @PostConstruct
     private fun logUpdateHandlersList() {

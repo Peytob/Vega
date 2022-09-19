@@ -5,8 +5,8 @@ import dev.inmo.tgbotapi.types.MessageEntity.textsources.BotCommandTextSource
 import dev.inmo.tgbotapi.types.message.abstracts.CommonMessage
 import dev.inmo.tgbotapi.types.message.abstracts.Message
 import dev.inmo.tgbotapi.types.message.content.TextContent
-import org.apache.logging.log4j.LogManager
-import org.apache.logging.log4j.Logger
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import ru.vega.telegram.service.CommandService
 
@@ -16,7 +16,7 @@ class CommandMessageHandler(
 ) : CommonMessageHandler() {
 
     companion object {
-        private val logger: Logger = LogManager.getLogger()
+        private val logger: Logger = LoggerFactory.getLogger(CommandMessageHandler::class.java)
     }
 
     override suspend fun handleMessage(message: CommonMessage<*>): Boolean {
