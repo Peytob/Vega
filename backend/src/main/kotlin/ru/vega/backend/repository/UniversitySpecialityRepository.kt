@@ -10,14 +10,21 @@ import java.util.UUID
 
 interface UniversitySpecialityRepository : JpaRepository<UniversitySpecialityEntity, UUID> {
 
-    @Query("""
-SELECT *
-FROM DISCIPLINES_SET_UNIVERSITY_SPECIALITY_LINK as dsusl
-INNER JOIN UNIVERSITY_SPECIALITY AS us
-	ON us.ID = dsusl.UNIVERSITY_SPECIALITY_ID
-INNER JOIN DISCIPLINES_SET AS ds
-	ON ds.ID = dsusl.SET_ID
-WHERE SET_ID = :disciplinesSet
-    """, nativeQuery = true)
+    @Query(
+        value = """
+            SELECT *
+            FROM DISCIPLINES_SET_UNIVERSITY_SPECIALITY_LINK as ds_to_us
+            INNER JOIN UNIVERSITY_SPECIALITY AS us
+                ON us.ID = ds_to_us.UNIVERSITY_SPECIALITY_ID
+            INNER JOIN DISCIPLINES_SET AS ds
+                ON ds.ID = ds_to_us.SET_ID
+            WHERE SET_ID = :disciplinesSet
+        """,
+
+        countQuery = """
+            SELECT COUNT(*) FROM DISCIPLINES_SET_UNIVERSITY_SPECIALITY_LINK WHERE SET_ID = :disciplinesSet
+        """,
+
+        nativeQuery = true)
     fun findAllByDisciplinesSet(disciplinesSet: DisciplinesSetEntity, pageable: Pageable): Page<UniversitySpecialityEntity>
 }
