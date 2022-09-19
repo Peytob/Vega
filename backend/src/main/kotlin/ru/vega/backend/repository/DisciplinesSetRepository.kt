@@ -6,4 +6,7 @@ import ru.vega.backend.entity.DisciplinesSetEntity
 import java.util.*
 
 @Repository
-interface DisciplinesSetRepository : JpaRepository<DisciplinesSetEntity, UUID>
+interface DisciplinesSetRepository : JpaRepository<DisciplinesSetEntity, UUID> {
+
+    fun findByExternalId(externalId: String): DisciplinesSetEntity?
+}

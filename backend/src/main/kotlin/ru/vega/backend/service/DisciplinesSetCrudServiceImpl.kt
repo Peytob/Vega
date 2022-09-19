@@ -23,4 +23,7 @@ class DisciplinesSetCrudServiceImpl(
         return disciplinesSetList
             .filter { it.disciplines?.size == disciplines.size && it.disciplines?.containsAll(disciplines) ?: false }
     }
+
+    override fun getByExternalId(externalId: String): DisciplinesSetEntity? =
+        disciplinesSetRepository.findByExternalId(externalId)
 }
