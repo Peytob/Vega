@@ -8,7 +8,7 @@ import ru.vega.model.dto.university.UniversitySpecialityDto
 @Mapper(
     componentModel = "spring",
     injectionStrategy = InjectionStrategy.CONSTRUCTOR,
-    uses = [UniversityMapper::class])
+    uses = [DisciplinesSetsMapper::class, UniversityMapper::class])
 interface UniversitySpecialityMapper {
 
     fun toDto(universitySpecialityEntity: UniversitySpecialityEntity): UniversitySpecialityDto

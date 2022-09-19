@@ -14,7 +14,9 @@ interface UniversitySpecialityRepository : JpaRepository<UniversitySpecialityEnt
 SELECT *
 FROM DISCIPLINES_SET_UNIVERSITY_SPECIALITY_LINK as dsusl
 INNER JOIN UNIVERSITY_SPECIALITY AS us
-    ON us.ID = dsusl.UNIVERSITY_SPECIALITY_ID 
+	ON us.ID = dsusl.UNIVERSITY_SPECIALITY_ID
+INNER JOIN DISCIPLINES_SET AS ds
+	ON ds.ID = dsusl.SET_ID
 WHERE SET_ID = :disciplinesSet
     """, nativeQuery = true)
     fun findAllByDisciplinesSet(disciplinesSet: DisciplinesSetEntity, pageable: Pageable): Page<UniversitySpecialityEntity>
