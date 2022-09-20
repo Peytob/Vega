@@ -5,6 +5,8 @@ telegram:
 #  webhook: # Если webhook, то нужно задать эти проперти
 #    url:
 #    port:
+    menu:
+      items-per-page: 5
 
 backend:
   url: http://localhost:8080/
@@ -12,3 +14,5 @@ backend:
 cache.duration: # Duration of caches.
   session: 10m
   backend-data: 1h
+
+server.port: 8081

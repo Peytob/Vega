@@ -51,7 +51,7 @@ class SpecialityDisciplinesSelectMenu(
                 row(
                     menuService.makeGenericNextMenuButton(
                         "Найти специальности!",
-                        SpecialitiesSearchResult.ID,
+                        SpecialitiesSearchResultMenu.ID,
                         PageSelectArguments(0))
                 )
             }

@@ -6,9 +6,11 @@ import com.fasterxml.jackson.module.kotlin.treeToValue
 import dev.inmo.tgbotapi.types.CallbackQuery.MessageCallbackQuery
 import dev.inmo.tgbotapi.utils.matrix
 import dev.inmo.tgbotapi.utils.row
+import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.stereotype.Component
 import ru.vega.model.utils.Page
 import ru.vega.model.utils.Pageable
+import ru.vega.telegram.configuration.MenuProperties
 import ru.vega.telegram.model.menu.Menu
 import ru.vega.telegram.model.menu.PageSelectArguments
 import ru.vega.telegram.service.DisciplinesSetService
@@ -17,7 +19,8 @@ import ru.vega.telegram.service.SessionService
 import ru.vega.telegram.service.UniversitySpecialityService
 
 @Component
-class SpecialitiesSearchResult(
+@EnableConfigurationProperties(MenuProperties::class)
+class SpecialitiesSearchResultMenu(
     private val sessionService: SessionService,
     private val objectMapper: ObjectMapper,
     private val menuService: MenuService,
@@ -32,7 +35,7 @@ class SpecialitiesSearchResult(
     override val id: String = ID
 
     override fun handle(message: MessageCallbackQuery, callback: JsonNode): Menu {
-        val page = objectMapper
+        val pageNumber = objectMapper
             .treeToValue<PageSelectArguments>(callback)
             .page
 
@@ -43,8 +46,8 @@ class SpecialitiesSearchResult(
 
         val disciplinesSet = disciplinesSetService.getDisciplinesSet(selectedDisciplines)
 
-        val pageData = if (disciplinesSet != null) {
-            universitySpecialityService.getByDisciplinesSet(disciplinesSet, Pageable(page, 5))
+        val page = if (disciplinesSet != null) {
+            universitySpecialityService.getByDisciplinesSet(disciplinesSet, Pageable(pageNumber, menuProperties.itemsPerPage))
         } else {
             Page.empty()
         }
@@ -53,8 +56,17 @@ class SpecialitiesSearchResult(
             "DisciplinesSet: $disciplinesSet",
 
             matrix {
+
+                page.content.forEach {
+                    row(
+                        menuService.makeGenericNextMenuButton(it.speciality.title, "--<><>")
+                    )
+                }
+
+                add(menuService.makePagesNavigationMenu(page, ID))
+
                 row(
-                    menuService.makeGenericNextMenuButton("Start", StartMenu.ID))
+                    menuService.makeGenericNextMenuButton(RETURN_BUTTON_TEXT, SpecialityDisciplinesSelectMenu.ID))
             }
         )
     }
