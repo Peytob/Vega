@@ -8,6 +8,7 @@ import dev.inmo.tgbotapi.utils.matrix
 import dev.inmo.tgbotapi.utils.row
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.stereotype.Component
+import ru.vega.model.dto.university.UniversitySpecialityDto
 import ru.vega.model.utils.Page
 import ru.vega.model.utils.Pageable
 import ru.vega.telegram.configuration.MenuProperties
@@ -52,22 +53,33 @@ class SpecialitiesSearchResultMenu(
             Page.empty()
         }
 
-        return Menu(
-            "DisciplinesSet: $disciplinesSet",
-
-            matrix {
-
-                page.content.forEach {
-                    row(
-                        menuService.makeGenericNextMenuButton(it.speciality.title, "--<><>")
-                    )
-                }
-
-                add(menuService.makePagesNavigationMenu(page, ID))
-
-                row(
-                    menuService.makeGenericNextMenuButton(RETURN_BUTTON_TEXT, SpecialityDisciplinesSelectMenu.ID))
-            }
-        )
+        return if (!page.empty) makeResultsExistsMenu(page) else makeResultsNotExistsMenu()
     }
+
+    private fun makeResultsNotExistsMenu() = Menu(
+        "Увы, но специальности по твоему запросу не нашлись :(",
+
+        matrix {
+            row(
+                menuService.makeGenericNextMenuButton("Попробовать ввести другой набор!", SpecialityDisciplinesSelectMenu.ID))
+        }
+    )
+
+    private fun makeResultsExistsMenu(page: Page<UniversitySpecialityDto>) = Menu(
+        "Нашлись специальности, на которые можно поступить, сдавая выбранные тобой дисциплины",
+
+        matrix {
+
+            page.content.forEach {
+                row(
+                    menuService.makeGenericNextMenuButton(it.speciality.title, "--<><>")
+                )
+            }
+
+            add(menuService.makePagesNavigationMenu(page, ID))
+
+            row(
+                menuService.makeGenericNextMenuButton(RETURN_BUTTON_TEXT, SpecialityDisciplinesSelectMenu.ID))
+        }
+    )
 }

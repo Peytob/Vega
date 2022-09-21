@@ -9,7 +9,6 @@ import dev.inmo.tgbotapi.utils.matrix
 import dev.inmo.tgbotapi.utils.row
 import org.springframework.stereotype.Component
 import ru.vega.telegram.model.menu.Menu
-import ru.vega.telegram.model.menu.PageSelectArguments
 import ru.vega.telegram.model.menu.SpecialitySelectMenuArgument
 import ru.vega.telegram.service.DisciplinesService
 import ru.vega.telegram.service.MenuService
@@ -49,16 +48,11 @@ class SpecialityDisciplinesSelectMenu(
 
             if (selectedDisciplinesIds.size != 0) {
                 row(
-                    menuService.makeGenericNextMenuButton(
-                        "Найти специальности!",
-                        SpecialitiesSearchResultMenu.ID,
-                        PageSelectArguments(0))
-                )
+                    menuService.makeGenericNextMenuButton("Найти специальности!", EnterScoreAllowMenu.ID))
             }
 
             row(
-                menuService.makeGenericNextMenuButton(RETURN_BUTTON_TEXT, StartMenu.ID)
-            )
+                menuService.makeGenericNextMenuButton(RETURN_BUTTON_TEXT, StartMenu.ID))
         }
 
         return Menu("Выбери дисциплины, которые ты сдавал во время проведения ЕГЭ!", menuMatrix)
