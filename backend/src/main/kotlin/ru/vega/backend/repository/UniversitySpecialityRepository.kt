@@ -18,13 +18,17 @@ interface UniversitySpecialityRepository : JpaRepository<UniversitySpecialityEnt
                 ON us.ID = ds_to_us.UNIVERSITY_SPECIALITY_ID
             INNER JOIN DISCIPLINES_SET AS ds
                 ON ds.ID = ds_to_us.SET_ID
-            WHERE SET_ID = :disciplinesSet
+            WHERE SET_ID = :disciplinesSet AND :scoreFilter >= us.budget_passing_score
         """,
 
         countQuery = """
-            SELECT COUNT(*) FROM DISCIPLINES_SET_UNIVERSITY_SPECIALITY_LINK WHERE SET_ID = :disciplinesSet
+            SELECT COUNT(*)
+            FROM DISCIPLINES_SET_UNIVERSITY_SPECIALITY_LINK as ds_to_us
+            INNER JOIN UNIVERSITY_SPECIALITY AS us
+                ON us.ID = ds_to_us.UNIVERSITY_SPECIALITY_ID
+            WHERE SET_ID = :disciplinesSet AND :scoreFilter >= us.budget_passing_score
         """,
 
         nativeQuery = true)
-    fun findAllByDisciplinesSet(disciplinesSet: DisciplinesSetEntity, pageable: Pageable): Page<UniversitySpecialityEntity>
+    fun findAllByDisciplinesSet(disciplinesSet: DisciplinesSetEntity, scoreFilter: Int, pageable: Pageable): Page<UniversitySpecialityEntity>
 }

@@ -42,6 +42,7 @@ class DisciplinesSetController(
     @GetMapping("/{disciplinesSetExternalId}/specialities")
     fun findUniversitySpecialitiesByDisciplinesSet(
         @PathVariable disciplinesSetExternalId: String,
+        @RequestParam(value = "scoreFilter", defaultValue = Int.MAX_VALUE.toString()) @Min(0) scoreFilter: Int,
         @RequestParam(value = "page", defaultValue = "0") @Min(0) page: Int,
         @RequestParam(value = "size", defaultValue = "10") @Min(1) size: Int,
     ): ResponseEntity<Page<UniversitySpecialityDto>> {
@@ -49,7 +50,7 @@ class DisciplinesSetController(
             throw EntityNotFoundException(disciplinesSetExternalId, "disciplineSet")
         val pageable: Pageable = PageRequest.of(page, size)
         val universitySpecialities = universitySpecialityCrudService
-            .getByDisciplineSet(disciplinesSet, pageable)
+            .getByDisciplineSet(disciplinesSet, scoreFilter, pageable)
             .map(universitySpecialityMapper::toDto)
         return ResponseEntity.ok(universitySpecialities)
     }

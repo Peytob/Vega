@@ -42,15 +42,20 @@ class SpecialitiesSearchResultMenu(
             .treeToValue<PageSelectArguments>(callback)
             .page
 
-        val selectedDisciplines = sessionService
+        val session = sessionService
             .getOrStartSession(message.user.id)
+
+        val selectedDisciplines = session
             .selectedDisciplinesIds
             .toSet() // Should be immutable, because it will be used as key in cache
 
         val disciplinesSet = disciplinesSetService.getDisciplinesSet(selectedDisciplines)
 
         val page = if (disciplinesSet != null) {
-            universitySpecialityService.getByDisciplinesSet(disciplinesSet, Pageable(pageNumber, menuProperties.itemsPerPage))
+            universitySpecialityService.getByDisciplinesSet(
+                disciplinesSet,
+                session.totalScore,
+                Pageable(pageNumber, menuProperties.itemsPerPage))
         } else {
             Page.empty()
         }

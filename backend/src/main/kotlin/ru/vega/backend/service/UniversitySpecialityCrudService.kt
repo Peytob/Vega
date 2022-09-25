@@ -7,5 +7,5 @@ import ru.vega.backend.entity.UniversitySpecialityEntity
 
 interface UniversitySpecialityCrudService {
 
-    fun getByDisciplineSet(disciplinesSet: DisciplinesSetEntity, pageable: Pageable): Page<UniversitySpecialityEntity>
+    fun getByDisciplineSet(disciplinesSet: DisciplinesSetEntity, scoreFilter: Int, pageable: Pageable): Page<UniversitySpecialityEntity>
 }

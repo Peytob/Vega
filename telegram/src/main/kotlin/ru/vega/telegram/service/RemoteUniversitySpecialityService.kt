@@ -27,6 +27,7 @@ class RemoteUniversitySpecialityService(
 
             val uri = UriComponentsBuilder
                 .fromUriString("/disciplinesSet/{disciplineSetId}/specialities")
+                .queryParam("scoreFilter", it.score ?: Int.MAX_VALUE)
                 .queryParam("page", it.pageable.page)
                 .queryParam("size", it.pageable.size)
                 .buildAndExpand(it.disciplinesSetId)
@@ -54,14 +55,15 @@ class RemoteUniversitySpecialityService(
         .expireAfterAccess(cacheProperties.backendData)
         .build()
 
-    override fun getByDisciplinesSet(disciplinesSet: DisciplinesSetDto, pageable: Pageable): Page<UniversitySpecialityDto> =
-        disciplinesSetCache[CacheKey(disciplinesSet.externalId, pageable)]!!
+    override fun getByDisciplinesSet(disciplinesSet: DisciplinesSetDto, score: Int?, pageable: Pageable) =
+        disciplinesSetCache[CacheKey(disciplinesSet.externalId, score, pageable)]!!
 
     override fun getByExternalId(externalId: String): UniversitySpecialityDto? =
         idsCache.getIfPresent(externalId)
 
     private data class CacheKey(
         val disciplinesSetId: String,
+        val score: Int?,
         val pageable: Pageable
     )
 }
