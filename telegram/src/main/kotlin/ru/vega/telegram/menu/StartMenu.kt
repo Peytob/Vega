@@ -5,6 +5,7 @@ import dev.inmo.tgbotapi.utils.matrix
 import dev.inmo.tgbotapi.utils.row
 import org.springframework.stereotype.Component
 import ru.vega.telegram.model.menu.Menu
+import ru.vega.telegram.model.menu.PageSelectArguments
 import ru.vega.telegram.service.MenuService
 
 @Component
@@ -27,17 +28,14 @@ class StartMenu(
 
             matrix {
                 row(
-                    menuService.makeGenericNextMenuButton("Университеты", OtherTestMenu.ID)
-                )
-                row(
                     menuService.makeGenericNextMenuButton("Предметы", DisciplinesDetailsSelectMenu.ID),
                     menuService.makeGenericNextMenuButton("Специальности", SpecialityDisciplinesSelectMenu.ID),
                 )
                 row(
-                    CallbackDataInlineKeyboardButton("Репетиторы!", "4")
+                    menuService.makeGenericNextMenuButton("Репетиторы!", "4")
                 )
                 row(
-                    CallbackDataInlineKeyboardButton("FAQ", "5")
+                    menuService.makeGenericNextMenuButton("FAQ", FaqSelectMenu.ID, PageSelectArguments(0))
                 )
             }
         )
