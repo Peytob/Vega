@@ -8,4 +8,6 @@ import ru.vega.model.utils.Pageable
 interface UniversitySpecialityService {
 
     fun getByDisciplinesSet(disciplinesSet: DisciplinesSetDto, pageable: Pageable): Page<UniversitySpecialityDto>
+
+    fun getByExternalId(externalId: String): UniversitySpecialityDto?
 }

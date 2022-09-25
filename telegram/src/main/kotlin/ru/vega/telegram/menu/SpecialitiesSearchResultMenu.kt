@@ -14,6 +14,7 @@ import ru.vega.model.utils.Pageable
 import ru.vega.telegram.configuration.MenuProperties
 import ru.vega.telegram.model.menu.Menu
 import ru.vega.telegram.model.menu.PageSelectArguments
+import ru.vega.telegram.model.menu.UniversityDetailsArgument
 import ru.vega.telegram.service.DisciplinesSetService
 import ru.vega.telegram.service.MenuService
 import ru.vega.telegram.service.SessionService
@@ -25,8 +26,9 @@ class SpecialitiesSearchResultMenu(
     private val sessionService: SessionService,
     private val objectMapper: ObjectMapper,
     private val menuService: MenuService,
-    private val disciplinesSetService: DisciplinesSetService
-//    private val specialitiesService: SpecialitiesService
+    private val disciplinesSetService: DisciplinesSetService,
+    private val universitySpecialityService: UniversitySpecialityService,
+    private val menuProperties: MenuProperties
 ) : MenuHandler {
 
     companion object {
@@ -72,7 +74,11 @@ class SpecialitiesSearchResultMenu(
 
             page.content.forEach {
                 row(
-                    menuService.makeGenericNextMenuButton(it.speciality.title, "--<><>")
+                    menuService.makeGenericNextMenuButton(
+                        it.speciality.title,
+                        UniversitySpecialityShowMenu.ID,
+                        UniversityDetailsArgument(it.externalId, page.number)
+                    )
                 )
             }
 

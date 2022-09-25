@@ -1,5 +1,6 @@
 package ru.vega.telegram.service
 
+import com.github.benmanes.caffeine.cache.Cache
 import com.github.benmanes.caffeine.cache.Caffeine
 import com.github.benmanes.caffeine.cache.LoadingCache
 import org.springframework.core.ParameterizedTypeReference
@@ -19,9 +20,9 @@ class RemoteUniversitySpecialityService(
     cacheProperties: CacheProperties
 ) : UniversitySpecialityService {
 
-    private val cache: LoadingCache<CacheKey, Page<UniversitySpecialityDto>> = Caffeine.newBuilder()
+    private val disciplinesSetCache: LoadingCache<CacheKey, Page<UniversitySpecialityDto>> = Caffeine.newBuilder()
         .initialCapacity(100)
-        .expireAfterAccess(cacheProperties.session)
+        .expireAfterAccess(cacheProperties.backendData)
         .build {
 
             val uri = UriComponentsBuilder
@@ -33,16 +34,31 @@ class RemoteUniversitySpecialityService(
 
             val typeReference = object : ParameterizedTypeReference<Page<UniversitySpecialityDto>>() {}
 
-            restTemplate.exchange(
+            val page = restTemplate.exchange(
                 uri,
                 HttpMethod.GET,
                 null,
                 typeReference
             ).body!!
+
+            idsCache.putAll(
+                page.content
+                    .associateBy(UniversitySpecialityDto::externalId)
+            )
+
+            page
         }
 
+    private val idsCache: Cache<String, UniversitySpecialityDto> = Caffeine.newBuilder()
+        .initialCapacity(100)
+        .expireAfterAccess(cacheProperties.backendData)
+        .build()
+
     override fun getByDisciplinesSet(disciplinesSet: DisciplinesSetDto, pageable: Pageable): Page<UniversitySpecialityDto> =
-        cache[CacheKey(disciplinesSet.externalId, pageable)]!!
+        disciplinesSetCache[CacheKey(disciplinesSet.externalId, pageable)]!!
+
+    override fun getByExternalId(externalId: String): UniversitySpecialityDto? =
+        idsCache.getIfPresent(externalId)
 
     private data class CacheKey(
         val disciplinesSetId: String,

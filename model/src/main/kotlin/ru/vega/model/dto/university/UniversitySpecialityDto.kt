@@ -4,6 +4,7 @@ import ru.vega.model.dto.discipline.DisciplinesSetDto
 import ru.vega.model.dto.speciality.SpecialityDto
 
 data class UniversitySpecialityDto(
+    val externalId: String,
     val speciality: SpecialityDto,
     val university: UniversityDto,
     val disciplinesSets: Collection<DisciplinesSetDto>,
