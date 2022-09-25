@@ -26,7 +26,11 @@ class LongPollingReceiverInitializer(
         logger.info("Initialization telegram bot with long polling strategy")
         target.startGettingOfUpdatesByLongPolling {
             scope.launch {
-                updateManager.handle(it)
+                try {
+                    updateManager.handle(it)
+                } catch (e: Throwable) {
+                    logger.error("Unhandled message during processing update", e)
+                }
             }
         }
     }

@@ -53,7 +53,7 @@ class FaqSelectMenu(
                     }
 
                 add(
-                    menuService.makePagesNavigationMenu(page, FaqAnswerMenu.ID))
+                    menuService.makePagesNavigationMenu(page, ID))
 
                 row(
                     menuService.makeGenericNextMenuButton(RETURN_BUTTON_TEXT, StartMenu.ID))

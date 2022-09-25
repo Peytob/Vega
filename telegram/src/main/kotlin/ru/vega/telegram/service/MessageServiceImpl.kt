@@ -26,6 +26,7 @@ class MessageServiceImpl(
             chatId = chatId,
             parseMode = MarkdownParseMode,
             text = text,
+            disableWebPagePreview = true,
             replyMarkup = replyMarkup)
 
     override suspend fun editMessage(
@@ -39,5 +40,6 @@ class MessageServiceImpl(
             messageId = messageId,
             parseMode = MarkdownParseMode,
             text = text,
+            disableWebPagePreview = true,
             replyMarkup = replyMarkup)
 }
