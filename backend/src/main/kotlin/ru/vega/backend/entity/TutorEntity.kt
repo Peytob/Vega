@@ -21,6 +21,12 @@ open class TutorEntity(
     @get:Column(nullable = false)
     open var phone: String? = null,
 
+    @get:Column(nullable = false)
+    open var offline: Boolean? = null,
+
+    @get:Column(nullable = false)
+    open var online: Boolean? = null,
+
     open var telegram: String? = null,
 
     open var whatsApp: String? = null,
