@@ -33,7 +33,7 @@ class TutorController(
                       @RequestParam(value = "size", defaultValue = "10") @Min(1) size: Int,
                       @RequestParam(value = "sortDir", defaultValue = "ASC") sortDir: Sort.Direction):
             ResponseEntity<Page<TutorDto>> {
-        val pageable = PageRequest.of(page, size, Sort.by(sortDir, ""))
+        val pageable = PageRequest.of(page, size)
 
         val discipline = disciplineCrudService.getByExternalId(disciplineId) ?:
             throw EntityNotFoundException(disciplineId, "Discipline")

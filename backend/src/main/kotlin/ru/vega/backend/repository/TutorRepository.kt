@@ -11,15 +11,23 @@ import java.util.UUID
 
 interface TutorRepository : JpaRepository<TutorEntity, UUID> {
 
-    // TODO Implement me
-
     @Query(
         value = """
-            SELECT * FROM TUTOR
+            SELECT *
+            FROM TUTOR_DISCIPLINE_LINK AS tdl 
+            INNER JOIN TUTOR AS t 
+                ON t.ID = tdl.TUTOR_ID 
+            INNER JOIN DISCIPLINE d
+                ON d.ID = tdl.DISCIPLINE_ID 
+            WHERE t.DISTRICT_ID = :district AND tdl.DISCIPLINE_ID = :discipline 
         """,
 
         countQuery = """
-            SELECT COUNT(*) FROM TUTOR
+            SELECT tdl.*, t.ID
+            FROM TUTOR_DISCIPLINE_LINK AS tdl 
+            INNER JOIN TUTOR AS t 
+                ON t.ID = tdl.TUTOR_ID 
+            WHERE t.DISTRICT_ID = :district AND tdl.DISCIPLINE_ID = :discipline 
         """,
 
         nativeQuery = true)
