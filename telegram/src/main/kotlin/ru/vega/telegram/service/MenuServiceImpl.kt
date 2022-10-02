@@ -15,7 +15,6 @@ import ru.vega.telegram.menu.LAST_PAGE_INCREMENT_BUTTON_TEXT
 import ru.vega.telegram.menu.PAGE_INCREMENT_BUTTON_TEXT
 import ru.vega.telegram.model.menu.Menu
 import ru.vega.telegram.model.menu.MenuCallbackCommand
-import ru.vega.telegram.model.menu.PageSelectArguments
 
 @Service
 class MenuServiceImpl(
@@ -52,28 +51,32 @@ class MenuServiceImpl(
         return CallbackDataInlineKeyboardButton(text, command)
     }
 
-    override fun makePagesNavigationMenu(page: Page<*>, nextMenuId: String): List<CallbackDataInlineKeyboardButton> = row {
+    override fun makePagesNavigationMenu(
+        page: Page<*>,
+        nextMenuId: String,
+        pageMappingMethod: (Int) -> Any
+    ): List<CallbackDataInlineKeyboardButton> = row {
         if (page.first) {
             add(
-                makeGenericNextMenuButton(FIRST_PAGE_DECREMENT_BUTTON_TEXT, nextMenuId, PageSelectArguments(0))
+                makeGenericNextMenuButton(FIRST_PAGE_DECREMENT_BUTTON_TEXT, nextMenuId, pageMappingMethod(0))
             )
         } else {
             add(
-                makeGenericNextMenuButton(DECREMENT_BUTTON_TEXT, nextMenuId, PageSelectArguments(page.number.dec()))
+                makeGenericNextMenuButton(DECREMENT_BUTTON_TEXT, nextMenuId, pageMappingMethod(page.number.dec()))
             )
         }
 
         add(
-            makeGenericNextMenuButton("${page.number.inc()} / ${page.totalPages}", nextMenuId, PageSelectArguments(page.number))
+            makeGenericNextMenuButton("${page.number.inc()} / ${page.totalPages}", nextMenuId, pageMappingMethod(page.number))
         )
 
         if (page.last) {
             add(
-                makeGenericNextMenuButton(LAST_PAGE_INCREMENT_BUTTON_TEXT, nextMenuId, PageSelectArguments(page.totalPages.dec()))
+                makeGenericNextMenuButton(LAST_PAGE_INCREMENT_BUTTON_TEXT, nextMenuId, pageMappingMethod(page.totalPages.dec()))
             )
         } else {
             add(
-                makeGenericNextMenuButton(PAGE_INCREMENT_BUTTON_TEXT, nextMenuId, PageSelectArguments(page.number.inc()))
+                makeGenericNextMenuButton(PAGE_INCREMENT_BUTTON_TEXT, nextMenuId, pageMappingMethod(page.number.inc()))
             )
         }
     }

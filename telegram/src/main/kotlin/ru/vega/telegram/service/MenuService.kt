@@ -19,5 +19,5 @@ interface MenuService {
 
     fun makeGenericNextMenuButton(text: String, nextMenuId: String, callbackMenuData: Any? = null): CallbackDataInlineKeyboardButton
 
-    fun makePagesNavigationMenu(page: Page<*>, nextMenuId: String): List<CallbackDataInlineKeyboardButton>
+    fun makePagesNavigationMenu(page: Page<*>, nextMenuId: String, pageMappingMethod: (Int) -> Any): List<CallbackDataInlineKeyboardButton>
 }

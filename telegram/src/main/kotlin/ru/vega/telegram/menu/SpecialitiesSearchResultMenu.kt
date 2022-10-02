@@ -87,7 +87,8 @@ class SpecialitiesSearchResultMenu(
                 )
             }
 
-            add(menuService.makePagesNavigationMenu(page, ID))
+            add(
+                menuService.makePagesNavigationMenu(page, ID, ::PageSelectArguments))
 
             row(
                 menuService.makeGenericNextMenuButton(RETURN_BUTTON_TEXT, SpecialityDisciplinesSelectMenu.ID))

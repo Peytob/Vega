@@ -53,7 +53,8 @@ class FaqSelectMenu(
                     }
 
                 add(
-                    menuService.makePagesNavigationMenu(page, ID))
+                    menuService.makePagesNavigationMenu(page, ID, ::PageSelectArguments)
+                )
 
                 row(
                     menuService.makeGenericNextMenuButton(RETURN_BUTTON_TEXT, StartMenu.ID))

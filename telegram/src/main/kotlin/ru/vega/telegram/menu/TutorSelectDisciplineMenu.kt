@@ -32,7 +32,9 @@ class TutorSelectDisciplineMenu(
                     TutorTownSelectArgument(0, it.externalId)
                 )
             }.chunked(3)
-            .forEach { row(*it.toTypedArray()) }
+            .forEach { add(it) }
+
+            row(menuService.makeGenericNextMenuButton(RETURN_BUTTON_TEXT, StartMenu.ID))
         }
 
         return Menu(
