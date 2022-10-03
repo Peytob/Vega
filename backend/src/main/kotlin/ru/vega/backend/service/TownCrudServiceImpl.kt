@@ -19,4 +19,10 @@ class TownCrudServiceImpl(
 
     override fun getTownPage(pageable: Pageable): Page<TownEntity> =
         townRepository.findAll(pageable)
+
+    override fun getTownByExternalId(townId: String): TownEntity? =
+        townRepository.getByExternalId(townId)
+
+    override fun getDistrictPageByTown(town: TownEntity, pageable: Pageable): Page<DistrictEntity> =
+        districtRepository.findByTown(town, pageable)
 }

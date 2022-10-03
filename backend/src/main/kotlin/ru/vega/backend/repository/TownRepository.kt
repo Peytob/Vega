@@ -6,4 +6,6 @@ import ru.vega.backend.entity.TownEntity
 import java.util.UUID
 
 @Repository
-interface TownRepository : JpaRepository<TownEntity, UUID>
+interface TownRepository : JpaRepository<TownEntity, UUID> {
+    fun getByExternalId(townId: String): TownEntity?
+}
