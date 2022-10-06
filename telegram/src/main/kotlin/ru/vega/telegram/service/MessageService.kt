@@ -12,11 +12,13 @@ interface MessageService {
     suspend fun sendMessage(
         chatId: ChatId,
         text: String,
-        replyMarkup: KeyboardMarkup? = null): ContentMessage<TextContent>
+        replyMarkup: KeyboardMarkup? = null,
+        disableWebPagePreview: Boolean = false): ContentMessage<TextContent>
 
     suspend fun editMessage(
         chatId: ChatId,
         messageId: MessageIdentifier,
         text: String,
-        replyMarkup: InlineKeyboardMarkup? = null): ContentMessage<TextContent>
+        replyMarkup: InlineKeyboardMarkup? = null,
+        disableWebPagePreview: Boolean = false): ContentMessage<TextContent>
 }

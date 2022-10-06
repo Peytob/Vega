@@ -1,3 +1,5 @@
 package ru.vega.telegram.model.menu
 
-class TutorDetailsMenuArgument(tutorId: String)
+data class TutorDetailsMenuArgument(
+    val tutorId: String
+)

@@ -1,5 +1,6 @@
 package ru.vega.telegram.service
 
+import com.github.benmanes.caffeine.cache.Cache
 import com.github.benmanes.caffeine.cache.Caffeine
 import com.github.benmanes.caffeine.cache.LoadingCache
 import org.slf4j.LoggerFactory
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Component
 import org.springframework.web.client.RestTemplate
 import org.springframework.web.util.UriComponentsBuilder
 import ru.vega.model.dto.tutor.TutorDto
+import ru.vega.model.dto.university.UniversitySpecialityDto
 import ru.vega.model.utils.Page
 import ru.vega.model.utils.Pageable
 import ru.vega.telegram.configuration.CacheProperties
@@ -23,7 +25,7 @@ class RemoteTutorService(
         private val logger = LoggerFactory.getLogger(RemoteTutorService::class.java)
     }
 
-    private val cache: LoadingCache<CacheKey, Page<TutorDto>> = Caffeine.newBuilder()
+    private val pagesCache: LoadingCache<CacheKey, Page<TutorDto>> = Caffeine.newBuilder()
         .initialCapacity(100)
         .expireAfterAccess(cacheProperties.session)
         .build {
@@ -39,20 +41,35 @@ class RemoteTutorService(
 
             val typeReference = object : ParameterizedTypeReference<Page<TutorDto>>() {}
 
-            restTemplate.exchange(
+            val page = restTemplate.exchange(
                 uri,
                 HttpMethod.GET,
                 null,
                 typeReference
             ).body!!
+
+            idsCache.putAll(
+                page.content
+                    .associateBy(TutorDto::externalId)
+            )
+
+            page
         }
+
+    private val idsCache: Cache<String, TutorDto> = Caffeine.newBuilder()
+        .initialCapacity(100)
+        .expireAfterAccess(cacheProperties.backendData)
+        .build()
+
+    override fun getTutorById(tutorId: String): TutorDto? =
+        idsCache.getIfPresent(tutorId)
 
     override fun getTutorsByDisciplineAndDistrict(
         disciplineExternalId: String,
         districtExternalId: String,
         pageable: Pageable
     ): Page<TutorDto> =
-        cache[CacheKey(disciplineExternalId, districtExternalId, pageable)]!!
+        pagesCache[CacheKey(disciplineExternalId, districtExternalId, pageable)]!!
 
     private data class CacheKey(
         val disciplineExternalId: String,

@@ -10,4 +10,6 @@ interface TutorService {
         disciplineExternalId: String,
         districtExternalId: String,
         pageable: Pageable): Page<TutorDto>
+
+    fun getTutorById(tutorId: String): TutorDto?
 }

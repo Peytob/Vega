@@ -6,6 +6,8 @@ import dev.inmo.tgbotapi.types.ChatId
 import dev.inmo.tgbotapi.types.MessageIdentifier
 import dev.inmo.tgbotapi.types.buttons.InlineKeyboardButtons.CallbackDataInlineKeyboardButton
 import dev.inmo.tgbotapi.types.buttons.InlineKeyboardMarkup
+import dev.inmo.tgbotapi.types.captionField
+import dev.inmo.tgbotapi.types.disableWebPagePreviewField
 import dev.inmo.tgbotapi.utils.row
 import org.springframework.stereotype.Service
 import ru.vega.model.utils.Page
@@ -26,7 +28,8 @@ class MenuServiceImpl(
         messageService.sendMessage(
             chatId = chatId,
             text = menu.message,
-            replyMarkup = InlineKeyboardMarkup(menu.replyMarkup)
+            replyMarkup = InlineKeyboardMarkup(menu.replyMarkup),
+            disableWebPagePreview = menu.disableWebPagePreview
         )
     }
 
@@ -35,7 +38,8 @@ class MenuServiceImpl(
             chatId = chatId,
             messageId = messageId,
             text = menu.message,
-            replyMarkup = InlineKeyboardMarkup(menu.replyMarkup)
+            replyMarkup = InlineKeyboardMarkup(menu.replyMarkup),
+            disableWebPagePreview = menu.disableWebPagePreview
         )
     }
 

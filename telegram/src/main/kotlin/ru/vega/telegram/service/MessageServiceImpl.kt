@@ -20,26 +20,28 @@ class MessageServiceImpl(
     override suspend fun sendMessage(
         chatId: ChatId,
         text: String,
-        replyMarkup: KeyboardMarkup?
+        replyMarkup: KeyboardMarkup?,
+        disableWebPagePreview: Boolean
     ): ContentMessage<TextContent> =
         requestsExecutor.sendMessage(
             chatId = chatId,
             parseMode = MarkdownParseMode,
             text = text,
-            disableWebPagePreview = true,
+            disableWebPagePreview = disableWebPagePreview,
             replyMarkup = replyMarkup)
 
     override suspend fun editMessage(
         chatId: ChatId,
         messageId: MessageIdentifier,
         text: String,
-        replyMarkup: InlineKeyboardMarkup?
+        replyMarkup: InlineKeyboardMarkup?,
+        disableWebPagePreview: Boolean
     ): ContentMessage<TextContent> =
         requestsExecutor.editMessageText(
             chatId = chatId,
             messageId = messageId,
             parseMode = MarkdownParseMode,
             text = text,
-            disableWebPagePreview = true,
+            disableWebPagePreview = disableWebPagePreview,
             replyMarkup = replyMarkup)
 }
