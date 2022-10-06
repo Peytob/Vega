@@ -12,6 +12,7 @@ import ru.vega.telegram.configuration.MenuProperties
 import ru.vega.telegram.model.menu.Menu
 import ru.vega.telegram.model.menu.TutorDistrictSelectMenuArgument
 import ru.vega.telegram.service.MenuService
+import ru.vega.telegram.service.SessionService
 import ru.vega.telegram.service.TownService
 
 @Component
@@ -19,7 +20,8 @@ class TutorDistrictSelectMenu(
     private val objectMapper: ObjectMapper,
     private val townService: TownService,
     private val menuProperties: MenuProperties,
-    private val menuService: MenuService
+    private val menuService: MenuService,
+    private val sessionService: SessionService
 ) : MenuHandler {
 
     companion object {
@@ -31,6 +33,8 @@ class TutorDistrictSelectMenu(
     override fun handle(message: MessageCallbackQuery, callback: JsonNode): Menu {
         val (pageNumber, townExternalId) = objectMapper.treeToValue<TutorDistrictSelectMenuArgument>(callback)
 
+        sessionService.getOrStartSession(message.user.id).tutorTown = townExternalId
+
         val page = townService.getDistrictPage(townExternalId, Pageable(pageNumber, menuProperties.itemsPerPage))
 
         return Menu(
@@ -40,7 +44,7 @@ class TutorDistrictSelectMenu(
                 page.content.map {
                     menuService.makeGenericNextMenuButton(
                         it.title,
-                        ID,
+                        TutorResultMenu.ID,
                         TutorDistrictSelectMenuArgument(0, it.externalId)
                     )
                 }.forEach(::row)

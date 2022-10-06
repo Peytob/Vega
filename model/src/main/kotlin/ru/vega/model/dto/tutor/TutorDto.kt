@@ -4,6 +4,8 @@ import ru.vega.model.dto.discipline.DisciplineDto
 import ru.vega.model.dto.town.DistrictDto
 
 data class TutorDto(
+    val externalId: String,
+
     val district: DistrictDto,
 
     val address: String,
