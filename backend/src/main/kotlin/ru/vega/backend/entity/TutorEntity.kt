@@ -22,6 +22,9 @@ open class TutorEntity(
     open var phone: String? = null,
 
     @get:Column(nullable = false)
+    open var photoUrl: String? = null,
+
+    @get:Column(nullable = false)
     open var offline: Boolean? = null,
 
     @get:Column(nullable = false)

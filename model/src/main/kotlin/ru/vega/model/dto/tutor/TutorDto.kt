@@ -24,5 +24,7 @@ data class TutorDto(
 
     val whatsApp: String?,
 
-    val disciplines: Collection<DisciplineDto>
+    val disciplines: Collection<DisciplineDto>,
+
+    val photoUrl: String
 )
