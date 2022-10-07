@@ -1,79 +1,56 @@
 package ru.vega.telegram.service
 
-import com.github.benmanes.caffeine.cache.Cache
-import com.github.benmanes.caffeine.cache.Caffeine
-import com.github.benmanes.caffeine.cache.LoadingCache
 import org.slf4j.LoggerFactory
+import org.springframework.cache.annotation.Cacheable
 import org.springframework.core.ParameterizedTypeReference
 import org.springframework.http.HttpMethod
 import org.springframework.stereotype.Component
 import org.springframework.web.client.RestTemplate
 import org.springframework.web.util.UriComponentsBuilder
 import ru.vega.model.dto.tutor.TutorDto
-import ru.vega.model.dto.university.UniversitySpecialityDto
 import ru.vega.model.utils.Page
 import ru.vega.model.utils.Pageable
-import ru.vega.telegram.configuration.CacheProperties
 
 @Component
 class RemoteTutorService(
-    private val restTemplate: RestTemplate,
-    cacheProperties: CacheProperties
+    private val restTemplate: RestTemplate
 ) : TutorService {
 
     companion object {
         private val logger = LoggerFactory.getLogger(RemoteTutorService::class.java)
     }
 
-    private val pagesCache: LoadingCache<CacheKey, Page<TutorDto>> = Caffeine.newBuilder()
-        .initialCapacity(100)
-        .expireAfterAccess(cacheProperties.session)
-        .build {
-            logger.info("Updating tutor cache for request $it")
+    @Cacheable("Tutors")
+    override fun getTutorById(tutorId: String): TutorDto? {
+        logger.info("Updating tutor with external id {} from remote", tutorId)
 
-            val uri = UriComponentsBuilder
-                .fromUriString("/tutor/search")
-                .queryParam("page", it.pageable.page)
-                .queryParam("size", it.pageable.size)
-                .queryParam("districtId", it.districtExternalId)
-                .queryParam("disciplineId", it.disciplineExternalId)
-                .toUriString()
+        return restTemplate
+            .getForObject("/tutor/$tutorId", TutorDto::class.java)
+    }
 
-            val typeReference = object : ParameterizedTypeReference<Page<TutorDto>>() {}
-
-            val page = restTemplate.exchange(
-                uri,
-                HttpMethod.GET,
-                null,
-                typeReference
-            ).body!!
-
-            idsCache.putAll(
-                page.content
-                    .associateBy(TutorDto::externalId)
-            )
-
-            page
-        }
-
-    private val idsCache: Cache<String, TutorDto> = Caffeine.newBuilder()
-        .initialCapacity(100)
-        .expireAfterAccess(cacheProperties.backendData)
-        .build()
-
-    override fun getTutorById(tutorId: String): TutorDto? =
-        idsCache.getIfPresent(tutorId)
-
+    @Cacheable("TutorsPagesByDisciplineAndDistrict")
     override fun getTutorsByDisciplineAndDistrict(
         disciplineExternalId: String,
         districtExternalId: String,
         pageable: Pageable
-    ): Page<TutorDto> =
-        pagesCache[CacheKey(disciplineExternalId, districtExternalId, pageable)]!!
+    ): Page<TutorDto> {
+        logger.info("Updating available tutors in district with id $disciplineExternalId and discipline $disciplineExternalId for page $pageable")
 
-    private data class CacheKey(
-        val disciplineExternalId: String,
-        val districtExternalId: String,
-        val pageable: Pageable
-    )
+        val uri = UriComponentsBuilder
+            .fromUriString("/tutor/search")
+            .queryParam("page", pageable.page)
+            .queryParam("size", pageable.size)
+            .queryParam("districtId", districtExternalId)
+            .queryParam("disciplineId", disciplineExternalId)
+            .toUriString()
+
+        val typeReference = object : ParameterizedTypeReference<Page<TutorDto>>() {}
+
+        return restTemplate.exchange(
+            uri,
+            HttpMethod.GET,
+            null,
+            typeReference
+        ).body!!
+    }
 }

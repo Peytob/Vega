@@ -13,4 +13,7 @@ class QuestionCrudServiceImpl(
 
     override fun getPage(pageable: Pageable): Page<QuestionEntity> =
         questionRepository.findAll(pageable)
+
+    override fun getByExternalId(externalId: String): QuestionEntity? =
+        questionRepository.findByExternalId(externalId)
 }

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
+import ru.vega.backend.exception.EntityNotFoundException
 import ru.vega.backend.mapper.QuestionMapper
 import ru.vega.backend.service.QuestionCrudService
 import ru.vega.model.dto.faq.QuestionDto
@@ -30,5 +31,13 @@ class QuestionController(
         val questionPage = questionCrudService.getPage(pageable)
         val questions = questionPage.map(questionMapper::toDto)
         return ResponseEntity.ok(questions)
+    }
+
+    @GetMapping("/{externalId}")
+    fun get(externalId: String): ResponseEntity<QuestionDto> {
+        val questionEntity = questionCrudService.getByExternalId(externalId) ?:
+            throw EntityNotFoundException(externalId, "question")
+        val question = questionMapper.toDto(questionEntity)
+        return ResponseEntity.ok(question)
     }
 }

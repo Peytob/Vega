@@ -14,4 +14,7 @@ class UniversitySpecialityCrudServiceImpl(
 
     override fun getByDisciplineSet(disciplinesSet: DisciplinesSetEntity, scoreFilter: Int, pageable: Pageable): Page<UniversitySpecialityEntity> =
         universitySpecialityRepository.findAllByDisciplinesSet(disciplinesSet, scoreFilter, pageable)
+
+    override fun getByExternalId(externalId: String): UniversitySpecialityEntity? =
+        universitySpecialityRepository.findByExternalId(externalId)
 }

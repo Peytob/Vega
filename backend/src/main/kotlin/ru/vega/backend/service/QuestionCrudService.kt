@@ -7,4 +7,5 @@ import ru.vega.backend.entity.QuestionEntity
 interface QuestionCrudService {
 
     fun getPage(pageable: Pageable): Page<QuestionEntity>
+    fun getByExternalId(externalId: String): QuestionEntity?
 }

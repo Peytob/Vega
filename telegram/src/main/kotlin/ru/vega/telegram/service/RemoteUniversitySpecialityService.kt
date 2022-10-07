@@ -1,8 +1,8 @@
 package ru.vega.telegram.service
 
-import com.github.benmanes.caffeine.cache.Cache
-import com.github.benmanes.caffeine.cache.Caffeine
-import com.github.benmanes.caffeine.cache.LoadingCache
+import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Qualifier
+import org.springframework.cache.annotation.Cacheable
 import org.springframework.core.ParameterizedTypeReference
 import org.springframework.http.HttpMethod
 import org.springframework.stereotype.Service
@@ -12,58 +12,45 @@ import ru.vega.model.dto.discipline.DisciplinesSetDto
 import ru.vega.model.dto.university.UniversitySpecialityDto
 import ru.vega.model.utils.Page
 import ru.vega.model.utils.Pageable
-import ru.vega.telegram.configuration.CacheProperties
 
 @Service
 class RemoteUniversitySpecialityService(
-    private val restTemplate: RestTemplate,
-    cacheProperties: CacheProperties
+    @Qualifier("backendRestTemplate")
+    private val restTemplate: RestTemplate
 ) : UniversitySpecialityService {
 
-    private val disciplinesSetCache: LoadingCache<CacheKey, Page<UniversitySpecialityDto>> = Caffeine.newBuilder()
-        .initialCapacity(100)
-        .expireAfterAccess(cacheProperties.backendData)
-        .build {
+    companion object {
+        private val logger = LoggerFactory.getLogger(RemoteUniversitySpecialityService::class.java)
+    }
 
-            val uri = UriComponentsBuilder
-                .fromUriString("/disciplinesSet/{disciplineSetId}/specialities")
-                .queryParam("scoreFilter", it.score ?: Int.MAX_VALUE)
-                .queryParam("page", it.pageable.page)
-                .queryParam("size", it.pageable.size)
-                .buildAndExpand(it.disciplinesSetId)
-                .toUriString()
+    @Cacheable("UniversitySpecialitiesByDisciplineSetAndScore")
+    override fun getByDisciplinesSet(disciplinesSet: DisciplinesSetDto, score: Int?, pageable: Pageable) : Page<UniversitySpecialityDto> {
+        logger.info("Updating university specialities of disciplines set with external id $disciplinesSet with score " +
+                "$score for page $pageable")
 
-            val typeReference = object : ParameterizedTypeReference<Page<UniversitySpecialityDto>>() {}
+        val uri = UriComponentsBuilder
+            .fromUriString("/disciplinesSet/{disciplineSetId}/specialities")
+            .queryParam("scoreFilter", score ?: Int.MAX_VALUE)
+            .queryParam("page", pageable.page)
+            .queryParam("size", pageable.size)
+            .buildAndExpand(disciplinesSet.externalId)
+            .toUriString()
 
-            val page = restTemplate.exchange(
-                uri,
-                HttpMethod.GET,
-                null,
-                typeReference
-            ).body!!
+        val typeReference = object : ParameterizedTypeReference<Page<UniversitySpecialityDto>>() {}
 
-            idsCache.putAll(
-                page.content
-                    .associateBy(UniversitySpecialityDto::externalId)
-            )
+        return restTemplate.exchange(
+            uri,
+            HttpMethod.GET,
+            null,
+            typeReference
+        ).body!!
+    }
 
-            page
-        }
+    @Cacheable("UniversitySpecialitiesByExternalId")
+    override fun getByExternalId(externalId: String): UniversitySpecialityDto? {
+        logger.info("Updating university speciality with external id {} from remote", externalId)
 
-    private val idsCache: Cache<String, UniversitySpecialityDto> = Caffeine.newBuilder()
-        .initialCapacity(100)
-        .expireAfterAccess(cacheProperties.backendData)
-        .build()
-
-    override fun getByDisciplinesSet(disciplinesSet: DisciplinesSetDto, score: Int?, pageable: Pageable) =
-        disciplinesSetCache[CacheKey(disciplinesSet.externalId, score, pageable)]!!
-
-    override fun getByExternalId(externalId: String): UniversitySpecialityDto? =
-        idsCache.getIfPresent(externalId)
-
-    private data class CacheKey(
-        val disciplinesSetId: String,
-        val score: Int?,
-        val pageable: Pageable
-    )
+        return restTemplate
+            .getForObject("/universitySpeciality/$externalId", UniversitySpecialityDto::class.java)
+    }
 }

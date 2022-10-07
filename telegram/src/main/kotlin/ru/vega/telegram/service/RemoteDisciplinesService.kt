@@ -1,37 +1,36 @@
 package ru.vega.telegram.service
 
-import com.google.common.base.Suppliers
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Qualifier
+import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestTemplate
 import ru.vega.model.dto.discipline.DisciplineDto
-import ru.vega.telegram.configuration.CacheProperties
-import java.util.concurrent.TimeUnit
 
 @Service
 class RemoteDisciplinesService(
     @Qualifier("backendRestTemplate")
-    private val restTemplate: RestTemplate,
-    cacheProperties: CacheProperties
+    private val restTemplate: RestTemplate
 ) : DisciplinesService {
 
     companion object {
         private val logger = LoggerFactory.getLogger(RemoteDisciplinesService::class.java)
     }
 
-    private val disciplinesCache = Suppliers.memoizeWithExpiration({
-            logger.info("Updating disciplines cache")
+    @Cacheable("AllDisciplines")
+    override fun getAll(): Collection<DisciplineDto> {
+        logger.info("Getting all disciplines from remote")
 
-            restTemplate
-                .getForObject("/discipline", Array<DisciplineDto>::class.java)!!
-                .associateBy(DisciplineDto::externalId)
-        },
-        cacheProperties.backendData.toSeconds(), TimeUnit.SECONDS)
+        return restTemplate
+            .getForObject("/discipline", Array<DisciplineDto>::class.java)!!
+            .toList()
+    }
 
-    override fun getAll(): Collection<DisciplineDto> =
-        disciplinesCache.get().values
+    @Cacheable("Disciplines")
+    override fun getByExternalId(externalId: String): DisciplineDto? {
+        logger.info("Updating discipline with external id {} from remote", externalId)
 
-    override fun getByExternalId(externalId: String): DisciplineDto? =
-        disciplinesCache.get()[externalId]
+        return restTemplate
+            .getForObject("/discipline/$externalId", DisciplineDto::class.java)
+    }
 }

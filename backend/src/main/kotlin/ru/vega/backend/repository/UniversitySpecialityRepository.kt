@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 import ru.vega.backend.entity.DisciplinesSetEntity
 import ru.vega.backend.entity.UniversitySpecialityEntity
-import java.util.UUID
+import java.util.*
 
 interface UniversitySpecialityRepository : JpaRepository<UniversitySpecialityEntity, UUID> {
 
@@ -31,4 +31,6 @@ interface UniversitySpecialityRepository : JpaRepository<UniversitySpecialityEnt
 
         nativeQuery = true)
     fun findAllByDisciplinesSet(disciplinesSet: DisciplinesSetEntity, scoreFilter: Int, pageable: Pageable): Page<UniversitySpecialityEntity>
+
+    fun findByExternalId(externalId: String): UniversitySpecialityEntity?
 }
