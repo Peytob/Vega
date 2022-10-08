@@ -8,13 +8,15 @@ import dev.inmo.tgbotapi.types.update.abstracts.Update
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import ru.vega.telegram.menu.MenuManager
+import ru.vega.telegram.menu.StartMenu
 import ru.vega.telegram.service.MenuService
 
 @Component
 class NextMenuCallbackHandler(
     private val menuService: MenuService,
     private val menuManager: MenuManager,
-    private val objectMapper: ObjectMapper
+    private val objectMapper: ObjectMapper,
+    private val startMenu: StartMenu
 ) : UpdateHandler {
 
     companion object {
@@ -32,11 +34,18 @@ class NextMenuCallbackHandler(
         val decodeNextMenuMessage = menuService.decodeNextMenuMessage(queryText)
 
         logger.info("New next menu event {}", decodeNextMenuMessage)
+
         if (decodeNextMenuMessage.nextMenuId != null) {
-            val nextMenuData = decodeNextMenuMessage.menuData ?: objectMapper.nullNode()
-            val menuHandler = menuManager.getMenuHandler(decodeNextMenuMessage.nextMenuId) ?: return // TODO 404 menu
-            val menu = menuHandler.handle(query, nextMenuData)
-            menuService.replaceMenu(query.message.chat.id, query.message.messageId, menu)
+            try {
+                val nextMenuData = decodeNextMenuMessage.menuData ?: objectMapper.nullNode()
+                val menuHandler =
+                    menuManager.getMenuHandler(decodeNextMenuMessage.nextMenuId) ?: return // TODO 404 menu
+                val menu = menuHandler.handle(query, nextMenuData)
+                menuService.replaceMenu(query.message.chat.id, query.message.messageId, menu)
+            } catch (exception: Exception) {
+                menuService.replaceMenu(query.message.chat.id, query.message.messageId, startMenu.menu)
+                throw exception
+            }
         }
     }
 }
