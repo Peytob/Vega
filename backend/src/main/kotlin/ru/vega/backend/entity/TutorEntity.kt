@@ -16,6 +16,9 @@ open class TutorEntity(
     open var name: String? = null,
 
     @get:Column(nullable = false)
+    open var notificationChatId: Long? = null,
+
+    @get:Column(nullable = false)
     open var email: String? = null,
 
     @get:Column(nullable = false)

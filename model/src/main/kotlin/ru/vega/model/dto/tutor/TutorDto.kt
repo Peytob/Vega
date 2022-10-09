@@ -8,6 +8,8 @@ data class TutorDto(
 
     val district: DistrictDto,
 
+    val notificationChatId: Long,
+
     val address: String,
 
     val name: String,

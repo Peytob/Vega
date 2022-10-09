@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component
 import ru.vega.telegram.exception.EntityNotFound
 import ru.vega.telegram.model.menu.DisciplineDetailsMenuArguments
 import ru.vega.telegram.model.menu.Menu
+import ru.vega.telegram.model.menu.TutorTownSelectArgument
 import ru.vega.telegram.service.DisciplinesService
 import ru.vega.telegram.service.MenuService
 
@@ -49,6 +50,9 @@ class DisciplineDetailsMenu(
                 )
                 row(
                     URLInlineKeyboardButton("ФИПИ", discipline.fipiLink)
+                )
+                row(
+                    menuService.makeGenericNextMenuButton("Найти репетитора", TutorTownSelectMenu.ID, TutorTownSelectArgument(0, discipline.externalId))
                 )
                 row(
                     menuService.makeGenericNextMenuButton(RETURN_BUTTON_TEXT, DisciplinesDetailsSelectMenu.ID)

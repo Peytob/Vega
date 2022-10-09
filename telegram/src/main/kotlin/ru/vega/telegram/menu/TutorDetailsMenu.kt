@@ -9,10 +9,10 @@ import dev.inmo.tgbotapi.utils.row
 import org.springframework.stereotype.Component
 import ru.vega.telegram.exception.EntityNotFound
 import ru.vega.telegram.model.menu.Menu
+import ru.vega.telegram.model.menu.TutorAcceptMessageMenuArgument
 import ru.vega.telegram.model.menu.TutorDetailsMenuArgument
 import ru.vega.telegram.model.menu.TutorDistrictSelectMenuArgument
 import ru.vega.telegram.service.MenuService
-import ru.vega.telegram.service.SessionService
 import ru.vega.telegram.service.TutorService
 
 @Component
@@ -55,6 +55,11 @@ class TutorDetailsMenu(
             """.trimIndent(),
 
             matrix {
+                row(menuService.makeGenericNextMenuButton(
+                    "Подать заявление репетитору",
+                    TutorAcceptMessageMenu.ID,
+                    TutorAcceptMessageMenuArgument(tutor.externalId)
+                ))
                 row(menuService.makeGenericNextMenuButton(
                     RETURN_BUTTON_TEXT,
                     TutorResultMenu.ID,
