@@ -28,5 +28,9 @@ data class TutorDto(
 
     val disciplines: Collection<DisciplineDto>,
 
-    val photoUrl: String
+    val photoUrl: String,
+
+    val description: String,
+
+    val price: Int
 )

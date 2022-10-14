@@ -33,6 +33,12 @@ open class TutorEntity(
     @get:Column(nullable = false)
     open var online: Boolean? = null,
 
+    @get:Column(nullable = false, columnDefinition = "TEXT")
+    open var description: String? = null,
+
+    @get:Column(nullable = false)
+    open var price: Int? = null,
+
     open var telegram: String? = null,
 
     open var whatsApp: String? = null,

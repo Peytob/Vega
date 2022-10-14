@@ -5,10 +5,7 @@ import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Sort
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 import ru.vega.backend.exception.EntityNotFoundException
 import ru.vega.backend.mapper.QuestionMapper
 import ru.vega.backend.service.QuestionCrudService
@@ -34,7 +31,7 @@ class QuestionController(
     }
 
     @GetMapping("/{externalId}")
-    fun get(externalId: String): ResponseEntity<QuestionDto> {
+    fun get(@PathVariable externalId: String): ResponseEntity<QuestionDto> {
         val questionEntity = questionCrudService.getByExternalId(externalId) ?:
             throw EntityNotFoundException(externalId, "question")
         val question = questionMapper.toDto(questionEntity)

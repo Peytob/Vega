@@ -20,10 +20,10 @@ class NotifyServiceImpl(
 
         val message =
             """
-                Новая заявка на репетиторство!
-                Указанные в профиле имя и фамилия: ${student.firstName} + ${student.lastName}
-                Имя профиля в телеграме: ${student.username}
-                Ссылка на профиль: ${student.link}
+Новая заявка на репетиторство!
+Указанные в профиле имя и фамилия: ${student.firstName} ${student.lastName}
+Имя профиля в телеграме: ${student.username?.username}
+Ссылка на профиль: ${student.link}
             """.trimMargin()
 
         messageService.sendMessage(chatId, message)
