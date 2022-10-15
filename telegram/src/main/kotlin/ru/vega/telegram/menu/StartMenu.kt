@@ -31,7 +31,7 @@ class StartMenu(
                     menuService.makeGenericNextMenuButton("Специальности", SpecialityDisciplinesSelectMenu.ID),
                 )
                 row(
-                    menuService.makeGenericNextMenuButton("Репетиторы!", TutorSelectDisciplineMenu.ID)
+                    menuService.makeGenericNextMenuButton("Репетиторы", SelectTutorMeetingType.ID)
                 )
                 row(
                     menuService.makeGenericNextMenuButton("FAQ", FaqSelectMenu.ID, PageSelectArguments(0))

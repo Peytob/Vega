@@ -12,4 +12,6 @@ interface TutorService {
         pageable: Pageable): Page<TutorDto>
 
     fun getTutorById(tutorId: String): TutorDto?
+
+    fun getOnlineTutorsByDiscipline(disciplineId: String, pageable: Pageable): Page<TutorDto>
 }

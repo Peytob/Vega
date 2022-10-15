@@ -20,5 +20,11 @@ class TutorCrudServiceImpl(
     ): Page<TutorEntity> =
         tutorRepository.findByDistrictAndDiscipline(district, discipline, pageable)
 
+    override fun getOnlineByDiscipline(
+        discipline: DisciplineEntity,
+        pageable: Pageable
+    ): Page<TutorEntity> =
+        tutorRepository.findOnlineByDiscipline(discipline, pageable)
+
     override fun getByExternalId(externalId: String): TutorEntity? = tutorRepository.findByExternalId(externalId)
 }

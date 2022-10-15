@@ -1,11 +1,13 @@
 package ru.vega.telegram.service
 
 import org.slf4j.LoggerFactory
+import org.springframework.cache.annotation.CachePut
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.core.ParameterizedTypeReference
 import org.springframework.http.HttpMethod
 import org.springframework.stereotype.Component
 import org.springframework.web.client.RestTemplate
+import org.springframework.web.client.getForObject
 import org.springframework.web.util.UriComponentsBuilder
 import ru.vega.model.dto.tutor.TutorDto
 import ru.vega.model.utils.Page
@@ -26,6 +28,27 @@ class RemoteTutorService(
 
         return restTemplate
             .getForObject("/tutor/$tutorId", TutorDto::class.java)
+    }
+
+    @Cacheable("OnlineTutorsByDiscipline")
+    override fun getOnlineTutorsByDiscipline(disciplineId: String, pageable: Pageable): Page<TutorDto> {
+        logger.info("Updating available online tutors for page $pageable")
+
+        val uri = UriComponentsBuilder
+            .fromUriString("/tutor/search/online")
+            .queryParam("page", pageable.page)
+            .queryParam("size", pageable.size)
+            .queryParam("disciplineId", disciplineId)
+            .toUriString()
+
+        val typeReference = object : ParameterizedTypeReference<Page<TutorDto>>() {}
+
+        return restTemplate.exchange(
+            uri,
+            HttpMethod.GET,
+            null,
+            typeReference
+        ).body!!
     }
 
     @Cacheable("TutorsPagesByDisciplineAndDistrict")

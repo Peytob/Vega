@@ -48,6 +48,24 @@ class TutorController(
         return ResponseEntity.ok(tutors)
     }
 
+    @GetMapping("/search/online")
+    fun getOnlineByDiscipline(@RequestParam(required = true) disciplineId: String,
+                      @RequestParam(value = "page", defaultValue = "0") @Min(0) page: Int,
+                      @RequestParam(value = "size", defaultValue = "10") @Min(1) size: Int,
+                      @RequestParam(value = "sortDir", defaultValue = "ASC") sortDir: Sort.Direction):
+            ResponseEntity<Page<TutorDto>> {
+        val pageable = PageRequest.of(page, size)
+
+        val discipline = disciplineCrudService.getByExternalId(disciplineId) ?:
+            throw EntityNotFoundException(disciplineId, "Discipline")
+
+        val tutors = tutorCrudService
+            .getOnlineByDiscipline(discipline, pageable)
+            .map(tutorMapper::toDto)
+
+        return ResponseEntity.ok(tutors)
+    }
+
     @GetMapping("/{externalId}")
     fun get(@PathVariable externalId: String): ResponseEntity<TutorDto> {
         val tutor = tutorCrudService.getByExternalId(externalId) ?:

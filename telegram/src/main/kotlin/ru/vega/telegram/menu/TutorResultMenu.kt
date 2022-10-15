@@ -67,7 +67,7 @@ class TutorResultMenu(
     }
 
     private fun makeEmptyTutorsMenu(townId: String) = Menu(
-        "В выбранном тобою районе города нет ни одного подходящего репетитора :(",
+        "В выбранном тобой районе города нет ни одного подходящего репетитора :(",
 
         matrix {
             row(menuService.makeGenericNextMenuButton(RETURN_BUTTON_TEXT, TutorDistrictSelectMenu.ID, TutorDistrictSelectMenuArgument(0, townId)))

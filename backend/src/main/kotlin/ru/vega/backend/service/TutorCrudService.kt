@@ -10,4 +10,5 @@ interface TutorCrudService {
 
     fun getByDistrictAndDiscipline(district: DistrictEntity, discipline: DisciplineEntity, pageable: Pageable): Page<TutorEntity>
     fun getByExternalId(externalId: String): TutorEntity?
+    fun getOnlineByDiscipline(discipline: DisciplineEntity, pageable: Pageable): Page<TutorEntity>
 }
