@@ -23,8 +23,8 @@ class StartCommand(
         logger.info("Start command from user ${message.from}")
 
         val session = sessionService.startSession(message)
-        session.menu = StartMenu()
-        menuService.showMenu(message.chat.id, session.menu as StartMenu)
+        session.menuHistory.pushNextMenu(StartMenu())
+        menuService.showMenu(message.chat.id, session.menuHistory.currentMenu!!)
     }
 
     override fun getCommandString() = "/start"

@@ -1,6 +1,5 @@
 package ru.vega.telegram.menu.processor
 
-import dev.inmo.tgbotapi.extensions.utils.extensions.raw.from
 import dev.inmo.tgbotapi.types.buttons.Matrix
 import dev.inmo.tgbotapi.utils.matrix
 import dev.inmo.tgbotapi.utils.row
@@ -15,8 +14,21 @@ class StartMenu : Menu {
 
     override val buttons: Matrix<Button> = matrix {
         row(
-            Button("Дисциплины", "disciplines") {
-                logger.info("Hello, ${it.message.from?.username}")
+            Button("Предметы", "disciplines") {
+
+            },
+
+            Button("Специальности", "specialities") {
+            }
+        )
+
+        row(
+            Button("Репетиторы", "tutors") {
+            }
+        )
+
+        row(
+            Button("FAQ", "faq") {
             }
         )
     }
