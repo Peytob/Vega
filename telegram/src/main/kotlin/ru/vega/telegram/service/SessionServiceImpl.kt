@@ -2,7 +2,8 @@ package ru.vega.telegram.service
 
 import com.github.benmanes.caffeine.cache.Caffeine
 import com.github.benmanes.caffeine.cache.LoadingCache
-import dev.inmo.tgbotapi.types.UserId
+import dev.inmo.tgbotapi.extensions.utils.extensions.raw.from
+import dev.inmo.tgbotapi.types.message.abstracts.Message
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.boot.context.properties.EnableConfigurationProperties
@@ -20,18 +21,24 @@ class SessionServiceImpl(
         private val logger: Logger = LoggerFactory.getLogger(SessionServiceImpl::class.java)
     }
 
-    // Or just use Spring Starter Cache?
-    private val cache: LoadingCache<UserId, Session> = Caffeine.newBuilder()
+    private val cache: LoadingCache<Message, Session> = Caffeine.newBuilder()
         .initialCapacity(100)
         .expireAfterAccess(cacheProperties.session)
         .build {
-            logger.info("Creating new session for $it")
+            logger.info("Creating new session for ${it.from}")
             Session(it)
         }
 
-    override fun getOrStartSession(userId: UserId) =
-        cache[userId]!!
+    override fun getSession(message: Message): Session? =
+        cache.getIfPresent(message)
 
-    override fun isSessionActive(userId: UserId) =
-        cache.getIfPresent(userId) != null
+    override fun startSession(message: Message): Session =
+        cache[message]!!
+
+    override fun isSessionActive(message: Message) =
+        cache.getIfPresent(message) != null
+
+    override fun refreshSession(message: Message) {
+        cache.refresh(message)
+    }
 }

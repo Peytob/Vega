@@ -10,7 +10,9 @@ class SessionRefresherMessageHandler(
 ) : MessageHandler() {
 
     override suspend fun handleMessage(message: Message) {
-        sessionService.getOrStartSession(message.chat.id)
+        if (sessionService.isSessionActive(message)) {
+            sessionService.refreshSession(message)
+        }
     }
 
     override fun filter(message: Message): Boolean = true

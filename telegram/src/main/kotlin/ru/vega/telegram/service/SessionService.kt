@@ -1,11 +1,15 @@
 package ru.vega.telegram.service
 
-import dev.inmo.tgbotapi.types.UserId
+import dev.inmo.tgbotapi.types.message.abstracts.Message
 import ru.vega.telegram.model.entity.Session
 
 interface SessionService {
 
-    fun getOrStartSession(userId: UserId): Session
+    fun getSession(message: Message): Session?
 
-    fun isSessionActive(userId: UserId): Boolean
+    fun startSession(message: Message): Session
+
+    fun isSessionActive(message: Message): Boolean
+
+    fun refreshSession(message: Message)
 }
