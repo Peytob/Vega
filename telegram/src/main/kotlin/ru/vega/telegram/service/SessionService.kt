@@ -10,6 +10,4 @@ interface SessionService {
     fun startSession(message: Message): Session
 
     fun isSessionActive(message: Message): Boolean
-
-    fun refreshSession(message: Message)
 }

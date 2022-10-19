@@ -1,17 +1,20 @@
 package ru.vega.telegram.model.entity
 
-import ru.vega.telegram.menu.processor.Menu
+import ru.vega.telegram.model.Menu
 import java.util.*
 
 class MenuHistory {
 
     private val menuStack: Stack<Menu> = Stack()
 
-    var size = menuStack.size
+    val size
+        get() = menuStack.size
 
-    var currentMenu = if (menuStack.empty()) null else menuStack.peek()
+    val currentMenu: Menu?
+        get() = if (menuStack.empty()) null else menuStack.peek()
 
-    var empty = size == 0
+    val empty: Boolean
+        get() = size == 0
 
     fun pushNextMenu(menu: Menu) {
         menuStack.push(menu)
@@ -23,5 +26,9 @@ class MenuHistory {
         } else {
             menuStack[menuStack.size - 1] = menu
         }
+    }
+
+    fun moveBack() {
+        menuStack.pop()
     }
 }
