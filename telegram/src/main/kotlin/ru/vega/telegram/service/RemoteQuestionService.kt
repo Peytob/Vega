@@ -11,6 +11,7 @@ import org.springframework.web.util.UriComponentsBuilder
 import ru.vega.model.dto.faq.QuestionDto
 import ru.vega.model.utils.Page
 import ru.vega.model.utils.Pageable
+import java.util.UUID
 
 @Service
 class RemoteQuestionService(
@@ -21,12 +22,12 @@ class RemoteQuestionService(
         private val logger: Logger = LoggerFactory.getLogger(RemoteQuestionService::class.java)
     }
 
-    @Cacheable("FaqPages")
+    @Cacheable("Questions, Pages")
     override fun get(pageable: Pageable): Page<QuestionDto> {
         logger.info("Updating available FAQ for page $pageable")
 
         val uri = UriComponentsBuilder
-            .fromUriString("/faq")
+            .fromUriString("/question")
             .queryParam("page", pageable.page)
             .queryParam("size", pageable.size)
             .toUriString()
@@ -39,15 +40,16 @@ class RemoteQuestionService(
         ).body!!
     }
 
-    @Cacheable("Faqs")
-    override fun get(externalId: String): QuestionDto? {
-        logger.info("Updating FAQ with external id $externalId from remote")
+    @Cacheable("Questions")
+    override fun getById(id: UUID): QuestionDto? {
+        logger.info("Updating FAQ with id $id from remote")
 
         return restTemplate.exchange(
-            "/faq/$externalId",
+            "/question/{id}",
             HttpMethod.GET,
             null,
-            QuestionDto::class.java
+            QuestionDto::class.java,
+            id
         ).body!!
     }
 }

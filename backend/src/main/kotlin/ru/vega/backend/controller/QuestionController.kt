@@ -10,10 +10,11 @@ import ru.vega.backend.exception.EntityNotFoundException
 import ru.vega.backend.mapper.QuestionMapper
 import ru.vega.backend.service.QuestionCrudService
 import ru.vega.model.dto.faq.QuestionDto
+import java.util.*
 import javax.validation.constraints.Min
 
 @RestController
-@RequestMapping("/faq")
+@RequestMapping("/question")
 class QuestionController(
     private val questionCrudService: QuestionCrudService,
     private val questionMapper: QuestionMapper
@@ -30,10 +31,10 @@ class QuestionController(
         return ResponseEntity.ok(questions)
     }
 
-    @GetMapping("/{externalId}")
-    fun get(@PathVariable externalId: String): ResponseEntity<QuestionDto> {
-        val questionEntity = questionCrudService.getByExternalId(externalId) ?:
-            throw EntityNotFoundException(externalId, "question")
+    @GetMapping("/{id}")
+    fun get(@PathVariable id: UUID): ResponseEntity<QuestionDto> {
+        val questionEntity = questionCrudService.getById(id) ?:
+            throw EntityNotFoundException(id, "question")
         val question = questionMapper.toDto(questionEntity)
         return ResponseEntity.ok(question)
     }

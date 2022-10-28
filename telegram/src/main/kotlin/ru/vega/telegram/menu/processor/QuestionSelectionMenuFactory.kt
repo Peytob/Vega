@@ -14,7 +14,8 @@ import ru.vega.telegram.service.QuestionService
 @EnableConfigurationProperties(MenuProperties::class)
 class QuestionSelectionMenuFactory(
     private val questionService: QuestionService,
-    private val menuProperties: MenuProperties
+    private val menuProperties: MenuProperties,
+    private val questionDetailsMenuFactory: QuestionDetailsMenuFactory
 ) : MenuFactory {
 
     fun create(page: Int): Menu {
@@ -26,7 +27,7 @@ class QuestionSelectionMenuFactory(
             questionPage.content
                 .map {
                     Button(it.quest, uuidAsByteString(it.id)) { session ->
-                        println(it.answer)
+                        session.menuHistory.pushNextMenu(questionDetailsMenuFactory.create(it.id))
                     }
                 }
                 .forEach { row(it) }
