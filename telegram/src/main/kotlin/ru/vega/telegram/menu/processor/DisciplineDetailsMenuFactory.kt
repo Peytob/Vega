@@ -12,7 +12,7 @@ import java.util.*
 @Component
 class DisciplineDetailsMenuFactory(
     private val disciplinesService: DisciplinesService
-) {
+) : MenuFactory {
 
     fun create(disciplineId: UUID): Menu {
         val discipline = disciplinesService.getById(disciplineId)

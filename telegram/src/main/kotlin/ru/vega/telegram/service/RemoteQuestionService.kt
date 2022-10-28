@@ -13,12 +13,12 @@ import ru.vega.model.utils.Page
 import ru.vega.model.utils.Pageable
 
 @Service
-class RemoteFaqService(
+class RemoteQuestionService(
     private val restTemplate: RestTemplate
-) : FaqService {
+) : QuestionService {
 
     companion object {
-        private val logger: Logger = LoggerFactory.getLogger(RemoteFaqService::class.java)
+        private val logger: Logger = LoggerFactory.getLogger(RemoteQuestionService::class.java)
     }
 
     @Cacheable("FaqPages")

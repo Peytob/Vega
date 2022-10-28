@@ -4,7 +4,7 @@ import ru.vega.model.dto.faq.QuestionDto
 import ru.vega.model.utils.Page
 import ru.vega.model.utils.Pageable
 
-interface FaqService {
+interface QuestionService {
 
     fun get(pageable: Pageable): Page<QuestionDto>
 

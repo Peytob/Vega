@@ -8,7 +8,8 @@ import ru.vega.telegram.model.Menu
 
 @Component
 class StartMenuFactory(
-    private val disciplineDetailsSelectMenuFactory: DisciplineDetailsSelectMenuFactory
+    private val disciplineDetailsSelectMenuFactory: DisciplineDetailsSelectMenuFactory,
+    private val questionSelectMenuFactory: QuestionSelectionMenuFactory
 ) : MenuFactory {
 
     fun create(): Menu {
@@ -28,7 +29,8 @@ class StartMenuFactory(
             )
 
             row(
-                Button("FAQ", "faq") {
+                Button("FAQ", "faq") { session ->
+                    session.menuHistory.pushNextMenu(questionSelectMenuFactory.create(0))
                 }
             )
         }
