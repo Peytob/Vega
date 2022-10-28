@@ -32,6 +32,11 @@ class QuestionSelectionMenuFactory(
                 }
                 .forEach { row(it) }
 
+            val navigationRow = makePagesNavigationRow(questionPage) { nextPage, session ->
+                session.menuHistory.changeCurrentMenu(create(nextPage))
+            }
+            add(navigationRow)
+
             row(makeReturnButton())
         }
 

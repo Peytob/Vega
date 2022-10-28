@@ -19,7 +19,7 @@ class StartMenuFactory(
                     session.menuHistory.pushNextMenu(disciplineDetailsSelectMenuFactory.create())
                 },
 
-                Button("Специальности", "specialities") {
+                Button("Специальности", "specialities") { session ->
                 }
             )
 
@@ -35,7 +35,11 @@ class StartMenuFactory(
             )
         }
 
-        val message = "sdfsdf"
+        val message =
+            """
+                Приветствую! Меня зовут Vega 💫
+                Я хочу помочь тебе в выборе твоей будущей специальности и ВУЗа! Что ты хочешь узнать?
+            """.trimIndent()
 
         return Menu(buttons, message)
     }
