@@ -8,7 +8,9 @@ import java.util.*
 @Repository
 interface DisciplineRepository : JpaRepository<DisciplineEntity, UUID> {
 
+    @Deprecated("External ids will be removed")
     fun findByExternalId(externalId: String): DisciplineEntity?
 
+    @Deprecated("External ids will be removed")
     fun findAllByExternalIdIn(externalIds: Collection<String>): Collection<DisciplineEntity>
 }

@@ -9,6 +9,7 @@ import ru.vega.backend.exception.EntityNotFoundException
 import ru.vega.backend.mapper.DisciplineMapper
 import ru.vega.backend.service.DisciplineCrudService
 import ru.vega.model.dto.discipline.DisciplineDto
+import java.util.UUID
 
 @RestController
 @RequestMapping("/discipline")
@@ -24,8 +25,8 @@ class DisciplineController(
     }
 
     @GetMapping("/{id}")
-    fun get(@PathVariable id: String): ResponseEntity<DisciplineDto> {
-        val discipline = disciplineCrudService.getByExternalId(id) ?: throw EntityNotFoundException(id, "discipline")
+    fun get(@PathVariable id: UUID): ResponseEntity<DisciplineDto> {
+        val discipline = disciplineCrudService.getById(id) ?: throw EntityNotFoundException(id, "discipline")
         return ResponseEntity.ok(disciplineMapper.toDisciplineDto(discipline))
     }
 }

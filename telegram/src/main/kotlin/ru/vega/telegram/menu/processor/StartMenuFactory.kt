@@ -15,7 +15,7 @@ class StartMenuFactory(
         val buttons = matrix<Button> {
             row(
                 Button("Предметы", "disciplines") { session ->
-                    session.menuHistory.pushNextMenu(disciplineDetailsSelectMenuFactory.create(0))
+                    session.menuHistory.pushNextMenu(disciplineDetailsSelectMenuFactory.create())
                 },
 
                 Button("Специальности", "specialities") {

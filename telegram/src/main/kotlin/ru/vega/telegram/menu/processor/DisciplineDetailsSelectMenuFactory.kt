@@ -12,21 +12,13 @@ class DisciplineDetailsSelectMenuFactory(
     private val disciplinesService: DisciplinesService
 ) : MenuFactory {
 
-    fun create(page: Int): Menu {
-        if (page < 0) {
-            throw IllegalArgumentException("Page can't be less than zero. Current value is $page")
-        }
-
+    fun create(): Menu {
         val buttons = matrix<Button> {
             val disciplines = disciplinesService.getAll()
 
-            disciplines
-                .map {
-                    Button(it.title, it.externalId) {
-                    }
-                }
-                .chunked(3)
-                .forEach(::add)
+            makeDisciplinesButtonsMatrix(disciplines) { disciplineDto, session ->
+                println("Selected ${disciplineDto.title} discipline for details...")
+            }.forEach(::add)
 
             val returnButton = Button("Назад", "return") {
                 it.menuHistory.moveBack()
