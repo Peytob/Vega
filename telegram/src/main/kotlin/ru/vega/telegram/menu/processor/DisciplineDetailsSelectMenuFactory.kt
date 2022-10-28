@@ -9,7 +9,8 @@ import ru.vega.telegram.service.DisciplinesService
 
 @Component
 class DisciplineDetailsSelectMenuFactory(
-    private val disciplinesService: DisciplinesService
+    private val disciplinesService: DisciplinesService,
+    private val disciplineDetailsMenuFactory: DisciplineDetailsMenuFactory
 ) : MenuFactory {
 
     fun create(): Menu {
@@ -17,17 +18,14 @@ class DisciplineDetailsSelectMenuFactory(
             val disciplines = disciplinesService.getAll()
 
             makeDisciplinesButtonsMatrix(disciplines) { disciplineDto, session ->
-                println("Selected ${disciplineDto.title} discipline for details...")
+                val detailsMenu = disciplineDetailsMenuFactory.create(disciplineDto.id)
+                session.menuHistory.pushNextMenu(detailsMenu)
             }.forEach(::add)
 
-            val returnButton = Button("Назад", "return") {
-                it.menuHistory.moveBack()
-            }
-
-            row(returnButton)
+            row(makeReturnButton())
         }
 
-        val message = "Выбери"
+        val message = "Выбери интересующую тебя дисциплину"
 
         return Menu(buttons, message)
     }

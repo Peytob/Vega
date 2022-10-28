@@ -21,7 +21,8 @@ class MenuServiceImpl(
         return messageService.sendMessage(
             chatId = chatId,
             text = menu.message,
-            replyMarkup = InlineKeyboardMarkup(makeKeyboard(menu.buttons))
+            replyMarkup = InlineKeyboardMarkup(makeKeyboard(menu.buttons)),
+            disableWebPagePreview = menu.disablePagePreview
         )
     }
 
@@ -30,7 +31,8 @@ class MenuServiceImpl(
             chatId = chatId,
             messageId = messageId,
             text = menu.message,
-            replyMarkup = InlineKeyboardMarkup(makeKeyboard(menu.buttons))
+            replyMarkup = InlineKeyboardMarkup(makeKeyboard(menu.buttons)),
+            disableWebPagePreview = menu.disablePagePreview
         )
     }
 

@@ -5,5 +5,6 @@ import ru.vega.telegram.menu.Button
 
 data class Menu(
     val buttons: Matrix<Button>,
-    val message: String
+    val message: String,
+    val disablePagePreview: Boolean = true
 )
