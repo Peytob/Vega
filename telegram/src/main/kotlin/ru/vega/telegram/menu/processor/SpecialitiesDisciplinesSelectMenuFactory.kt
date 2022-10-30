@@ -10,7 +10,8 @@ import java.util.*
 
 @Component
 class SpecialitiesDisciplinesSelectMenuFactory(
-    private val disciplinesService: DisciplinesService
+    private val disciplinesService: DisciplinesService,
+    private val specialitiesEducationFormSelectMenuFactory: SpecialitiesEducationFormSelectMenuFactory
 ) : MenuFactory {
 
     fun create(selectedDisciplines: Collection<UUID>): Menu {
@@ -32,7 +33,8 @@ class SpecialitiesDisciplinesSelectMenuFactory(
 
             if (selectedDisciplines.isNotEmpty()) {
                 val specialitySearchTypeSelect = Button("Далее...", "next") { session ->
-                    TODO()
+                    val nextMenu = specialitiesEducationFormSelectMenuFactory.create()
+                    session.menuHistory.pushNextMenu(nextMenu)
                 }
 
                 row(specialitySearchTypeSelect)

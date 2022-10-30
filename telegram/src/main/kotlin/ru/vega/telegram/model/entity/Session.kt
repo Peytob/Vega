@@ -2,6 +2,7 @@ package ru.vega.telegram.model.entity
 
 import dev.inmo.tgbotapi.types.MessageIdentifier
 import dev.inmo.tgbotapi.types.User
+import ru.vega.telegram.model.enums.EducationForm
 import java.util.*
 
 data class Session(
@@ -12,5 +13,7 @@ data class Session(
 )
 
 data class SessionSpeciality(
-    val selectedDisciplines: MutableList<UUID> = mutableListOf()
+    val selectedDisciplines: MutableList<UUID> = mutableListOf(),
+    var educationForm: Set<EducationForm> = emptySet(),
+    var score: Int? = null
 )
