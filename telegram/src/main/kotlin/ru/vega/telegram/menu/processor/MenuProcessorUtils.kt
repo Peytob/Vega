@@ -6,7 +6,7 @@ import ru.vega.model.dto.discipline.DisciplineDto
 import ru.vega.model.utils.Page
 import ru.vega.telegram.menu.Button
 import ru.vega.telegram.model.entity.Session
-import java.util.UUID
+import java.util.*
 
 private const val RETURN_BUTTON_TEXT = "↩"
 private const val SELECTED_SYMBOL = "✅"
@@ -24,10 +24,19 @@ internal fun makeReturnButton() =
         it.menuHistory.moveBack()
     }
 
-internal fun makeDisciplinesButtonsMatrix(disciplines: Collection<DisciplineDto>, buttonCallback: (DisciplineDto, Session) -> Unit) =
+internal fun makeDisciplinesButtonsMatrix(
+    disciplines: Collection<DisciplineDto>,
+    markAsSelected: Collection<UUID> = emptyList(),
+    buttonCallback: (DisciplineDto, Session) -> Unit) =
     disciplines
         .map {
-            Button(it.title, uuidAsByteString(it.id)) { session -> buttonCallback(it, session) }
+            val title = if (markAsSelected.contains(it.id)) {
+                "$SELECTED_SYMBOL ${it.title}"
+            } else {
+                it.title
+            }
+
+            Button(title, uuidAsByteString(it.id)) { session -> buttonCallback(it, session) }
         }
         .chunked(3)
 
