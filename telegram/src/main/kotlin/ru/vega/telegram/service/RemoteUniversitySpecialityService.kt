@@ -12,6 +12,7 @@ import ru.vega.model.dto.discipline.DisciplinesSetDto
 import ru.vega.model.dto.university.UniversitySpecialityDto
 import ru.vega.model.utils.Page
 import ru.vega.model.utils.Pageable
+import ru.vega.telegram.model.enums.EducationForm
 import java.util.UUID
 
 @Service
@@ -25,7 +26,12 @@ class RemoteUniversitySpecialityService(
     }
 
     @Cacheable("UniversitySpecialitiesByDisciplineSetAndScore")
-    override fun getByDisciplinesSet(disciplinesSet: DisciplinesSetDto, score: Int?, pageable: Pageable) : Page<UniversitySpecialityDto> {
+    override fun search(
+        disciplinesSet: DisciplinesSetDto,
+        score: Int?,
+        educationForm: Set<EducationForm>,
+        pageable: Pageable
+    ) : Page<UniversitySpecialityDto> {
         logger.info("Updating university specialities of disciplines set with id ${disciplinesSet.id} with score " +
                 "$score for page $pageable")
 
@@ -34,6 +40,8 @@ class RemoteUniversitySpecialityService(
             .queryParam("scoreFilter", score ?: Int.MAX_VALUE)
             .queryParam("page", pageable.page)
             .queryParam("size", pageable.size)
+            .queryParam("includeBudget", educationForm.contains(EducationForm.BUDGET))
+            .queryParam("includeContract", educationForm.contains(EducationForm.CONTRACT))
             .buildAndExpand(disciplinesSet.id)
             .toUriString()
 

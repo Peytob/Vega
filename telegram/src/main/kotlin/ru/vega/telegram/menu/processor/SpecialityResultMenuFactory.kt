@@ -11,9 +11,9 @@ import ru.vega.telegram.configuration.MenuProperties
 import ru.vega.telegram.exception.EntityNotFound
 import ru.vega.telegram.menu.Button
 import ru.vega.telegram.model.Menu
+import ru.vega.telegram.model.entity.SessionSpeciality
 import ru.vega.telegram.service.DisciplinesSetService
 import ru.vega.telegram.service.UniversitySpecialityService
-import java.util.*
 
 @Component
 @EnableConfigurationProperties(MenuProperties::class)
@@ -24,8 +24,8 @@ class SpecialityResultMenuFactory(
     private val universitySpecialityMenuFactory: UniversitySpecialityMenuFactory
 ) : MenuFactory {
 
-    fun create(page: Int, disciplines: Set<UUID>, nullableScore: Int?) : Menu {
-        val universitySpecialitiesPage = getUniversitySpecialitiesPage(page, disciplines, nullableScore)
+    fun create(page: Int, search: SessionSpeciality) : Menu {
+        val universitySpecialitiesPage = getUniversitySpecialitiesPage(page, search)
 
         val buttons = matrix<Button> {
 
@@ -36,7 +36,7 @@ class SpecialityResultMenuFactory(
                 .forEach(::row)
 
             val navigationRow = makePagesNavigationRow(universitySpecialitiesPage) { nextPage, session ->
-                session.menuHistory.changeCurrentMenu(create(nextPage, disciplines, nullableScore))
+                session.menuHistory.changeCurrentMenu(create(nextPage, session.speciality))
             }
 
             add(navigationRow)
@@ -55,14 +55,16 @@ class SpecialityResultMenuFactory(
             it.menuHistory.pushNextMenu(nextMenu)
         }
 
-    private fun getUniversitySpecialitiesPage(page: Int, disciplines: Set<UUID>, nullableScore: Int?): Page<UniversitySpecialityDto> {
+    private fun getUniversitySpecialitiesPage(page: Int, search: SessionSpeciality): Page<UniversitySpecialityDto> {
+        val (disciplines, educationForm, nullableScore) = search
+
         val score = nullableScore ?: (disciplines.size * 100)
 
         val disciplinesSet = disciplinesSetService.getDisciplinesSet(disciplines)
             ?: throw EntityNotFound("No disciplines set found for disciplines: $disciplines")
 
         val pageable = Pageable(page, menuProperties.itemsPerPage)
-        return universitySpecialityService.getByDisciplinesSet(disciplinesSet, score, pageable)
+        return universitySpecialityService.search(disciplinesSet, score, educationForm, pageable)
     }
 
 }

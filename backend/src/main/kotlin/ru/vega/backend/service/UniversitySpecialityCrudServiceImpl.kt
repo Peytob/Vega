@@ -14,8 +14,13 @@ class UniversitySpecialityCrudServiceImpl(
     private val universitySpecialityRepository: UniversitySpecialityRepository
 ) : UniversitySpecialityCrudService {
 
-    override fun getByDisciplineSet(disciplinesSet: DisciplinesSetEntity, scoreFilter: Int, pageable: Pageable): Page<UniversitySpecialityEntity> =
-        universitySpecialityRepository.findAllByDisciplinesSet(disciplinesSet, scoreFilter, pageable)
+    override fun search(
+        disciplinesSet: DisciplinesSetEntity,
+        scoreFilter: Int,
+        includeBudget: Boolean,
+        includeContract: Boolean,
+        pageable: Pageable): Page<UniversitySpecialityEntity> =
+        universitySpecialityRepository.search(disciplinesSet, scoreFilter, includeBudget, includeContract, pageable)
 
     override fun getById(id: UUID): UniversitySpecialityEntity? =
         universitySpecialityRepository.findByIdOrNull(id)

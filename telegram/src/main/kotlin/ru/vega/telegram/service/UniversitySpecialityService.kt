@@ -4,10 +4,11 @@ import ru.vega.model.dto.discipline.DisciplinesSetDto
 import ru.vega.model.dto.university.UniversitySpecialityDto
 import ru.vega.model.utils.Page
 import ru.vega.model.utils.Pageable
+import ru.vega.telegram.model.enums.EducationForm
 import java.util.*
 
 interface UniversitySpecialityService {
 
-    fun getByDisciplinesSet(disciplinesSet: DisciplinesSetDto, score: Int?, pageable: Pageable): Page<UniversitySpecialityDto>
+    fun search(disciplinesSet: DisciplinesSetDto, score: Int?, educationForm: Set<EducationForm>, pageable: Pageable): Page<UniversitySpecialityDto>
     fun getById(id: UUID): UniversitySpecialityDto?
 }

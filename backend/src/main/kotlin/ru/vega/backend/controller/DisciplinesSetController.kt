@@ -46,12 +46,14 @@ class DisciplinesSetController(
         @RequestParam(value = "scoreFilter", defaultValue = Int.MAX_VALUE.toString()) @Min(0) scoreFilter: Int,
         @RequestParam(value = "page", defaultValue = "0") @Min(0) page: Int,
         @RequestParam(value = "size", defaultValue = "10") @Min(1) size: Int,
+        @RequestParam(value = "includeBudget", defaultValue = "true") includeBudget: Boolean,
+        @RequestParam(value = "includeContract", defaultValue = "true") includeContract: Boolean
     ): ResponseEntity<Page<UniversitySpecialityDto>> {
         val disciplinesSet = disciplinesSetCrudService.getById(disciplinesSetId) ?:
             throw EntityNotFoundException(disciplinesSetId, "disciplineSet")
         val pageable: Pageable = PageRequest.of(page, size)
         val universitySpecialities = universitySpecialityCrudService
-            .getByDisciplineSet(disciplinesSet, scoreFilter, pageable)
+            .search(disciplinesSet, scoreFilter, includeBudget, includeContract, pageable)
             .map(universitySpecialityMapper::toDto)
         return ResponseEntity.ok(universitySpecialities)
     }

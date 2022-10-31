@@ -18,7 +18,9 @@ interface UniversitySpecialityRepository : JpaRepository<UniversitySpecialityEnt
                 ON us.ID = ds_to_us.UNIVERSITY_SPECIALITY_ID
             INNER JOIN DISCIPLINES_SET AS ds
                 ON ds.ID = ds_to_us.SET_ID
-            WHERE SET_ID = :disciplinesSet AND (:scoreFilter >= us.budget_passing_score OR :scoreFilter >= us.contract_passing_score)
+            WHERE
+                SET_ID = :disciplinesSet AND
+                (:scoreFilter >= us.budget_passing_score AND :includeBudget OR :scoreFilter >= us.contract_passing_score AND :includeContract)
         """,
 
         countQuery = """
@@ -26,9 +28,17 @@ interface UniversitySpecialityRepository : JpaRepository<UniversitySpecialityEnt
             FROM DISCIPLINES_SET_UNIVERSITY_SPECIALITY_LINK as ds_to_us
             INNER JOIN UNIVERSITY_SPECIALITY AS us
                 ON us.ID = ds_to_us.UNIVERSITY_SPECIALITY_ID
-            WHERE SET_ID = :disciplinesSet AND (:scoreFilter >= us.budget_passing_score OR :scoreFilter >= us.contract_passing_score)
+            WHERE
+                SET_ID = :disciplinesSet AND
+                (:scoreFilter >= us.budget_passing_score AND :includeBudget OR :scoreFilter >= us.contract_passing_score AND :includeContract)
         """,
 
         nativeQuery = true)
-    fun findAllByDisciplinesSet(disciplinesSet: DisciplinesSetEntity, scoreFilter: Int, pageable: Pageable): Page<UniversitySpecialityEntity>
+    fun search(
+        disciplinesSet: DisciplinesSetEntity,
+        scoreFilter: Int,
+        includeBudget: Boolean,
+        includeContract: Boolean,
+        pageable: Pageable
+    ): Page<UniversitySpecialityEntity>
 }

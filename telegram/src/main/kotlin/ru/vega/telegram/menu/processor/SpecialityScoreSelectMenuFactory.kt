@@ -17,11 +17,7 @@ class SpecialityScoreSelectMenuFactory(
 
             val anyScore = Button("Я не хочу вводить баллы, просто покажи специальности!", "any") { session ->
                 session.speciality.score = null
-                val nextMenu = specialityResultMenuFactory.create(
-                    0,
-                    session.speciality.selectedDisciplines,
-                    session.speciality.score
-                )
+                val nextMenu = specialityResultMenuFactory.create(0, session.speciality)
 
                 session.menuHistory.pushNextMenu(nextMenu)
             }
@@ -33,11 +29,7 @@ class SpecialityScoreSelectMenuFactory(
                 .map {
                     Button(it.toString(), it.toString()) { session ->
                         session.speciality.score = it
-                        val nextMenu = specialityResultMenuFactory.create(
-                            0,
-                            session.speciality.selectedDisciplines,
-                            session.speciality.score
-                        )
+                        val nextMenu = specialityResultMenuFactory.create(0, session.speciality)
 
                         session.menuHistory.pushNextMenu(nextMenu)
                     }

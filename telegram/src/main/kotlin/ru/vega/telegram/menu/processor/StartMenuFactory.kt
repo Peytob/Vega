@@ -21,7 +21,7 @@ class StartMenuFactory(
                 },
 
                 Button("Специальности", "specialities") { session ->
-                    session.menuHistory.pushNextMenu(specialitiesDisciplinesSelectMenuFactory.create(emptyList()))
+                    session.menuHistory.pushNextMenu(specialitiesDisciplinesSelectMenuFactory.create(session.speciality.selectedDisciplines))
                 }
             )
 
