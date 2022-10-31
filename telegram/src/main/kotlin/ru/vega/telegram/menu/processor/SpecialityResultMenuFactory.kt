@@ -20,7 +20,8 @@ import java.util.*
 class SpecialityResultMenuFactory(
     private val universitySpecialityService: UniversitySpecialityService,
     private val disciplinesSetService: DisciplinesSetService,
-    private val menuProperties: MenuProperties
+    private val menuProperties: MenuProperties,
+    private val universitySpecialityMenuFactory: UniversitySpecialityMenuFactory
 ) : MenuFactory {
 
     fun create(page: Int, disciplines: Set<UUID>, nullableScore: Int?) : Menu {
@@ -50,11 +51,12 @@ class SpecialityResultMenuFactory(
 
     private fun makeUniversitySelectButton(speciality: UniversitySpecialityDto) =
         Button("${speciality.speciality.title} (${speciality.university.shortTitle})", uuidAsByteString(speciality.id)) {
-            TODO("UniversitySpecialityMenu")
+            val nextMenu = universitySpecialityMenuFactory.create(speciality.id)
+            it.menuHistory.pushNextMenu(nextMenu)
         }
 
     private fun getUniversitySpecialitiesPage(page: Int, disciplines: Set<UUID>, nullableScore: Int?): Page<UniversitySpecialityDto> {
-        val score = nullableScore ?: Int.MAX_VALUE
+        val score = nullableScore ?: (disciplines.size * 100)
 
         val disciplinesSet = disciplinesSetService.getDisciplinesSet(disciplines)
             ?: throw EntityNotFound("No disciplines set found for disciplines: $disciplines")

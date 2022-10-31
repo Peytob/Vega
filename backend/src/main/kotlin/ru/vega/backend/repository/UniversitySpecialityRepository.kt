@@ -31,6 +31,4 @@ interface UniversitySpecialityRepository : JpaRepository<UniversitySpecialityEnt
 
         nativeQuery = true)
     fun findAllByDisciplinesSet(disciplinesSet: DisciplinesSetEntity, scoreFilter: Int, pageable: Pageable): Page<UniversitySpecialityEntity>
-
-    fun findByExternalId(externalId: String): UniversitySpecialityEntity?
 }

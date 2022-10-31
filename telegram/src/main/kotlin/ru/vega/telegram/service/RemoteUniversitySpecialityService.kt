@@ -12,6 +12,7 @@ import ru.vega.model.dto.discipline.DisciplinesSetDto
 import ru.vega.model.dto.university.UniversitySpecialityDto
 import ru.vega.model.utils.Page
 import ru.vega.model.utils.Pageable
+import java.util.UUID
 
 @Service
 class RemoteUniversitySpecialityService(
@@ -46,11 +47,11 @@ class RemoteUniversitySpecialityService(
         ).body!!
     }
 
-    @Cacheable("UniversitySpecialitiesByExternalId")
-    override fun getByExternalId(externalId: String): UniversitySpecialityDto? {
-        logger.info("Updating university speciality with external id {} from remote", externalId)
+    @Cacheable("UniversitySpecialitiesById")
+    override fun getById(id: UUID): UniversitySpecialityDto? {
+        logger.info("Updating university speciality with id {} from remote", id)
 
         return restTemplate
-            .getForObject("/universitySpeciality/$externalId", UniversitySpecialityDto::class.java)
+            .getForObject("/universitySpeciality/{id}", UniversitySpecialityDto::class.java, id)
     }
 }
