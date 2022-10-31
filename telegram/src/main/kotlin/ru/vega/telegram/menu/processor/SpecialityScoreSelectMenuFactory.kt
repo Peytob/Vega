@@ -7,7 +7,9 @@ import ru.vega.telegram.menu.Button
 import ru.vega.telegram.model.Menu
 
 @Component
-class SpecialityScoreSelectMenuFactory : MenuFactory {
+class SpecialityScoreSelectMenuFactory(
+    private val specialityResultMenuFactory: SpecialityResultMenuFactory
+) : MenuFactory {
 
     fun create(): Menu {
 
@@ -15,7 +17,13 @@ class SpecialityScoreSelectMenuFactory : MenuFactory {
 
             val anyScore = Button("Я не хочу вводить баллы, просто покажи специальности!", "any") { session ->
                 session.speciality.score = null
-                TODO()
+                val nextMenu = specialityResultMenuFactory.create(
+                    0,
+                    session.speciality.selectedDisciplines,
+                    session.speciality.score
+                )
+
+                session.menuHistory.pushNextMenu(nextMenu)
             }
 
             row(anyScore)
@@ -25,7 +33,13 @@ class SpecialityScoreSelectMenuFactory : MenuFactory {
                 .map {
                     Button(it.toString(), it.toString()) { session ->
                         session.speciality.score = it
-                        TODO()
+                        val nextMenu = specialityResultMenuFactory.create(
+                            0,
+                            session.speciality.selectedDisciplines,
+                            session.speciality.score
+                        )
+
+                        session.menuHistory.pushNextMenu(nextMenu)
                     }
                 }
                 .chunked(2)

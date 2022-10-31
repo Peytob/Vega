@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service
 import org.springframework.web.client.RestTemplate
 import org.springframework.web.util.UriComponentsBuilder
 import ru.vega.model.dto.discipline.DisciplinesSetDto
+import java.util.UUID
 
 @Service
 class RemoteDisciplinesSetService(
@@ -19,11 +20,11 @@ class RemoteDisciplinesSetService(
     }
 
     @Cacheable("DisciplinesSets")
-    override fun getDisciplinesSet(disciplinesExternalIds: Set<String>): DisciplinesSetDto? {
-        logger.info("Updating available disciplinesSet for set $disciplinesExternalIds from remote")
+    override fun getDisciplinesSet(disciplinesIds: Set<UUID>): DisciplinesSetDto? {
+        logger.info("Updating available disciplinesSet for set $disciplinesIds from remote")
 
         val uri = UriComponentsBuilder.fromUriString("/disciplinesSet")
-            .queryParam("discipline", disciplinesExternalIds)
+            .queryParam("discipline", disciplinesIds)
             .build()
             .toUriString()
 
@@ -31,7 +32,7 @@ class RemoteDisciplinesSetService(
             .getForObject(uri, Array<DisciplinesSetDto>::class.java)!!
 
         if (disciplinesSets.size != 1) {
-            logger.warn("For disciplines set $disciplinesExternalIds found more, than one disciplines set.")
+            logger.warn("For disciplines set $disciplinesIds found more, than one disciplines set.")
         }
 
         return disciplinesSets.firstOrNull()

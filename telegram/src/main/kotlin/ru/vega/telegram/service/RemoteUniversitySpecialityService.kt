@@ -25,7 +25,7 @@ class RemoteUniversitySpecialityService(
 
     @Cacheable("UniversitySpecialitiesByDisciplineSetAndScore")
     override fun getByDisciplinesSet(disciplinesSet: DisciplinesSetDto, score: Int?, pageable: Pageable) : Page<UniversitySpecialityDto> {
-        logger.info("Updating university specialities of disciplines set with external id $disciplinesSet with score " +
+        logger.info("Updating university specialities of disciplines set with id ${disciplinesSet.id} with score " +
                 "$score for page $pageable")
 
         val uri = UriComponentsBuilder
@@ -33,7 +33,7 @@ class RemoteUniversitySpecialityService(
             .queryParam("scoreFilter", score ?: Int.MAX_VALUE)
             .queryParam("page", pageable.page)
             .queryParam("size", pageable.size)
-            .buildAndExpand(disciplinesSet.externalId)
+            .buildAndExpand(disciplinesSet.id)
             .toUriString()
 
         val typeReference = object : ParameterizedTypeReference<Page<UniversitySpecialityDto>>() {}

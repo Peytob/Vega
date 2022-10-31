@@ -1,7 +1,9 @@
 package ru.vega.model.dto.discipline
 
+import java.util.UUID
+
 data class DisciplinesSetDto(
-    val externalId: String,
+    val id: UUID,
     val title: String,
-    val disciplines: Collection<String>
+    val disciplines: Collection<UUID>
 )

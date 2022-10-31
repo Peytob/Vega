@@ -14,13 +14,9 @@ class DisciplineCrudServiceImpl(
     override fun getAll(): Collection<DisciplineEntity> =
         disciplineRepository.findAll()
 
-    @Deprecated("External ids will be removed")
-    override fun getByExternalId(id: String): DisciplineEntity? =
-        disciplineRepository.findByExternalId(id)
-
     override fun getById(id: UUID): DisciplineEntity? =
         disciplineRepository.findByIdOrNull(id)
 
-    override fun getAllByExternalId(disciplinesExternalIds: Collection<String>): Collection<DisciplineEntity> =
-        disciplineRepository.findAllByExternalIdIn(disciplinesExternalIds)
+    override fun getById(disciplinesIds: Collection<UUID>): Collection<DisciplineEntity> =
+        disciplineRepository.findAllById(disciplinesIds)
 }

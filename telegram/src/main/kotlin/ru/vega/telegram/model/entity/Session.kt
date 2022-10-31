@@ -13,7 +13,7 @@ data class Session(
 )
 
 data class SessionSpeciality(
-    val selectedDisciplines: MutableList<UUID> = mutableListOf(),
+    val selectedDisciplines: MutableSet<UUID> = mutableSetOf(),
     var educationForm: Set<EducationForm> = emptySet(),
     var score: Int? = null
 )
