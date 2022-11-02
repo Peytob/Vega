@@ -4,10 +4,7 @@ import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 import ru.vega.backend.exception.EntityNotFoundException
 import ru.vega.backend.mapper.TutorMapper
 import ru.vega.backend.service.DisciplineCrudService
@@ -25,8 +22,6 @@ class TutorController(
     private val tutorCrudService: TutorCrudService,
     private val tutorMapper: TutorMapper
 ) {
-
-    // TODO Восстановить на UUID
 
     @GetMapping("/search/offline")
     fun getByDistrict(@RequestParam(required = true) districtId: UUID,
@@ -68,11 +63,11 @@ class TutorController(
         return ResponseEntity.ok(tutors)
     }
 
-//    @GetMapping("/{externalId}")
-//    fun get(@PathVariable externalId: String): ResponseEntity<TutorDto> {
-//        val tutor = tutorCrudService.getByExternalId(externalId) ?:
-//            throw EntityNotFoundException(externalId, "Tutor")
-//
-//        return ResponseEntity.ok(tutorMapper.toDto(tutor))
-//    }
+    @GetMapping("/{id}")
+    fun get(@PathVariable id: UUID): ResponseEntity<TutorDto> {
+        val tutor = tutorCrudService.getById(id) ?:
+            throw EntityNotFoundException(id, "Tutor")
+
+        return ResponseEntity.ok(tutorMapper.toDto(tutor))
+    }
 }

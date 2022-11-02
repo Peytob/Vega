@@ -17,7 +17,8 @@ import ru.vega.telegram.service.TutorService
 @EnableConfigurationProperties(MenuProperties::class)
 class TutorResultMenuFactory(
     private val tutorService: TutorService,
-    private val menuProperties: MenuProperties
+    private val menuProperties: MenuProperties,
+    private val tutorDetailsMenuFactory: TutorDetailsMenuFactory
 ) : MenuFactory {
 
     fun create(page: Int, search: SessionTutor): Menu {
@@ -59,6 +60,7 @@ class TutorResultMenuFactory(
     }
 
     fun makeTutorButton(tutor: TutorDto) = Button(tutor.name, uuidAsByteString(tutor.id)) { session ->
-        TODO()
+        val nextMenu = tutorDetailsMenuFactory.create(tutor.id)
+        session.menuHistory.pushNextMenu(nextMenu)
     }
 }

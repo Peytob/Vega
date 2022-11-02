@@ -61,6 +61,4 @@ interface TutorRepository : JpaRepository<TutorEntity, UUID> {
         discipline: DisciplineEntity,
         pageable: Pageable,
     ): Page<TutorEntity>
-
-    fun findByExternalId(externalId: String): TutorEntity?
 }

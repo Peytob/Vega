@@ -9,7 +9,7 @@ interface TutorService {
 
     fun getTutorsByDisciplineAndDistrict(disciplineId: UUID, districtId: UUID, pageable: Pageable): Page<TutorDto>
 
-    fun getTutorById(tutorId: String): TutorDto?
+    fun getTutorById(tutorId: UUID): TutorDto?
 
     fun getOnlineTutorsByDiscipline(disciplineId: UUID, pageable: Pageable): Page<TutorDto>
 }
