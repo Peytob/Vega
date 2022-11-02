@@ -21,5 +21,7 @@ data class SessionSpeciality(
 )
 
 data class SessionTutor(
-    var meetingForms: Set<TutorMeetingForm> = setOf()
+    var meetingForm: TutorMeetingForm? = null,
+    var disciplineId: UUID? = null,
+    var districtId: UUID? = null
 )

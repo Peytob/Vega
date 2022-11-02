@@ -2,9 +2,10 @@ package ru.vega.model.dto.tutor
 
 import ru.vega.model.dto.discipline.DisciplineDto
 import ru.vega.model.dto.town.DistrictDto
+import java.util.UUID
 
 data class TutorDto(
-    val externalId: String,
+    val id: UUID,
 
     val district: DistrictDto,
 

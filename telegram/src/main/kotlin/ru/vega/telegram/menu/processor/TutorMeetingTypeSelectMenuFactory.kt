@@ -8,20 +8,24 @@ import ru.vega.telegram.model.Menu
 import ru.vega.telegram.model.enums.TutorMeetingForm
 
 @Component
-class SelectTutorMeetingTypeMenuFactory : MenuFactory {
+class TutorMeetingTypeSelectMenuFactory(
+    private val tutorSelectDisciplineMenuFactory: TutorSelectDisciplineMenuFactory
+) : MenuFactory {
 
     fun create(): Menu {
 
         val buttons = matrix<Button> {
             val online = Button("Только онлайн", "online") { session ->
-                session.tutor.meetingForms = setOf(TutorMeetingForm.ONLINE)
-                TODO()
+                session.tutor.meetingForm = TutorMeetingForm.ONLINE
+                val nextMenu = tutorSelectDisciplineMenuFactory.create()
+                session.menuHistory.pushNextMenu(nextMenu)
             }
             row(online)
 
             val offline = Button("Только очно", "offline") { session ->
-                session.tutor.meetingForms = setOf(TutorMeetingForm.OFFLINE)
-                TODO()
+                session.tutor.meetingForm = TutorMeetingForm.OFFLINE
+                val nextMenu = tutorSelectDisciplineMenuFactory.create()
+                session.menuHistory.pushNextMenu(nextMenu)
             }
             row(offline)
 

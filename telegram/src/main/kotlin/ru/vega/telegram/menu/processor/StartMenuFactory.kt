@@ -11,7 +11,7 @@ class StartMenuFactory(
     private val disciplineDetailsSelectMenuFactory: DisciplineDetailsSelectMenuFactory,
     private val questionSelectMenuFactory: QuestionSelectionMenuFactory,
     private val specialitiesDisciplinesSelectMenuFactory: SpecialitiesDisciplinesSelectMenuFactory,
-    private val selectTutorMeetingTypeMenuFactory: SelectTutorMeetingTypeMenuFactory
+    private val tutorMeetingTypeSelectMenuFactory: TutorMeetingTypeSelectMenuFactory
 ) : MenuFactory {
 
     fun create(): Menu {
@@ -28,7 +28,7 @@ class StartMenuFactory(
 
             row(
                 Button("Репетиторы", "tutors") { session ->
-                    session.menuHistory.pushNextMenu(selectTutorMeetingTypeMenuFactory.create())
+                    session.menuHistory.pushNextMenu(tutorMeetingTypeSelectMenuFactory.create())
                 }
             )
 
