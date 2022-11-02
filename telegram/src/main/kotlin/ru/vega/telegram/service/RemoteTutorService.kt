@@ -55,7 +55,7 @@ class RemoteTutorService(
         logger.info("Updating available tutors in district with id $disciplineId and discipline $districtId for page $pageable")
 
         val uri = UriComponentsBuilder
-            .fromUriString("/tutor/search")
+            .fromUriString("/tutor/search/offline")
             .queryParam("page", pageable.page)
             .queryParam("size", pageable.size)
             .queryParam("districtId", districtId)

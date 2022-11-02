@@ -10,6 +10,6 @@ interface TownCrudService {
 
     fun getDistrictById(districtId: UUID): DistrictEntity?
     fun getTownPage(pageable: Pageable): Page<TownEntity>
-    fun getTownByExternalId(townId: String): TownEntity?
+    fun getTownById(townId: UUID): TownEntity?
     fun getDistrictPageByTown(town: TownEntity, pageable: Pageable): Page<DistrictEntity>
 }

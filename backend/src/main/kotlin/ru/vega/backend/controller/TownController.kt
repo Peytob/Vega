@@ -1,6 +1,5 @@
 package ru.vega.backend.controller
 
-import org.apache.logging.log4j.util.Strings
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
@@ -11,6 +10,7 @@ import ru.vega.backend.mapper.TownMapper
 import ru.vega.backend.service.TownCrudService
 import ru.vega.model.dto.town.DistrictDto
 import ru.vega.model.dto.town.TownDto
+import java.util.UUID
 import javax.validation.constraints.Min
 
 @RestController
@@ -22,7 +22,6 @@ class TownController(
 
     @GetMapping
     fun getTownPage(
-        @RequestParam(defaultValue = Strings.EMPTY) filter: String,
         @RequestParam(value = "page", defaultValue = "0") @Min(0) page: Int,
         @RequestParam(value = "size", defaultValue = "10") @Min(1) size: Int,
         @RequestParam(value = "sortDir", defaultValue = "ASC") sortDir: Sort.Direction
@@ -33,16 +32,16 @@ class TownController(
         return ResponseEntity.ok(towns)
     }
 
-    @GetMapping("/{townExternalId}/district")
+    @GetMapping("/{id}/district")
     fun getDistrictsByTown(
-        @PathVariable townExternalId: String,
+        @PathVariable id: UUID,
         @RequestParam(value = "page", defaultValue = "0") @Min(0) page: Int,
         @RequestParam(value = "size", defaultValue = "10") @Min(1) size: Int,
         @RequestParam(value = "sortDir", defaultValue = "ASC") sortDir: Sort.Direction
     ): ResponseEntity<Page<DistrictDto>> {
         val pageable = PageRequest.of(page, size, Sort.by(sortDir, "title"))
-        val town = townCrudService.getTownByExternalId(townExternalId) ?:
-            throw EntityNotFoundException(townExternalId, "Town")
+        val town = townCrudService.getTownById(id) ?:
+            throw EntityNotFoundException(id, "Town")
         val districtEntitiesPage = townCrudService.getDistrictPageByTown(town, pageable)
         val districts = districtEntitiesPage.map(townMapper::toDto)
         return ResponseEntity.ok(districts)

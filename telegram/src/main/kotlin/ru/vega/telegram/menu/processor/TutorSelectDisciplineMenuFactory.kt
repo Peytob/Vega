@@ -11,7 +11,8 @@ import ru.vega.telegram.service.DisciplinesService
 @Component
 class TutorSelectDisciplineMenuFactory(
     private val disciplinesService: DisciplinesService,
-    private val tutorResultMenuFactory: TutorResultMenuFactory
+    private val tutorResultMenuFactory: TutorResultMenuFactory,
+    private val tutorTownSelectMenuFactory: TutorTownSelectMenuFactory
 ) : MenuFactory {
 
     fun create(): Menu {
@@ -24,8 +25,8 @@ class TutorSelectDisciplineMenuFactory(
 
                 val nextMenu = when (session.tutor.meetingForm) {
                     TutorMeetingForm.ONLINE -> tutorResultMenuFactory.create(0, session.tutor)
-                    TutorMeetingForm.OFFLINE -> TODO()
-                    null -> TODO()
+                    TutorMeetingForm.OFFLINE -> tutorTownSelectMenuFactory.create(0)
+                    null -> throw IllegalArgumentException("Tutor meeting form should be selected")
                 }
 
                 session.menuHistory.pushNextMenu(nextMenu)
