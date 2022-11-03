@@ -25,7 +25,7 @@ class StartCommand(
 
         val startMenu = startMenuFactory.create()
         val menuMessage = menuService.showMenu(message.chat.id, startMenu)
-        val session = sessionService.startSession(menuMessage)
+        val session = sessionService.startSession(menuMessage, message.from!!)
         session.menuHistory.pushNextMenu(startMenu)
     }
 

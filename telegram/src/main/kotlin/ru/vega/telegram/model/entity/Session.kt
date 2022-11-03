@@ -9,7 +9,7 @@ import java.util.*
 data class Session(
     val messageIdentifier: MessageIdentifier,
     val user: User,
-    val menuHistory: MenuHistory,
+    val menuHistory: MenuHistory = MenuHistory(),
     val speciality: SessionSpeciality = SessionSpeciality(),
     val tutor: SessionTutor = SessionTutor()
 )

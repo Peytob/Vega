@@ -1,6 +1,5 @@
 package ru.vega.telegram.handler.update
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import dev.inmo.tgbotapi.extensions.utils.asCallbackQueryUpdate
 import dev.inmo.tgbotapi.extensions.utils.asMessageCallbackQuery
 import dev.inmo.tgbotapi.extensions.utils.extensions.raw.data
@@ -71,7 +70,7 @@ class MenuButtonCallbackUpdateHandler(
 
         val startMenu = startMenuFactory.create()
         val menuMessage = menuService.replaceMenu(query.message.chat.id, query.message.messageId, startMenu)
-        val session = sessionService.startSession(menuMessage)
+        val session = sessionService.startSession(menuMessage, query.from)
         session.menuHistory.pushNextMenu(startMenu)
         return session
     }

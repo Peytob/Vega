@@ -2,15 +2,14 @@ package ru.vega.telegram.service
 
 import com.github.benmanes.caffeine.cache.Cache
 import com.github.benmanes.caffeine.cache.Caffeine
-import dev.inmo.tgbotapi.extensions.utils.extensions.raw.from
 import dev.inmo.tgbotapi.types.MessageIdentifier
+import dev.inmo.tgbotapi.types.User
 import dev.inmo.tgbotapi.types.message.abstracts.Message
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.stereotype.Service
 import ru.vega.telegram.configuration.CacheProperties
-import ru.vega.telegram.model.entity.MenuHistory
 import ru.vega.telegram.model.entity.Session
 
 @Service
@@ -31,13 +30,12 @@ class SessionServiceImpl(
     override fun getSession(message: Message): Session? =
         cache.getIfPresent(message.messageId)
 
-    override fun startSession(message: Message): Session {
+    override fun startSession(message: Message, initiator: User): Session {
         logger.info("Starting session for message $message")
 
         val session = Session(
             message.messageId,
-            message.from!!,
-            MenuHistory()
+            initiator,
         )
 
         cache.put(message.messageId, session)
