@@ -1,17 +1,20 @@
 package ru.vega.telegram.menu.processor
 
+import dev.inmo.tgbotapi.types.ChatId
 import dev.inmo.tgbotapi.utils.matrix
 import dev.inmo.tgbotapi.utils.row
 import org.springframework.stereotype.Component
+import ru.vega.model.dto.tutor.TutorDto
 import ru.vega.telegram.exception.EntityNotFound
 import ru.vega.telegram.menu.Button
 import ru.vega.telegram.model.Menu
 import ru.vega.telegram.service.TutorService
-import java.util.UUID
+import java.util.*
 
 @Component
 class TutorDetailsMenuFactory(
-    private val tutorService: TutorService
+    private val tutorService: TutorService,
+    private val tutorRequestAcceptQuestionMenuFactory: TutorRequestAcceptQuestionMenuFactory
 ) : MenuFactory {
 
     fun create(tutorId: UUID): Menu {
@@ -20,11 +23,22 @@ class TutorDetailsMenuFactory(
             throw EntityNotFound("Tutor with id $tutorId not found")
 
         val buttons = matrix<Button> {
-            row(makeReturnButton())
+            val sendRequest = Button("Отправить заявку", "request") { session ->
+                val chatId = ChatId(tutor.notificationChatId)
+                val nextMenu = tutorRequestAcceptQuestionMenuFactory.create(chatId)
+                session.menuHistory.pushNextMenu(nextMenu)
+            }
+            row(sendRequest)
 
-            // TODO Кнопки отправки заявок
+            row(makeReturnButton())
         }
 
+        val message = makeTutorDescriptionMessage(tutor)
+
+        return Menu(buttons, message, false)
+    }
+
+    fun makeTutorDescriptionMessage(tutor: TutorDto): String {
         val disciplines = tutor
             .disciplines
             .joinToString(",") { it.title }
@@ -35,7 +49,7 @@ class TutorDetailsMenuFactory(
             else if (tutor.offline) "только очно"
             else "репетитор сейчас не принимает новых учеников"
 
-        val message = """
+        return """
                 *${tutor.name}*
                 Преподаваемые дисциплины: $disciplines
                 Формат занятий: $educationFormat
@@ -43,7 +57,5 @@ class TutorDetailsMenuFactory(
                 Цена академического часа: ${tutor.price}
                 [​](${tutor.photoUrl})
             """.trimIndent()
-
-        return Menu(buttons, message, false)
     }
 }

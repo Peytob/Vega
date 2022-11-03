@@ -16,13 +16,14 @@ private const val DECREMENT_BUTTON_TEXT = "⏪"
 private const val LAST_PAGE_INCREMENT_BUTTON_TEXT = "⏭"
 private const val PAGE_INCREMENT_BUTTON_TEXT = "⏩"
 
+private val RETURN_BUTTON = Button(RETURN_BUTTON_TEXT, "return") {
+    it.menuHistory.moveBack()
+}
+
 internal fun uuidAsByteString(id: UUID) =
     String(id.bytes)
 
-internal fun makeReturnButton() =
-    Button(RETURN_BUTTON_TEXT, "return") {
-        it.menuHistory.moveBack()
-    }
+internal fun makeReturnButton() = RETURN_BUTTON
 
 internal fun makeDisciplinesButtonsMatrix(
     disciplines: Collection<DisciplineDto>,
