@@ -55,6 +55,27 @@ class RemoteUniversitySpecialityService(
         ).body!!
     }
 
+    @Cacheable("UniversitySpecialitiesByUniversity")
+    override fun getUniversitySpecialities(universityId: UUID, pageable: Pageable): Page<UniversitySpecialityDto> {
+        logger.info("Updating university specialities for university with id $universityId for page $pageable")
+
+        val uri = UriComponentsBuilder
+            .fromUriString("/university/{disciplineSetId}/specialities")
+            .queryParam("page", pageable.page)
+            .queryParam("size", pageable.size)
+            .buildAndExpand(universityId)
+            .toUriString()
+
+        val typeReference = object : ParameterizedTypeReference<Page<UniversitySpecialityDto>>() {}
+
+        return restTemplate.exchange(
+            uri,
+            HttpMethod.GET,
+            null,
+            typeReference
+        ).body!!
+    }
+
     @Cacheable("UniversitySpecialitiesById")
     override fun getById(id: UUID): UniversitySpecialityDto? {
         logger.info("Updating university speciality with id {} from remote", id)

@@ -7,6 +7,7 @@ import org.springframework.core.ParameterizedTypeReference
 import org.springframework.http.HttpMethod
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestTemplate
+import org.springframework.web.client.getForObject
 import org.springframework.web.util.UriComponentsBuilder
 import ru.vega.model.dto.tutor.TutorDto
 import ru.vega.model.dto.university.UniversityDto
@@ -43,5 +44,13 @@ class RemoteUniversityService(
             null,
             typeReference
         ).body!!
+    }
+
+    @Cacheable("Universities")
+    override fun getById(universityId: UUID): UniversityDto? {
+        logger.info("Updating university with id {} from remote", universityId)
+
+        return restTemplate
+            .getForObject("/university/{id}", UniversityDto::class.java, universityId)
     }
 }

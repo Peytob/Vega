@@ -8,4 +8,6 @@ import java.util.*
 interface UniversityService {
 
     fun getByTown(townId: UUID, pageable: Pageable): Page<UniversityDto>
+
+    fun getById(universityId: UUID): UniversityDto?
 }

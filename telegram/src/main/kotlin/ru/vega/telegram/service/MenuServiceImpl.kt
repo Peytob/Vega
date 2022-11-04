@@ -4,6 +4,7 @@ import dev.inmo.tgbotapi.types.ChatId
 import dev.inmo.tgbotapi.types.MessageIdentifier
 import dev.inmo.tgbotapi.types.buttons.InlineKeyboardButtons.CallbackDataInlineKeyboardButton
 import dev.inmo.tgbotapi.types.buttons.InlineKeyboardButtons.InlineKeyboardButton
+import dev.inmo.tgbotapi.types.buttons.InlineKeyboardButtons.URLInlineKeyboardButton
 import dev.inmo.tgbotapi.types.buttons.InlineKeyboardMarkup
 import dev.inmo.tgbotapi.types.buttons.Matrix
 import dev.inmo.tgbotapi.types.message.abstracts.ContentMessage
@@ -39,6 +40,11 @@ class MenuServiceImpl(
     private fun makeKeyboard(buttons: Matrix<Button>): Matrix<InlineKeyboardButton> =
         buttons
         .map { row ->
-            row.map { CallbackDataInlineKeyboardButton(it.text, it.id) }
+            row.map {
+                if (it.url == null)
+                    CallbackDataInlineKeyboardButton(it.text, it.id)
+                else
+                    URLInlineKeyboardButton(it.text, it.url.toString())
+            }
         }
 }

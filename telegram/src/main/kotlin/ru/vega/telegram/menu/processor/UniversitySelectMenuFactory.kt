@@ -16,6 +16,7 @@ import java.util.*
 @EnableConfigurationProperties(MenuProperties::class)
 class UniversitySelectMenuFactory(
     private val universityService: UniversityService,
+    private val universityDetailsMenuFactory: UniversityDetailsMenuFactory,
     private val menuProperties: MenuProperties
 ) : MenuFactory {
 
@@ -43,8 +44,9 @@ class UniversitySelectMenuFactory(
         return Menu(buttons, message)
     }
 
-    private fun makeUniversityButton(university: UniversityDto) = Button(university.title, uuidAsByteString(university.id)) {
-        TODO()
+    private fun makeUniversityButton(university: UniversityDto) = Button(university.title, uuidAsByteString(university.id)) { session ->
+        val nextMenu = universityDetailsMenuFactory.create(university.id)
+        session.menuHistory.pushNextMenu(nextMenu)
     }
 
 }

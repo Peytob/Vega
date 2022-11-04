@@ -3,6 +3,7 @@ package ru.vega.backend.service
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import ru.vega.backend.entity.DisciplinesSetEntity
+import ru.vega.backend.entity.UniversityEntity
 import ru.vega.backend.entity.UniversitySpecialityEntity
 import java.util.UUID
 
@@ -16,4 +17,6 @@ interface UniversitySpecialityCrudService {
         pageable: Pageable): Page<UniversitySpecialityEntity>
 
     fun getById(id: UUID): UniversitySpecialityEntity?
+
+    fun getByUniversity(university: UniversityEntity, pageable: Pageable): Page<UniversitySpecialityEntity>
 }

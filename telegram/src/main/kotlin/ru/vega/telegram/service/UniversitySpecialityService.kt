@@ -10,5 +10,7 @@ import java.util.*
 interface UniversitySpecialityService {
 
     fun search(disciplinesSet: DisciplinesSetDto, score: Int?, educationForm: Set<EducationForm>, pageable: Pageable): Page<UniversitySpecialityDto>
+    fun getUniversitySpecialities(universityId: UUID, pageable: Pageable): Page<UniversitySpecialityDto>
+
     fun getById(id: UUID): UniversitySpecialityDto?
 }

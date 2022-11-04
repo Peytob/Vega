@@ -5,6 +5,7 @@ import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import ru.vega.backend.entity.DisciplinesSetEntity
+import ru.vega.backend.entity.UniversityEntity
 import ru.vega.backend.entity.UniversitySpecialityEntity
 import ru.vega.backend.repository.UniversitySpecialityRepository
 import java.util.UUID
@@ -13,7 +14,6 @@ import java.util.UUID
 class UniversitySpecialityCrudServiceImpl(
     private val universitySpecialityRepository: UniversitySpecialityRepository
 ) : UniversitySpecialityCrudService {
-
     override fun search(
         disciplinesSet: DisciplinesSetEntity,
         scoreFilter: Int,
@@ -24,4 +24,7 @@ class UniversitySpecialityCrudServiceImpl(
 
     override fun getById(id: UUID): UniversitySpecialityEntity? =
         universitySpecialityRepository.findByIdOrNull(id)
+
+    override fun getByUniversity(university: UniversityEntity, pageable: Pageable): Page<UniversitySpecialityEntity> =
+        universitySpecialityRepository.findByUniversity(university, pageable)
 }

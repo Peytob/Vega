@@ -5,6 +5,7 @@ import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 import ru.vega.backend.entity.DisciplinesSetEntity
+import ru.vega.backend.entity.UniversityEntity
 import ru.vega.backend.entity.UniversitySpecialityEntity
 import java.util.*
 
@@ -41,4 +42,6 @@ interface UniversitySpecialityRepository : JpaRepository<UniversitySpecialityEnt
         includeContract: Boolean,
         pageable: Pageable
     ): Page<UniversitySpecialityEntity>
+
+    fun findByUniversity(university: UniversityEntity, pageable: Pageable): Page<UniversitySpecialityEntity>
 }

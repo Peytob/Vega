@@ -23,7 +23,7 @@ class RemoteTutorService(
 
     @Cacheable("Tutors")
     override fun getTutorById(tutorId: UUID): TutorDto? {
-        logger.info("Updating tutor with external id {} from remote", tutorId)
+        logger.info("Updating tutor with id {} from remote", tutorId)
 
         return restTemplate
             .getForObject("/tutor/{tutorId}", TutorDto::class.java, tutorId)
