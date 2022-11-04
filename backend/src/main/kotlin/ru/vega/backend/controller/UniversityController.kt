@@ -10,6 +10,7 @@ import ru.vega.backend.exception.EntityNotFoundException
 import ru.vega.backend.mapper.UniversityMapper
 import ru.vega.backend.service.UniversityCrudService
 import ru.vega.model.dto.university.UniversityDto
+import java.util.*
 import javax.validation.constraints.Min
 
 @RestController
@@ -20,20 +21,21 @@ class UniversityController(
 ) {
 
     @GetMapping
-    fun get(@RequestParam(defaultValue = Strings.EMPTY) filter: String,
+    fun get(@RequestParam(defaultValue = Strings.EMPTY) titleFilter: String,
             @RequestParam(value = "page", defaultValue = "0") @Min(0) page: Int,
             @RequestParam(value = "size", defaultValue = "10") @Min(1) size: Int,
             @RequestParam(value = "sortDir", defaultValue = "ASC") sortDir: Sort.Direction
     ): ResponseEntity<Page<UniversityDto>> {
         val pageable = PageRequest.of(page, size, Sort.by(sortDir, "title"))
-        val universitiesEntitiesPage = universityCrudService.getPage(filter, pageable)
-        val universities = universitiesEntitiesPage.map(universityMapper::toUniversityDto)
+        val universitiesEntitiesPage = universityCrudService.getPage(titleFilter, pageable)
+        val universities = universitiesEntitiesPage.map(universityMapper::toDto)
         return ResponseEntity.ok(universities)
     }
 
     @GetMapping("/{id}")
-    fun get(@PathVariable id: String): ResponseEntity<UniversityDto> {
-        val university = universityCrudService.getByExternalId(id) ?: throw EntityNotFoundException(id, "university")
-        return ResponseEntity.ok(universityMapper.toUniversityDto(university))
+    fun get(@PathVariable id: UUID): ResponseEntity<UniversityDto> {
+        val university = universityCrudService.getById(id) ?:
+            throw EntityNotFoundException(id, "university")
+        return ResponseEntity.ok(universityMapper.toDto(university))
     }
 }

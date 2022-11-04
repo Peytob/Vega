@@ -11,7 +11,8 @@ class StartMenuFactory(
     private val disciplineDetailsSelectMenuFactory: DisciplineDetailsSelectMenuFactory,
     private val questionSelectMenuFactory: QuestionSelectionMenuFactory,
     private val specialitiesDisciplinesSelectMenuFactory: SpecialitiesDisciplinesSelectMenuFactory,
-    private val tutorMeetingTypeSelectMenuFactory: TutorMeetingTypeSelectMenuFactory
+    private val tutorMeetingTypeSelectMenuFactory: TutorMeetingTypeSelectMenuFactory,
+    private val universitiesTownSelectMenuFactory: UniversitiesTownSelectMenuFactory
 ) : MenuFactory {
 
     fun create(): Menu {
@@ -35,6 +36,10 @@ class StartMenuFactory(
             row(
                 Button("FAQ", "faq") { session ->
                     session.menuHistory.pushNextMenu(questionSelectMenuFactory.create(0))
+                },
+
+                Button("Университеты", "universities") { session ->
+                    session.menuHistory.pushNextMenu(universitiesTownSelectMenuFactory.create(0))
                 }
             )
         }
