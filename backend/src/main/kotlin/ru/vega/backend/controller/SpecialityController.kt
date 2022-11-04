@@ -11,6 +11,7 @@ import ru.vega.backend.exception.EntityNotFoundException
 import ru.vega.backend.mapper.SpecialityMapper
 import ru.vega.backend.service.SpecialityCrudService
 import ru.vega.model.dto.speciality.SpecialityDto
+import java.util.*
 import javax.validation.constraints.Min
 
 @RestController
@@ -33,8 +34,9 @@ class SpecialityController(
     }
 
     @GetMapping("/{id}")
-    fun get(@PathVariable id: String): ResponseEntity<SpecialityDto> {
-        val speciality = specialityCrudService.getByExternalId(id) ?: throw EntityNotFoundException(id, "speciality")
+    fun get(@PathVariable id: UUID): ResponseEntity<SpecialityDto> {
+        val speciality = specialityCrudService.getById(id)
+            ?: throw EntityNotFoundException(id, "speciality")
         return ResponseEntity.ok(specialityMapper.toSpecialityDto(speciality))
     }
 }
