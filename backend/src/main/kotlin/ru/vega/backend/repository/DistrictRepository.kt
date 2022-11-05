@@ -10,7 +10,5 @@ import java.util.*
 
 @Repository
 interface DistrictRepository : JpaRepository<DistrictEntity, UUID> {
-
-    fun getByExternalId(externalId: String): DistrictEntity?
     fun findByTown(town: TownEntity, pageable: Pageable): Page<DistrictEntity>
 }

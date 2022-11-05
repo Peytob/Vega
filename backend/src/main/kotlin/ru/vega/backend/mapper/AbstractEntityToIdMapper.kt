@@ -4,6 +4,7 @@ import org.mapstruct.InjectionStrategy
 import org.mapstruct.Mapper
 import org.mapstruct.Named
 import ru.vega.backend.entity.AbstractEntity
+import java.util.UUID
 
 @Mapper(
     componentModel = "spring",
@@ -11,5 +12,5 @@ import ru.vega.backend.entity.AbstractEntity
 abstract class AbstractEntityToIdMapper {
 
     @Named("extractId")
-    fun extractId(entity: AbstractEntity): String = entity.externalId!!
+    fun extractId(entity: AbstractEntity): UUID = entity.id!!
 }

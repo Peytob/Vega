@@ -1,15 +1,27 @@
 package ru.vega.telegram.model.entity
 
-import dev.inmo.tgbotapi.types.UserId
+import dev.inmo.tgbotapi.types.MessageIdentifier
+import dev.inmo.tgbotapi.types.User
+import ru.vega.telegram.model.enums.EducationForm
+import ru.vega.telegram.model.enums.TutorMeetingForm
+import java.util.*
 
 data class Session(
-    val telegram_user: UserId,
-    val selectedDisciplinesIds: MutableSet<String> = mutableSetOf(),
-    val selectedTutors: MutableSet<String> = mutableSetOf(),
-    val tutorsToSendMessage: MutableSet<String> = mutableSetOf(),
-    var totalScore: Int? = null,
+    val messageIdentifier: MessageIdentifier,
+    val user: User,
+    val menuHistory: MenuHistory = MenuHistory(),
+    val speciality: SessionSpeciality = SessionSpeciality(),
+    val tutor: SessionTutor = SessionTutor()
+)
 
-    var tutorDiscipline: String? = null,
-    var tutorTown: String? = null,
-    var tutorDistrict: String? = null
+data class SessionSpeciality(
+    val selectedDisciplines: MutableSet<UUID> = mutableSetOf(),
+    var educationForm: Set<EducationForm> = emptySet(),
+    var score: Int? = null
+)
+
+data class SessionTutor(
+    var meetingForm: TutorMeetingForm? = null,
+    var disciplineId: UUID? = null,
+    var districtId: UUID? = null
 )

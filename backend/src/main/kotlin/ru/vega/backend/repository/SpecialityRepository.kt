@@ -10,7 +10,5 @@ import java.util.UUID
 @Repository
 interface SpecialityRepository : JpaRepository<SpecialityEntity, UUID> {
 
-    fun findByExternalId(externalId: String): SpecialityEntity?
-
     fun findAllByTitleContainingIgnoreCase(titleFilter: String, pageable: Pageable): Page<SpecialityEntity>
 }

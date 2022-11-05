@@ -11,7 +11,7 @@ import ru.vega.model.dto.university.UniversityDto
     uses = [TownMapper::class])
 interface UniversityMapper {
 
-    fun toUniversityDto(university: UniversityEntity): UniversityDto
+    fun toDto(university: UniversityEntity): UniversityDto
 
-    fun toUniversityDto(universities: Collection<UniversityEntity>): Collection<UniversityDto>
+    fun toDto(universities: Collection<UniversityEntity>): Collection<UniversityDto>
 }

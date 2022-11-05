@@ -9,6 +9,7 @@ import ru.vega.backend.exception.EntityNotFoundException
 import ru.vega.backend.mapper.UniversitySpecialityMapper
 import ru.vega.backend.service.UniversitySpecialityCrudService
 import ru.vega.model.dto.university.UniversitySpecialityDto
+import java.util.UUID
 
 @RestController
 @RequestMapping("/universitySpeciality")
@@ -17,10 +18,10 @@ class UniversitySpecialityController(
     private val universitySpecialityCrudService: UniversitySpecialityCrudService
 ) {
 
-    @GetMapping("/{externalId}")
-    fun getByExternalId(@PathVariable externalId: String): ResponseEntity<UniversitySpecialityDto> {
-        val universitySpecialityEntity = universitySpecialityCrudService.getByExternalId(externalId) ?:
-            throw EntityNotFoundException(externalId, "universitySpeciality")
+    @GetMapping("/{id}")
+    fun getById(@PathVariable id: UUID): ResponseEntity<UniversitySpecialityDto> {
+        val universitySpecialityEntity = universitySpecialityCrudService.getById(id) ?:
+            throw EntityNotFoundException(id, "universitySpeciality")
         val universitySpecialityDto = universitySpecialityMapper.toDto(universitySpecialityEntity)
         return ResponseEntity.ok(universitySpecialityDto)
     }

@@ -5,13 +5,15 @@ import dev.inmo.tgbotapi.types.message.abstracts.CommonMessage
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
-import ru.vega.telegram.menu.StartMenu
+import ru.vega.telegram.menu.processor.StartMenuFactory
 import ru.vega.telegram.service.MenuService
+import ru.vega.telegram.service.SessionService
 
 @Component
 class StartCommand(
+    private val startMenuFactory: StartMenuFactory,
     private val menuService: MenuService,
-    private val startMenu: StartMenu
+    private val sessionService: SessionService
 ) : Command {
 
     companion object {
@@ -19,8 +21,12 @@ class StartCommand(
     }
 
     override suspend fun execute(message: CommonMessage<*>) {
-        logger.info("Start command from {}", message.from?.username)
-        menuService.showMenu(message.chat.id, startMenu.menu)
+        logger.info("Start command from user ${message.from}")
+
+        val startMenu = startMenuFactory.create()
+        val menuMessage = menuService.showMenu(message.chat.id, startMenu)
+        val session = sessionService.startSession(menuMessage, message.from!!)
+        session.menuHistory.pushNextMenu(startMenu)
     }
 
     override fun getCommandString() = "/start"

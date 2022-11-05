@@ -1,11 +1,18 @@
 package ru.vega.telegram.service
 
-import dev.inmo.tgbotapi.types.UserId
+import dev.inmo.tgbotapi.types.User
+import dev.inmo.tgbotapi.types.message.abstracts.Message
 import ru.vega.telegram.model.entity.Session
 
 interface SessionService {
 
-    fun getOrStartSession(userId: UserId): Session
+    fun getSession(message: Message): Session?
 
-    fun isSessionActive(userId: UserId): Boolean
+    /**
+     * {@param message} - Сообщение, в котором происходит текущая сессия диалога с ботом.
+     * {@param initiator} - Тот, кто инициировал общение с ботом, например, отправив ему команду /start
+     */
+    fun startSession(message: Message, initiator: User): Session
+
+    fun isSessionActive(message: Message): Boolean
 }

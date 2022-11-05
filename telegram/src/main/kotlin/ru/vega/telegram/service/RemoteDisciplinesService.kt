@@ -6,6 +6,7 @@ import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestTemplate
 import ru.vega.model.dto.discipline.DisciplineDto
+import java.util.UUID
 
 @Service
 class RemoteDisciplinesService(
@@ -27,10 +28,10 @@ class RemoteDisciplinesService(
     }
 
     @Cacheable("Disciplines")
-    override fun getByExternalId(externalId: String): DisciplineDto? {
-        logger.info("Updating discipline with external id {} from remote", externalId)
+    override fun getById(id: UUID): DisciplineDto? {
+        logger.info("Updating discipline with id {} from remote", id)
 
         return restTemplate
-            .getForObject("/discipline/$externalId", DisciplineDto::class.java)
+            .getForObject("/discipline/{id}", DisciplineDto::class.java, id)
     }
 }

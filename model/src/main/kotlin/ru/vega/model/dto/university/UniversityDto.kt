@@ -1,7 +1,9 @@
 package ru.vega.model.dto.university
 
+import java.util.*
+
 data class UniversityDto(
-    val externalId: String,
+    val id: UUID,
     val title: String,
     val shortTitle: String,
     val description: String,

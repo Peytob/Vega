@@ -1,6 +1,8 @@
 package ru.vega.model.dto.town
 
+import java.util.UUID
+
 data class TownDto(
-    val externalId: String,
+    val id: UUID,
     val title: String
 )

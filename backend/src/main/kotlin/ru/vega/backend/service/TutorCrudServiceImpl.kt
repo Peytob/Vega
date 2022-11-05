@@ -2,11 +2,13 @@ package ru.vega.backend.service
 
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import ru.vega.backend.entity.DisciplineEntity
 import ru.vega.backend.entity.DistrictEntity
 import ru.vega.backend.entity.TutorEntity
 import ru.vega.backend.repository.TutorRepository
+import java.util.*
 
 @Service
 class TutorCrudServiceImpl(
@@ -26,5 +28,5 @@ class TutorCrudServiceImpl(
     ): Page<TutorEntity> =
         tutorRepository.findOnlineByDiscipline(discipline, pageable)
 
-    override fun getByExternalId(externalId: String): TutorEntity? = tutorRepository.findByExternalId(externalId)
+    override fun getById(id: UUID): TutorEntity? = tutorRepository.findByIdOrNull(id)
 }

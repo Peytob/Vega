@@ -12,6 +12,7 @@ import ru.vega.model.dto.town.DistrictDto
 import ru.vega.model.dto.town.TownDto
 import ru.vega.model.utils.Page
 import ru.vega.model.utils.Pageable
+import java.util.*
 
 @Service
 class RemoteTownService(
@@ -42,11 +43,11 @@ class RemoteTownService(
     }
 
     @Cacheable("DistrictPages")
-    override fun getDistrictPage(townExternalId: String, pageable: Pageable): Page<DistrictDto> {
-        logger.info("Updating districts of town with external id $townExternalId for page $pageable")
+    override fun getDistrictPage(townId: UUID, pageable: Pageable): Page<DistrictDto> {
+        logger.info("Updating districts of town with external id $townId for page $pageable")
 
         val uri = UriComponentsBuilder
-            .fromUriString("/town/${townExternalId}/district")
+            .fromUriString("/town/${townId}/district")
             .queryParam("page", pageable.page)
             .queryParam("size", pageable.size)
             .toUriString()
