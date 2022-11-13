@@ -16,3 +16,9 @@ cache.duration: # Duration of caches.
   backend-data: 1h
 
 server.port: 8081
+
+# TODO Костыль, убрать. См TODO.md
+
+spring:
+  main:
+    allow-circular-references: true
