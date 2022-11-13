@@ -4,8 +4,9 @@ import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.boot.context.properties.ConstructorBinding
 import java.net.URI
 
-@ConfigurationProperties(prefix = "backend")
+@ConfigurationProperties(prefix = "external-links")
 @ConstructorBinding
-data class BackendProperties(
-    val url: URI
+data class ExternalResourcesProperties(
+    val backendUrl: URI,
+    val spoBotUrl: URI
 )

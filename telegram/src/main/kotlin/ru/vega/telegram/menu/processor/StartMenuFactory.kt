@@ -2,17 +2,21 @@ package ru.vega.telegram.menu.processor
 
 import dev.inmo.tgbotapi.utils.matrix
 import dev.inmo.tgbotapi.utils.row
+import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.stereotype.Component
+import ru.vega.telegram.configuration.ExternalResourcesProperties
 import ru.vega.telegram.menu.Button
 import ru.vega.telegram.model.Menu
 
 @Component
+@EnableConfigurationProperties(ExternalResourcesProperties::class)
 class StartMenuFactory(
     private val disciplineDetailsSelectMenuFactory: DisciplineDetailsSelectMenuFactory,
     private val questionSelectMenuFactory: QuestionSelectionMenuFactory,
     private val specialitiesDisciplinesSelectMenuFactory: SpecialitiesDisciplinesSelectMenuFactory,
     private val tutorMeetingTypeSelectMenuFactory: TutorMeetingTypeSelectMenuFactory,
-    private val universitiesTownSelectMenuFactory: UniversitiesTownSelectMenuFactory
+    private val universitiesTownSelectMenuFactory: UniversitiesTownSelectMenuFactory,
+    private val externalResourcesProperties: ExternalResourcesProperties
 ) : MenuFactory {
 
     fun create(): Menu {
@@ -41,6 +45,10 @@ class StartMenuFactory(
                 Button("Университеты", "universities") { session ->
                     session.menuHistory.pushNextMenu(universitiesTownSelectMenuFactory.create(0))
                 }
+            )
+
+            row(
+                Button("Если ты поступаешь в ССУЗ - тебе сюда!", "spo", url = externalResourcesProperties.spoBotUrl) {}
             )
         }
 
