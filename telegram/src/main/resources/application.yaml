@@ -8,11 +8,18 @@ telegram:
     menu:
       items-per-page: 5
 
-backend:
-  url: http://localhost:8080/
+external-links:
+  backend-url: http://localhost:8080/
+  spo-bot-url: https://t.me/VegaSPO_bot
 
 cache.duration: # Duration of caches.
   session: 10m
   backend-data: 1h
 
 server.port: 8081
+
+# TODO Костыль, убрать. См TODO.md
+
+spring:
+  main:
+    allow-circular-references: true

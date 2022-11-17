@@ -60,7 +60,7 @@ class RemoteUniversitySpecialityService(
         logger.info("Updating university specialities for university with id $universityId for page $pageable")
 
         val uri = UriComponentsBuilder
-            .fromUriString("/university/{disciplineSetId}/specialities")
+            .fromUriString("/university/{universityId}/specialities")
             .queryParam("page", pageable.page)
             .queryParam("size", pageable.size)
             .buildAndExpand(universityId)

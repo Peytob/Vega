@@ -10,14 +10,14 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.web.client.RestTemplate
 
 @Configuration
-@EnableConfigurationProperties(BackendProperties::class)
+@EnableConfigurationProperties(ExternalResourcesProperties::class)
 class RestTemplateConfiguration(
-    private val backendProperties: BackendProperties
+    private val externalResourcesProperties: ExternalResourcesProperties
 ) {
 
     @Bean("backendRestTemplate")
     fun restTemplate(restTemplateBuilder: RestTemplateBuilder): RestTemplate = restTemplateBuilder
-            .rootUri(backendProperties.url.toString())
+            .rootUri(externalResourcesProperties.backendUrl.toString())
             .build()
 
     @Bean
