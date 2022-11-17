@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException
+import ru.vega.backend.exception.EntityNotFoundException
 import ru.vega.model.dto.common.ErrorDto
 
 @RestControllerAdvice
@@ -20,6 +21,10 @@ class DefaultControllerAdvice {
     @ExceptionHandler(MethodArgumentTypeMismatchException::class)
     fun badRequestException(exception: Exception): ResponseEntity<ErrorDto> =
         makeDefaultException(exception.message, HttpStatus.BAD_REQUEST)
+
+    @ExceptionHandler(EntityNotFoundException::class)
+    fun notFoundException(exception: Exception): ResponseEntity<ErrorDto> =
+        makeDefaultException(exception.message, HttpStatus.NOT_FOUND)
 
     @ExceptionHandler(Exception::class)
     fun anyException(exception: Exception): ResponseEntity<ErrorDto> =

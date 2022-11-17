@@ -17,7 +17,7 @@ class SwaggerConfiguration {
         return GroupedOpenApi.builder()
             .group("api")
             .displayName("Vega API")
-            .packagesToScan("ru.vega.backend.controller")
+            .pathsToMatch("/**")
             .build()
     }
 }
