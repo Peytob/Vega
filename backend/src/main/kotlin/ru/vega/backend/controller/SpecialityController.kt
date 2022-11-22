@@ -22,13 +22,13 @@ class SpecialityController(
 ) {
 
     @GetMapping
-    fun getAll(@RequestParam(defaultValue = EMPTY) filter: String,
-            @RequestParam(value = "page", defaultValue = "0") @Min(0) page: Int,
-            @RequestParam(value = "size", defaultValue = "10") @Min(1) size: Int,
-            @RequestParam(value = "sortDir", defaultValue = "ASC") sortDir: Sort.Direction
+    fun getAll(@RequestParam(defaultValue = EMPTY) titleFilter: String,
+               @RequestParam(value = "page", defaultValue = "0") @Min(0) page: Int,
+               @RequestParam(value = "size", defaultValue = "10") @Min(1) size: Int,
+               @RequestParam(value = "sortDir", defaultValue = "ASC") sortDir: Sort.Direction
     ): ResponseEntity<Page<SpecialityDto>> {
         val pageable: Pageable = PageRequest.of(page, size, Sort.by(sortDir, "title"))
-        val specialitiesEntitiesPage = specialityCrudService.getPage(filter, pageable)
+        val specialitiesEntitiesPage = specialityCrudService.getPage(titleFilter, pageable)
         val specialities = specialitiesEntitiesPage.map(specialityMapper::toSpecialityDto)
         return ResponseEntity.ok(specialities)
     }
