@@ -7,11 +7,11 @@ import javax.persistence.OneToOne
 import javax.persistence.Table
 
 @Entity
-@Table(name = "telegram_user_request")
-open class TelegramUserRequestEntity(
+@Table(name = "user_tutor_request")
+open class UserTutorRequest(
 
     @get:OneToOne(optional = false)
-    open var telegramUser: TelegramUserEntity? = null,
+    open var user: User? = null,
 
     @get:OneToOne(optional = false)
     open var tutor: TutorEntity? = null,

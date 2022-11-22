@@ -2,8 +2,9 @@ package ru.vega.backend.entity
 
 import javax.persistence.*
 
+// TODO Переименовать в TutorDetailsEntity !!!
 @Entity
-@Table(name = "tutor")
+@Table(name = "tutor_details")
 open class TutorEntity(
 
     @get:ManyToOne(optional = false)
@@ -39,9 +40,10 @@ open class TutorEntity(
     @get:Column(nullable = false)
     open var price: Int? = null,
 
-    open var telegram: String? = null,
-
     open var whatsApp: String? = null,
+
+    @get:OneToOne(optional = false)
+    open var user: TutorUser? = null,
 
     @get:ManyToMany
     @get:JoinTable(
