@@ -16,6 +16,5 @@ interface UserMapper {
     fun toDto(user: User): TelegramUserDto
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "role", constant = "STUDENT")
     fun toEntity(createTelegramUserDto: CreateTelegramUserDto): StudentUser
 }

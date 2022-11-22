@@ -6,7 +6,7 @@ import javax.persistence.*
 @Entity
 @Table(name = "\"USER\"")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(discriminatorType = DiscriminatorType.STRING)
+@DiscriminatorColumn(discriminatorType = DiscriminatorType.STRING, name = "user_role")
 abstract class User(
     @get:Column(nullable = true)
     open var firstName: String? = null,
@@ -19,8 +19,4 @@ abstract class User(
 
     @get:Column(nullable = true, updatable = false)
     open var username: String? = null,
-
-    @get:Column(nullable = false, name = "user_role")
-    @get:Enumerated(EnumType.STRING)
-    open var role: UserRole? = null
 ) : AbstractEntity()
