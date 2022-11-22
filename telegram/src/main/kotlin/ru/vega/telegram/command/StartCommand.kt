@@ -33,7 +33,7 @@ class StartCommand(
         val session = sessionService.startSession(menuMessage, user)
         session.menuHistory.pushNextMenu(startMenu)
 
-        if (!userService.isUserExists(user)) {
+        if (userService.getUser(user.id.chatId) == null) {
             userService.createUser(user)
         }
     }

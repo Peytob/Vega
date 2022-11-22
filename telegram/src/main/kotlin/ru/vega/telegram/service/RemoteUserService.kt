@@ -25,7 +25,7 @@ class RemoteUserService(
         logger.info("Updating remote telegram user entity with telegram id {} from remote", telegramId)
 
         return restTemplate
-            .getForObjectOrNull("/telegram/user/search/{telegramId}", TelegramUserDto::class.java, telegramId)
+            .getForObjectOrNull("/user/telegram/{telegramId}", TelegramUserDto::class.java, telegramId)
     }
 
     override fun createUser(user: User) {
@@ -39,8 +39,6 @@ class RemoteUserService(
         )
 
         restTemplate
-            .postForObject("/telegram/user", createDto, TelegramUserDto::class.java)
+            .postForObject("/user/telegram", createDto, TelegramUserDto::class.java)
     }
-
-    override fun isUserExists(user: User): Boolean = getUser(user.id.chatId) != null
 }
