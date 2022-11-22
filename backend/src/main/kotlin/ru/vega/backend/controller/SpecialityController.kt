@@ -22,7 +22,7 @@ class SpecialityController(
 ) {
 
     @GetMapping
-    fun get(@RequestParam(defaultValue = EMPTY) filter: String,
+    fun getAll(@RequestParam(defaultValue = EMPTY) filter: String,
             @RequestParam(value = "page", defaultValue = "0") @Min(0) page: Int,
             @RequestParam(value = "size", defaultValue = "10") @Min(1) size: Int,
             @RequestParam(value = "sortDir", defaultValue = "ASC") sortDir: Sort.Direction

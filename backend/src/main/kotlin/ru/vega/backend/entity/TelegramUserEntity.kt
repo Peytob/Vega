@@ -16,6 +16,6 @@ open class TelegramUserEntity(
     @get:Column(updatable = false, unique = true)
     open var telegramId: Long? = null,
 
-    @get:Column(nullable = true, updatable = false, unique = true)
+    @get:Column(nullable = true, updatable = false)
     open var username: String? = null
 ) : AbstractEntity()

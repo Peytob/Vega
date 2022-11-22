@@ -1,5 +1,11 @@
 package ru.vega.backend.controller
 
+import org.apache.logging.log4j.util.Strings
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Pageable
+import org.springframework.data.domain.Sort
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import ru.vega.backend.exception.EntityNotFoundException
@@ -7,6 +13,7 @@ import ru.vega.backend.mapper.TelegramUserMapper
 import ru.vega.backend.service.TelegramUserService
 import ru.vega.model.dto.user.CreateTelegramUserDto
 import ru.vega.model.dto.user.TelegramUserDto
+import javax.validation.constraints.Min
 
 @RestController
 @RequestMapping("/telegram/user")
@@ -23,7 +30,20 @@ class TelegramUserController(
         return ResponseEntity.ok(telegramUserDto)
     }
 
+    @GetMapping
+    fun getAll(@RequestParam(defaultValue = Strings.EMPTY) usernameFilter: String,
+               @RequestParam(value = "page", defaultValue = "0") @Min(0) page: Int,
+               @RequestParam(value = "size", defaultValue = "10") @Min(1) size: Int,
+               @RequestParam(value = "sortDir", defaultValue = "ASC") sortDir: Sort.Direction
+    ): ResponseEntity<Page<TelegramUserDto>> {
+        val pageable: Pageable = PageRequest.of(page, size, Sort.by(sortDir, "username"))
+        val telegramUsersEntitiesPage = telegramUserService.getPage(usernameFilter, pageable)
+        val telegramUsers = telegramUsersEntitiesPage.map(telegramUserMapper::toDto)
+        return ResponseEntity.ok(telegramUsers)
+    }
+
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     fun create(@RequestBody createTelegramUserDto: CreateTelegramUserDto): ResponseEntity<TelegramUserDto> {
         val telegramUser = telegramUserService.createTelegramUser(createTelegramUserDto)
         val telegramUsrDto = telegramUserMapper.toDto(telegramUser)
