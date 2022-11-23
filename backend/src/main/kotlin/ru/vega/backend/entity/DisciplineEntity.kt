@@ -24,9 +24,6 @@ open class DisciplineEntity(
     open var passingScore: Int? = null,
 
     @get:Column(nullable = false)
-    open var questionsNumber: Int? = null,
-
-    @get:Column(nullable = false)
     open var sdamGiaLink: String? = null,
 
     @get:Column(nullable = false)

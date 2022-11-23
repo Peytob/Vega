@@ -9,7 +9,6 @@ data class DisciplineDto(
     val fipiLink: String,
     val lastMiddleScore: Int,
     val passingScore: Int,
-    val questionsNumber: Int,
     val sdamGiaLink: String,
     val descriptionYear: Int
 )

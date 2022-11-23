@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component
 import ru.vega.telegram.menu.Button
 import ru.vega.telegram.menu.ButtonId
 import ru.vega.telegram.menu.processor.StartMenuFactory
+import ru.vega.telegram.model.Menu
 import ru.vega.telegram.model.entity.Session
 import ru.vega.telegram.service.MenuService
 import ru.vega.telegram.service.SessionService
@@ -41,36 +42,49 @@ class MenuButtonCallbackUpdateHandler(
 
         // TODO Пренести в другой хендлер обновления сессий?
 
-        val session = sessionService.getSession(query.message) ?:
+        val session = sessionService.getSession(query.message) ?: run {
             handleOutOfSession(query)
+        }
 
         logger.debug("Pressed button with id {} by user {}", buttonId, session.user)
 
         val menu = session.menuHistory.currentMenu ?: run {
             logger.error("Session for message ${session.messageIdentifier} from ${session.user} dont have current menu")
-            return
+            resetSessionsMenu(session)
         }
 
         val button = findButton(menu.buttons, buttonId) ?: run {
             logger.error("In query menu {} button with id {} not found", query, buttonId)
+            val menuAfterReset = resetSessionsMenu(session)
+            menuService.replaceMenu(query.message.chat.id, query.message.messageId, menuAfterReset)
             return
         }
 
         button.callback(session)
 
-        val menuAfterCallback = session.menuHistory.currentMenu
-
-        if (menuAfterCallback != null) {
-            menuService.replaceMenu(query.message.chat.id, query.message.messageId, menuAfterCallback)
+        val menuAfterCallback = session.menuHistory.currentMenu ?: run {
+            logger.error("Menu after callback for button {} is null!", buttonId)
+            val menuAfterReset = resetSessionsMenu(session)
+            menuService.replaceMenu(query.message.chat.id, query.message.messageId, menuAfterReset)
+            return
         }
+
+        menuService.replaceMenu(query.message.chat.id, query.message.messageId, menuAfterCallback)
     }
 
-    private suspend fun handleOutOfSession(query: MessageCallbackQuery): Session {
+    private fun resetSessionsMenu(session: Session): Menu {
+        logger.error("Resetting menus for session for user {} in message {}", session.user, session.messageIdentifier)
+
+        session.menuHistory.clear()
+        session.menuHistory.pushNextMenu(startMenuFactory.create())
+        return session.menuHistory.currentMenu!!
+    }
+
+    private fun handleOutOfSession(query: MessageCallbackQuery): Session {
         logger.info("Message out of session. Recreating session and return session state to start menu.")
 
         val startMenu = startMenuFactory.create()
-        val menuMessage = menuService.replaceMenu(query.message.chat.id, query.message.messageId, startMenu)
-        val session = sessionService.startSession(menuMessage, query.from)
+        val session = sessionService.startSession(query.message, query.from)
         session.menuHistory.pushNextMenu(startMenu)
         return session
     }

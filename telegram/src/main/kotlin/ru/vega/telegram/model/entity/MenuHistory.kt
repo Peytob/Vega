@@ -31,4 +31,8 @@ class MenuHistory {
     fun moveBack() {
         menuStack.pop()
     }
+
+    fun clear() {
+        menuStack.clear()
+    }
 }
