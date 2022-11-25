@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*
 import ru.vega.backend.exception.EntityNotFoundException
 import ru.vega.backend.mapper.UserMapper
 import ru.vega.backend.service.TutorCrudService
+import ru.vega.backend.service.UniversitySpecialityCrudService
 import ru.vega.backend.service.UserCrudService
 import ru.vega.backend.service.UserService
 import ru.vega.model.dto.user.CreateTelegramUserDto
@@ -18,12 +19,15 @@ import ru.vega.model.dto.user.TelegramUserDto
 import java.util.*
 import javax.validation.constraints.Min
 
+// TODO Декомпозировать ! ! !
+
 @RestController
 @RequestMapping("/user")
 class UserController(
     private val userCrudService: UserCrudService,
     private val tutorCrudService: TutorCrudService,
     private val userService: UserService,
+    private val universitySpecialityCrudService: UniversitySpecialityCrudService,
     private val userMapper: UserMapper
 ) {
 
@@ -55,6 +59,24 @@ class UserController(
             throw EntityNotFoundException("Telegram user with telegram id $telegramId not found!")
         val request = userService.createTutorRequest(student, tutor)
         return ResponseEntity.ok(request)
+    }
+
+    @GetMapping("/telegram/{telegramId}/bookmark/{universitySpecialityId}")
+    fun createBookmark(@PathVariable universitySpecialityId: UUID, @PathVariable telegramId: Long) {
+        val telegramUser = userCrudService.getTelegramUserByTelegramId(telegramId) ?:
+        throw EntityNotFoundException("User with telegram id $telegramId not found!")
+        val universitySpeciality = universitySpecialityCrudService.getById(universitySpecialityId) ?:
+        throw EntityNotFoundException(universitySpecialityId, "UniversitySpeciality")
+        userService.createBookmark(telegramUser, universitySpeciality)
+    }
+
+    @DeleteMapping("/telegram/{telegramId}/bookmark/{universitySpecialityId}")
+    fun deleteBookmark(@PathVariable universitySpecialityId: UUID, @PathVariable telegramId: Long) {
+        val telegramUser = userCrudService.getTelegramUserByTelegramId(telegramId) ?:
+            throw EntityNotFoundException("User with telegram id $telegramId not found!")
+        val universitySpeciality = universitySpecialityCrudService.getById(universitySpecialityId) ?:
+            throw EntityNotFoundException(universitySpecialityId, "UniversitySpeciality")
+        userService.deleteBookmark(telegramUser, universitySpeciality)
     }
 
     @PostMapping("/telegram")
