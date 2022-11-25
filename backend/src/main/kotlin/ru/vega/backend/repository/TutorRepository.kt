@@ -15,7 +15,7 @@ interface TutorRepository : JpaRepository<TutorEntity, UUID> {
         value = """
             SELECT *
             FROM TUTOR_DISCIPLINE_LINK AS tdl 
-            INNER JOIN TUTOR AS t 
+            INNER JOIN TUTOR_DETAILS AS t 
                 ON t.ID = tdl.TUTOR_ID 
             INNER JOIN DISCIPLINE d
                 ON d.ID = tdl.DISCIPLINE_ID 
@@ -25,7 +25,7 @@ interface TutorRepository : JpaRepository<TutorEntity, UUID> {
         countQuery = """
             SELECT tdl.*, t.ID
             FROM TUTOR_DISCIPLINE_LINK AS tdl 
-            INNER JOIN TUTOR AS t 
+            INNER JOIN TUTOR_DETAILS AS t 
                 ON t.ID = tdl.TUTOR_ID 
             WHERE t.DISTRICT_ID = :district AND tdl.DISCIPLINE_ID = :discipline 
         """,
@@ -41,7 +41,7 @@ interface TutorRepository : JpaRepository<TutorEntity, UUID> {
         value = """
             SELECT *
             FROM TUTOR_DISCIPLINE_LINK AS tdl 
-            INNER JOIN TUTOR AS t 
+            INNER JOIN TUTOR_DETAILS AS t 
                 ON t.ID = tdl.TUTOR_ID 
             INNER JOIN DISCIPLINE d
                 ON d.ID = tdl.DISCIPLINE_ID 
@@ -51,7 +51,7 @@ interface TutorRepository : JpaRepository<TutorEntity, UUID> {
         countQuery = """
             SELECT tdl.*, t.ID
             FROM TUTOR_DISCIPLINE_LINK AS tdl 
-            INNER JOIN TUTOR AS t
+            INNER JOIN TUTOR_DETAILS AS t
                 ON t.ID = tdl.TUTOR_ID 
             WHERE t.ONLINE = TRUE AND tdl.DISCIPLINE_ID = :discipline 
         """,

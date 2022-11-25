@@ -24,8 +24,7 @@ class TutorDetailsMenuFactory(
 
         val buttons = matrix<Button> {
             val sendRequest = Button("Отправить заявку", "request") { session ->
-                val chatId = ChatId(tutor.notificationChatId)
-                val nextMenu = tutorRequestAcceptQuestionMenuFactory.create(chatId)
+                val nextMenu = tutorRequestAcceptQuestionMenuFactory.create(tutor.id)
                 session.menuHistory.pushNextMenu(nextMenu)
             }
             row(sendRequest)
@@ -43,18 +42,10 @@ class TutorDetailsMenuFactory(
             .disciplines
             .joinToString(",") { it.title }
 
-        val educationFormat =
-            if (tutor.online && tutor.offline) "очно и онлайн"
-            else if (tutor.online) "только онлайн"
-            else if (tutor.offline) "только очно"
-            else "репетитор сейчас не принимает новых учеников"
-
         return """
-                *${tutor.name}*
+                *${makeTutorName(tutor)}*
                 Преподаваемые дисциплины: $disciplines
-                Формат занятий: $educationFormat
                 ${tutor.description}
-                Цена академического часа: ${tutor.price}
                 [​](${tutor.photoUrl})
             """.trimIndent()
     }

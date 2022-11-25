@@ -39,7 +39,10 @@ class TutorDistrictSelectMenuFactory(
             row(makeReturnButton())
         }
 
-        val message = "Выбери район города, в котором ты ищешь репетитора!"
+        val message = if (districts.empty)
+                "Ой-ой. Мы, пока что, не знаем репетиторов в этом городе :( Следи за обновлениями, скоро появятся"
+            else
+                "Выбери район города, в котором ты ищешь репетитора!"
 
         return Menu(buttons, message)
     }

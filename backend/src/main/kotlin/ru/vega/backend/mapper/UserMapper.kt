@@ -3,6 +3,7 @@ package ru.vega.backend.mapper
 import org.mapstruct.InjectionStrategy
 import org.mapstruct.Mapper
 import org.mapstruct.Mapping
+import org.mapstruct.Mappings
 import ru.vega.backend.entity.StudentUser
 import ru.vega.backend.entity.User
 import ru.vega.model.dto.user.CreateTelegramUserDto
@@ -15,6 +16,9 @@ interface UserMapper {
 
     fun toDto(user: User): TelegramUserDto
 
-    @Mapping(target = "id", ignore = true)
+    @Mappings(
+        Mapping(target = "id", ignore = true),
+        Mapping(target = "patronymic", ignore = true)
+    )
     fun toEntity(createTelegramUserDto: CreateTelegramUserDto): StudentUser
 }

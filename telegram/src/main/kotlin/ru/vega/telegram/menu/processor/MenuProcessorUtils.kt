@@ -3,6 +3,7 @@ package ru.vega.telegram.menu.processor
 import com.benasher44.uuid.bytes
 import dev.inmo.tgbotapi.utils.row
 import ru.vega.model.dto.discipline.DisciplineDto
+import ru.vega.model.dto.tutor.TutorDto
 import ru.vega.model.utils.Page
 import ru.vega.telegram.menu.Button
 import ru.vega.telegram.model.entity.Session
@@ -42,7 +43,7 @@ internal fun makeDisciplinesButtonsMatrix(
         .chunked(3)
 
 internal fun makePagesNavigationRow(page: Page<*>, buttonCallback: (Int, Session) -> Unit) = row<Button> {
-    if (page.totalPages == 1) {
+    if (page.totalPages == 0) {
         return@row
     }
 
@@ -70,3 +71,5 @@ internal fun makePagesNavigationRow(page: Page<*>, buttonCallback: (Int, Session
         )
     }
 }
+
+internal fun makeTutorName(tutor: TutorDto) = "${tutor.surname} ${tutor.forename} ${tutor.patronymic}"

@@ -30,7 +30,7 @@ class UniversitiesTownSelectMenuFactory(
                 .forEach { row(it) }
 
             val navigation = makePagesNavigationRow(towns) { nextPage, session ->
-                session.menuHistory.pushNextMenu(create(nextPage))
+                session.menuHistory.changeCurrentMenu(create(nextPage))
             }
             add(navigation)
 

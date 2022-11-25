@@ -15,7 +15,8 @@ class UserServiceImpl(
 
     override fun createTutorRequest(student: User, tutor: TutorEntity): UserTutorRequest {
         if (userTutorRequestRepository.existsByUserAndTutor(student, tutor)) {
-            throw EntityAlreadyExistsException("Request from user with id ${student.id} to tutor with id ${tutor.id} already exists!")
+            throw EntityAlreadyExistsException(
+                "Request from user with id ${student.id} to tutor with id ${tutor.id} already exists!")
         }
 
         val request = UserTutorRequest(student, tutor, Instant.now())

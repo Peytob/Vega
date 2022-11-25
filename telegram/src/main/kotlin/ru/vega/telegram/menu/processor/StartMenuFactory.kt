@@ -9,14 +9,13 @@ import ru.vega.telegram.menu.Button
 import ru.vega.telegram.model.Menu
 
 @Component
-@EnableConfigurationProperties(ExternalResourcesProperties::class)
 class StartMenuFactory(
     private val disciplineDetailsSelectMenuFactory: DisciplineDetailsSelectMenuFactory,
     private val questionSelectMenuFactory: QuestionSelectionMenuFactory,
     private val specialitiesDisciplinesSelectMenuFactory: SpecialitiesDisciplinesSelectMenuFactory,
     private val tutorMeetingTypeSelectMenuFactory: TutorMeetingTypeSelectMenuFactory,
     private val universitiesTownSelectMenuFactory: UniversitiesTownSelectMenuFactory,
-    private val externalResourcesProperties: ExternalResourcesProperties
+    private val contactsMenuFactory: ContentsMenuFactory
 ) : MenuFactory {
 
     fun create(): Menu {
@@ -48,7 +47,9 @@ class StartMenuFactory(
             )
 
             row(
-                Button("Если ты поступаешь в ССУЗ - тебе сюда!", "spo", url = externalResourcesProperties.spoBotUrl) {}
+                Button("Контакты", "contacts") { session ->
+                    session.menuHistory.pushNextMenu(contactsMenuFactory.create())
+                }
             )
         }
 

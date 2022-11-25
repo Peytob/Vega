@@ -8,5 +8,7 @@ import java.net.URI
 @ConstructorBinding
 data class ExternalResourcesProperties(
     val backendUrl: URI,
-    val spoBotUrl: URI
+    val spoBotUrl: URI,
+    val telegramChat: URI,
+    val vkGroup: URI
 )

@@ -1,6 +1,5 @@
 package ru.vega.backend.entity
 
-import ru.vega.model.enumeration.UserRole
 import javax.persistence.*
 
 @Entity
@@ -9,10 +8,13 @@ import javax.persistence.*
 @DiscriminatorColumn(discriminatorType = DiscriminatorType.STRING, name = "user_role")
 abstract class User(
     @get:Column(nullable = true)
-    open var firstName: String? = null,
+    open var forename: String? = null,
 
     @get:Column(nullable = true)
-    open var lastName: String? = null,
+    open var surname: String? = null,
+
+    @get:Column(nullable = true)
+    open var patronymic: String? = null,
 
     @get:Column(nullable = false, updatable = false, unique = true)
     open var telegramId: Long? = null,

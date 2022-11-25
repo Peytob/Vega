@@ -10,12 +10,12 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import ru.vega.backend.exception.EntityNotFoundException
 import ru.vega.backend.mapper.UserMapper
+import ru.vega.backend.service.TutorCrudService
 import ru.vega.backend.service.UserCrudService
 import ru.vega.backend.service.UserService
-import ru.vega.backend.service.TutorCrudService
 import ru.vega.model.dto.user.CreateTelegramUserDto
-import ru.vega.model.dto.user.CreateTutorRequest
 import ru.vega.model.dto.user.TelegramUserDto
+import java.util.*
 import javax.validation.constraints.Min
 
 @RestController
@@ -47,12 +47,12 @@ class UserController(
         return ResponseEntity.ok(telegramUsers)
     }
 
-    @PostMapping("/request")
-    fun createTutorRequest(@RequestBody tutorRequest: CreateTutorRequest): ResponseEntity<*> {
-        val tutor = tutorCrudService.getById(tutorRequest.tutorId) ?:
-            throw EntityNotFoundException(tutorRequest.tutorId, "Tutor")
-        val student = userCrudService.getById(tutorRequest.studentId) ?:
-            throw EntityNotFoundException(tutorRequest.studentId, "TelegramUser")
+    @PostMapping("/telegram/{telegramId}/request/{tutorId}")
+    fun createTutorRequest(@PathVariable tutorId: UUID, @PathVariable telegramId: Long): ResponseEntity<*> {
+        val tutor = tutorCrudService.getById(tutorId) ?:
+            throw EntityNotFoundException(tutorId, "Tutor")
+        val student = userCrudService.getTelegramUserByTelegramId(telegramId) ?:
+            throw EntityNotFoundException("Telegram user with telegram id $telegramId not found!")
         val request = userService.createTutorRequest(student, tutor)
         return ResponseEntity.ok(request)
     }

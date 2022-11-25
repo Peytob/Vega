@@ -59,7 +59,7 @@ class TutorResultMenuFactory(
         return Menu(buttons, message)
     }
 
-    fun makeTutorButton(tutor: TutorDto) = Button(tutor.name, uuidAsByteString(tutor.id)) { session ->
+    fun makeTutorButton(tutor: TutorDto) = Button(makeTutorName(tutor), uuidAsByteString(tutor.id)) { session ->
         val nextMenu = tutorDetailsMenuFactory.create(tutor.id)
         session.menuHistory.pushNextMenu(nextMenu)
     }

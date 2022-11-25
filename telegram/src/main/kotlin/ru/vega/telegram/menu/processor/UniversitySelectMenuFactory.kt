@@ -32,14 +32,17 @@ class UniversitySelectMenuFactory(
 
             val navigation = makePagesNavigationRow(universities) { nextPage, session ->
                 val nextMenu = create(nextPage, townId)
-                session.menuHistory.pushNextMenu(nextMenu)
+                session.menuHistory.changeCurrentMenu(nextMenu)
             }
             add(navigation)
 
             row(makeReturnButton())
         }
 
-        val message = "Какой университет тебя интересует?"
+        val message = if (universities.empty)
+                "Мы еще не добавили местные университеты! Следите за нашими обновлениями, скоро добавим!"
+            else
+                "Какой университет тебя интересует?"
 
         return Menu(buttons, message)
     }
