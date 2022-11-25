@@ -51,7 +51,7 @@ class SpecialityResultMenuFactory(
 
     private fun makeUniversitySelectButton(speciality: UniversitySpecialityDto) =
         Button("${speciality.speciality.title} (${speciality.university.shortTitle})", uuidAsByteString(speciality.id)) {
-            val nextMenu = universitySpecialityMenuFactory.create(speciality.id)
+            val nextMenu = universitySpecialityMenuFactory.create(speciality.id, it.user.id)
             it.menuHistory.pushNextMenu(nextMenu)
         }
 

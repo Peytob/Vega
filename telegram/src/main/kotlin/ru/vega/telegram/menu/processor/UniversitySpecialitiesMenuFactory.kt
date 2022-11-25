@@ -50,7 +50,7 @@ class UniversitySpecialitiesMenuFactory(
 
     private fun makeSpecialityButton(speciality: UniversitySpecialityDto) =
         Button(speciality.speciality.title, uuidAsByteString(speciality.id)) { session ->
-            val nextMenu = universitySpecialityMenuFactory.create(speciality.id)
+            val nextMenu = universitySpecialityMenuFactory.create(speciality.id, session.user.id)
             session.menuHistory.pushNextMenu(nextMenu)
         }
 }

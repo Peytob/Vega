@@ -8,9 +8,11 @@ import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Service
 import org.springframework.web.client.HttpClientErrorException
 import org.springframework.web.client.RestTemplate
+import org.springframework.web.client.postForEntity
 import org.springframework.web.client.postForObject
 import ru.vega.model.dto.user.CreateTelegramUserDto
 import ru.vega.model.dto.user.TelegramUserDto
+import ru.vega.telegram.exception.EntityNotFound
 import java.util.*
 
 @Service
@@ -41,6 +43,34 @@ class RemoteUserService(
             false
         }
     }
+
+    override fun containsBookmark(userId: Identifier, universitySpecialityId: UUID): Boolean {
+        val user = getUser(userId) ?:
+            throw EntityNotFound("User with id $userId not found")
+
+        return user.bookmarksSpecialities.contains(universitySpecialityId)
+    }
+
+    override fun deleteBookmark(userId: Identifier, universitySpecialityId: UUID) {
+        try {
+            restTemplate.delete(
+                "/user/telegram/{userId}/bookmark/{universitySpecialityId}", userId, universitySpecialityId)
+        } catch (badRequest: HttpClientErrorException.BadRequest) {
+            logger.warn("Bad request while deleting bookmark")
+        }
+    }
+
+    override fun createBookmark(userId: Identifier, universitySpecialityId: UUID) {
+        try {
+            restTemplate.postForEntity<String>(
+                "/user/telegram/{userId}/bookmark/{universitySpecialityId}", "null", userId, universitySpecialityId)
+        } catch (badRequest: HttpClientErrorException.BadRequest) {
+            logger.warn("Bad request while deleting bookmark")
+        }
+    }
+
+    override fun getBookmarks(userId: Identifier): Collection<UUID>? =
+        getUser(userId)?.bookmarksSpecialities
 
     override fun createUser(user: User) {
         logger.info("Creating user record")

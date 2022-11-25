@@ -1,5 +1,6 @@
 package ru.vega.telegram.menu.processor
 
+import dev.inmo.tgbotapi.types.UserId
 import dev.inmo.tgbotapi.utils.matrix
 import dev.inmo.tgbotapi.utils.row
 import org.springframework.beans.factory.annotation.Autowired
@@ -10,23 +11,41 @@ import ru.vega.telegram.exception.EntityNotFound
 import ru.vega.telegram.menu.Button
 import ru.vega.telegram.model.Menu
 import ru.vega.telegram.service.UniversitySpecialityService
+import ru.vega.telegram.service.UserService
 import java.util.*
 
 @Component
 class UniversitySpecialityMenuFactory(
     private val universitySpecialityService: UniversitySpecialityService,
+    private val userService: UserService,
+    private val justMessageMenuFactory: JustMessageMenuFactory
 ) : MenuFactory {
 
     // Resolution of circular reference.
     @set:Autowired
     var universityDetailsMenuFactory: UniversityDetailsMenuFactory? = null
 
-    fun create(universitySpecialityId: UUID): Menu {
+    fun create(universitySpecialityId: UUID, userId: UserId): Menu {
         val specialityDto = universitySpecialityService.getById(universitySpecialityId)
             ?: throw EntityNotFound("University speciality with ID $universitySpecialityId not found")
 
         val buttons = matrix<Button> {
             row(makeUniversityButton(specialityDto.university))
+
+            if (userService.containsBookmark(userId.chatId, specialityDto.id)) {
+                val deleteBookmark = Button("Убрать из закладок", "deleteBookmark") {
+                    userService.deleteBookmark(userId.chatId, specialityDto.id)
+                    it.menuHistory.changeCurrentMenu(justMessageMenuFactory.create("Закладка удалена!"))
+                }
+                row(deleteBookmark)
+            } else {
+                val createBookmark = Button("Добавить в закладки", "createBookmark") {
+                    userService.createBookmark(userId.chatId, specialityDto.id)
+                    it.menuHistory.changeCurrentMenu(justMessageMenuFactory.create("Закладка создана!"))
+                }
+                row(createBookmark)
+            }
+
             row(makeReturnButton())
         }
 

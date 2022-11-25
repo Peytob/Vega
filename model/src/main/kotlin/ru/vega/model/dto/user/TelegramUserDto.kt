@@ -7,5 +7,6 @@ data class TelegramUserDto(
     val telegramId: Long,
     val surname: String?,
     val forename: String?,
-    val username: String?
+    val username: String?,
+    val bookmarksSpecialities: Collection<UUID>
 )

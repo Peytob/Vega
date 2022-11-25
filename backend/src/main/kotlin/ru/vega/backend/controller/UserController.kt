@@ -61,7 +61,7 @@ class UserController(
         return ResponseEntity.ok(request)
     }
 
-    @GetMapping("/telegram/{telegramId}/bookmark/{universitySpecialityId}")
+    @PostMapping("/telegram/{telegramId}/bookmark/{universitySpecialityId}")
     fun createBookmark(@PathVariable universitySpecialityId: UUID, @PathVariable telegramId: Long) {
         val telegramUser = userCrudService.getTelegramUserByTelegramId(telegramId) ?:
         throw EntityNotFoundException("User with telegram id $telegramId not found!")
