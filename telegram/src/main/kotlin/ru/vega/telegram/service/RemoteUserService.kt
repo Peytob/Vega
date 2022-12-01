@@ -4,7 +4,6 @@ import dev.inmo.tgbotapi.types.Identifier
 import dev.inmo.tgbotapi.types.User
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Qualifier
-import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Service
 import org.springframework.web.client.HttpClientErrorException
 import org.springframework.web.client.RestTemplate
@@ -25,7 +24,8 @@ class RemoteUserService(
         private val logger = LoggerFactory.getLogger(RemoteUserService::class.java)
     }
 
-    @Cacheable("TelegramUserByTelegramId")
+    // TODO Не кешируется, так как после создания пользователя его пересоздает из-за null в кеше.
+    //  Добавить инвалидацию записи в кеше при создании юзера
     override fun getUser(telegramId: Identifier): TelegramUserDto? {
         logger.info("Updating remote telegram user entity with telegram id {} from remote", telegramId)
 
@@ -73,7 +73,7 @@ class RemoteUserService(
         getUser(userId)?.bookmarksSpecialities
 
     override fun createUser(user: User) {
-        logger.info("Creating user record")
+        logger.info("Creating user record for user {}", user)
 
         val createDto = CreateTelegramUserDto(
             user.id.chatId,

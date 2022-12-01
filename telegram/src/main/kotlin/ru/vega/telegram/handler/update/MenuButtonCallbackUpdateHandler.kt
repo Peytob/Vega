@@ -15,12 +15,14 @@ import ru.vega.telegram.model.Menu
 import ru.vega.telegram.model.entity.Session
 import ru.vega.telegram.service.MenuService
 import ru.vega.telegram.service.SessionService
+import ru.vega.telegram.service.UserService
 
 @Component
 class MenuButtonCallbackUpdateHandler(
     private val menuService: MenuService,
     private val sessionService: SessionService,
-    private val startMenuFactory: StartMenuFactory
+    private val startMenuFactory: StartMenuFactory,
+    private val userService: UserService
 ) : UpdateHandler {
 
     companion object {
@@ -83,9 +85,16 @@ class MenuButtonCallbackUpdateHandler(
     private fun handleOutOfSession(query: MessageCallbackQuery): Session {
         logger.info("Message out of session. Recreating session and return session state to start menu.")
 
+        val user = query.from
         val startMenu = startMenuFactory.create()
-        val session = sessionService.startSession(query.message, query.from)
+        val session = sessionService.startSession(query.message, user)
         session.menuHistory.pushNextMenu(startMenu)
+
+        if (userService.getUser(user.id.chatId) == null) {
+            logger.error("Unregistered user {} (id {}) out of session", user.username, user.id)
+            userService.createUser(user)
+        }
+
         return session
     }
 

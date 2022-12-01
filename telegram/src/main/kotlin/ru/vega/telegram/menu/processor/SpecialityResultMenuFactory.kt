@@ -8,7 +8,6 @@ import ru.vega.model.dto.university.UniversitySpecialityDto
 import ru.vega.model.utils.Page
 import ru.vega.model.utils.Pageable
 import ru.vega.telegram.configuration.MenuProperties
-import ru.vega.telegram.exception.EntityNotFound
 import ru.vega.telegram.menu.Button
 import ru.vega.telegram.model.Menu
 import ru.vega.telegram.model.entity.SessionSpeciality
@@ -44,7 +43,10 @@ class SpecialityResultMenuFactory(
             row(makeReturnButton())
         }
 
-        val message = "Какая специальность тебе интересна?"
+        val message = if (universitySpecialitiesPage.empty)
+                "По твоему запросы мы не нашли ни одной специальности :("
+            else
+                "Какая специальность тебе интересна?"
 
         return Menu(buttons, message)
     }
@@ -61,7 +63,7 @@ class SpecialityResultMenuFactory(
         val score = nullableScore ?: (disciplines.size * 100)
 
         val disciplinesSet = disciplinesSetService.getDisciplinesSet(disciplines)
-            ?: throw EntityNotFound("No disciplines set found for disciplines: $disciplines")
+            ?: return Page.empty()
 
         val pageable = Pageable(page, menuProperties.itemsPerPage)
         return universitySpecialityService.search(disciplinesSet, score, educationForm, pageable)
