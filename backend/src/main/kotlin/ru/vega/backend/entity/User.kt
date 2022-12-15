@@ -1,5 +1,6 @@
 package ru.vega.backend.entity
 
+import ru.vega.model.enumeration.UserRole
 import javax.persistence.*
 
 @Entity
@@ -21,4 +22,8 @@ abstract class User(
 
     @get:Column(nullable = true, updatable = false)
     open var username: String? = null,
+
+    @get:Column(name = "user_role", insertable = false, updatable = false)
+    @get:Enumerated(EnumType.STRING)
+    open var userRole: UserRole? = null
 ) : AbstractEntity()

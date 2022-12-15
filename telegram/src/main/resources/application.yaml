@@ -7,6 +7,9 @@ telegram:
 #    port:
     menu:
       items-per-page: 5
+    admins: # ID телеграма-аккаунта
+      - 1327325939 # Рома
+      - 803555618 # Настя
 
 external-links:
   backend-url: http://localhost:8080/

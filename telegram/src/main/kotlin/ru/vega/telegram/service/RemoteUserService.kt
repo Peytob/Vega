@@ -4,14 +4,21 @@ import dev.inmo.tgbotapi.types.Identifier
 import dev.inmo.tgbotapi.types.User
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Qualifier
+import org.springframework.cache.annotation.Cacheable
+import org.springframework.core.ParameterizedTypeReference
+import org.springframework.http.HttpMethod
 import org.springframework.stereotype.Service
 import org.springframework.web.client.HttpClientErrorException
 import org.springframework.web.client.RestTemplate
 import org.springframework.web.client.postForEntity
 import org.springframework.web.client.postForObject
+import org.springframework.web.util.UriComponentsBuilder
+import ru.vega.model.dto.university.UniversitySpecialityDto
 import ru.vega.model.dto.user.CreateTelegramUserDto
 import ru.vega.model.dto.user.TelegramUserDto
+import ru.vega.model.utils.Page
 import ru.vega.telegram.exception.EntityNotFound
+import ru.vega.telegram.model.enums.EducationForm
 import java.util.*
 
 @Service
@@ -67,6 +74,26 @@ class RemoteUserService(
         } catch (badRequest: HttpClientErrorException.BadRequest) {
             logger.warn("Bad request while deleting bookmark")
         }
+    }
+
+    @Cacheable("AllUsers")
+    override fun getAllUsers(): Page<TelegramUserDto> {
+        logger.info("Updating all users cache")
+
+        val uri = UriComponentsBuilder
+            .fromUriString("/user")
+            .queryParam("page", 0)
+            .queryParam("size", Int.MAX_VALUE)
+            .toUriString()
+
+        val typeReference = object : ParameterizedTypeReference<Page<TelegramUserDto>>() {}
+
+        return restTemplate.exchange(
+            uri,
+            HttpMethod.GET,
+            null,
+            typeReference
+        ).body!!
     }
 
     override fun getBookmarks(userId: Identifier): Collection<UUID>? =
