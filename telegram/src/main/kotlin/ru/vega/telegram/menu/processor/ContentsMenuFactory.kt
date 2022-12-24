@@ -18,7 +18,6 @@ class ContentsMenuFactory(
         val buttons = matrix<Button> {
             row(Button("Группа в VK", "vk", url = externalResourcesProperties.vkGroup) {})
             row(Button("Чат в Telegram", "tg", url = externalResourcesProperties.telegramChat) {})
-            row(Button("Если ты поступаешь в ССУЗ", "spo", url = externalResourcesProperties.spoBotUrl) {})
             row(makeReturnButton())
         }
 

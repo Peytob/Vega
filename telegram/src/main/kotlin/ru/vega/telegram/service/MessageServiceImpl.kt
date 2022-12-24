@@ -6,6 +6,7 @@ import dev.inmo.tgbotapi.extensions.api.send.sendMessage
 import dev.inmo.tgbotapi.types.ChatId
 import dev.inmo.tgbotapi.types.MessageIdentifier
 import dev.inmo.tgbotapi.types.ParseMode.MarkdownParseMode
+import dev.inmo.tgbotapi.types.ParseMode.ParseMode
 import dev.inmo.tgbotapi.types.buttons.InlineKeyboardMarkup
 import dev.inmo.tgbotapi.types.buttons.KeyboardMarkup
 import dev.inmo.tgbotapi.types.message.abstracts.ContentMessage
@@ -21,11 +22,12 @@ class MessageServiceImpl(
         chatId: ChatId,
         text: String,
         replyMarkup: KeyboardMarkup?,
+        parseMode: ParseMode?,
         disableWebPagePreview: Boolean
     ): ContentMessage<TextContent> =
         requestsExecutor.sendMessage(
             chatId = chatId,
-            parseMode = MarkdownParseMode,
+            parseMode = parseMode,
             text = text,
             disableWebPagePreview = disableWebPagePreview,
             replyMarkup = replyMarkup)
@@ -35,12 +37,13 @@ class MessageServiceImpl(
         messageId: MessageIdentifier,
         text: String,
         replyMarkup: InlineKeyboardMarkup?,
+        parseMode: ParseMode?,
         disableWebPagePreview: Boolean
     ): ContentMessage<TextContent> =
         requestsExecutor.editMessageText(
             chatId = chatId,
             messageId = messageId,
-            parseMode = MarkdownParseMode,
+            parseMode = parseMode,
             text = text,
             disableWebPagePreview = disableWebPagePreview,
             replyMarkup = replyMarkup)

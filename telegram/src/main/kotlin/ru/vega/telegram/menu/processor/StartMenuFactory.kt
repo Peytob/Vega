@@ -16,7 +16,8 @@ class StartMenuFactory(
     private val tutorMeetingTypeSelectMenuFactory: TutorMeetingTypeSelectMenuFactory,
     private val universitiesTownSelectMenuFactory: UniversitiesTownSelectMenuFactory,
     private val universitySpecialityBookmarksMenuFactory: UniversitySpecialitiesBookmarksMenuFactory,
-    private val contactsMenuFactory: ContentsMenuFactory
+    private val contactsMenuFactory: ContentsMenuFactory,
+    private val externalResourcesProperties: ExternalResourcesProperties
 ) : MenuFactory {
 
     fun create(): Menu {
@@ -52,11 +53,13 @@ class StartMenuFactory(
                     session.menuHistory.pushNextMenu(contactsMenuFactory.create())
                 },
 
-                Button("Мои закладки", "bookmarks") { session ->
+                Button("Избранное", "bookmarks") { session ->
                     val menu = universitySpecialityBookmarksMenuFactory.create(session.user.id)
                     session.menuHistory.pushNextMenu(menu)
                 }
             )
+
+            row(Button("Если ты поступаешь в ССУЗ", "spo", url = externalResourcesProperties.spoBotUrl) {})
         }
 
         val message =

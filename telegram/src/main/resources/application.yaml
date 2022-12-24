@@ -8,7 +8,7 @@ telegram:
     menu:
       items-per-page: 5
     admins: # ID телеграма-аккаунта
-      - 1327325939 # Рома
+      - 1327325938 # Рома
       - 803555618 # Настя
 
 external-links:

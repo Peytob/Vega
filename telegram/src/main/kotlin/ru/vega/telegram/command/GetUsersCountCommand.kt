@@ -1,8 +1,10 @@
 package ru.vega.telegram.command
 
+import dev.inmo.tgbotapi.types.ParseMode.HTMLParseMode
 import dev.inmo.tgbotapi.types.message.abstracts.CommonMessage
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
+import ru.vega.model.dto.user.TelegramUserDto
 import ru.vega.telegram.configuration.TelegramProperties
 import ru.vega.telegram.service.MessageService
 import ru.vega.telegram.service.UserService
@@ -25,8 +27,15 @@ class GetUsersCountCommand(
         }
 
         val allUsers = userService.getAllUsers()
-        val messageText = "Общее количество пользователей в БД: ${allUsers.totalElements}"
-        messageService.sendMessage(message.chat.id, messageText)
+        val userListMessages = allUsers
+            .content
+            .mapNotNull(TelegramUserDto::username)
+            .chunked(50)
+            .map { users -> users.joinToString("; ") }
+
+        messageService.sendMessage(message.chat.id, "Общее количество пользователей в БД: ${allUsers.totalElements}")
+        userListMessages.forEach { messageText ->
+            messageService.sendMessage(message.chat.id, messageText, parseMode = HTMLParseMode) }
     }
 
     override fun getCommandString() = "/users"
