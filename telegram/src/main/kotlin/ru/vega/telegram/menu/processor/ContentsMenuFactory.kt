@@ -17,7 +17,8 @@ class ContentsMenuFactory(
     fun create(): Menu {
         val buttons = matrix<Button> {
             row(Button("Группа в VK", "vk", url = externalResourcesProperties.vkGroup) {})
-            row(Button("Чат в Telegram", "tg", url = externalResourcesProperties.telegramChat) {})
+            row(Button("Наш Telegram-канал", "tg", url = externalResourcesProperties.telegramSuggestionChat) {})
+            row(Button("Чат вопросов и предложений в Telegram", "tg", url = externalResourcesProperties.telegramSuggestionChat) {})
             row(makeReturnButton())
         }
 

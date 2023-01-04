@@ -14,8 +14,10 @@ telegram:
 external-links:
   backend-url: http://localhost:8080/
   vk-group: https://vk.com/vega_bot
-  telegram-chat: https://t.me/+Xu730w6PuTliMjBi
+  telegram-vega-chat: https://t.me/vegajn
+  telegram-suggestion-chat: https://t.me/+Xu730w6PuTliMjBi
   spo-bot-url: https://t.me/VegaSPO_bot
+  service-contact: https://t.me/kuanpa
 
 cache.duration: # Duration of caches.
   session: 10m

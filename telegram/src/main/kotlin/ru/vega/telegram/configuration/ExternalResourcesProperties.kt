@@ -9,6 +9,8 @@ import java.net.URI
 data class ExternalResourcesProperties(
     val backendUrl: URI,
     val spoBotUrl: URI,
-    val telegramChat: URI,
-    val vkGroup: URI
+    val telegramSuggestionChat: URI,
+    val telegramVegaChat: URI,
+    val vkGroup: URI,
+    val serviceContact: URI
 )

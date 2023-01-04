@@ -17,6 +17,7 @@ class StartMenuFactory(
     private val universitiesTownSelectMenuFactory: UniversitiesTownSelectMenuFactory,
     private val universitySpecialityBookmarksMenuFactory: UniversitySpecialitiesBookmarksMenuFactory,
     private val contactsMenuFactory: ContentsMenuFactory,
+    private val servicesMenuFactory: ServicesMenuFactory,
     private val externalResourcesProperties: ExternalResourcesProperties
 ) : MenuFactory {
 
@@ -60,6 +61,11 @@ class StartMenuFactory(
             )
 
             row(Button("Если ты поступаешь в ССУЗ", "spo", url = externalResourcesProperties.spoBotUrl) {})
+
+            row(Button("Наши услуги", "services") { session ->
+                val menu = servicesMenuFactory.create(externalResourcesProperties.serviceContact)
+                session.menuHistory.pushNextMenu(menu)
+            })
         }
 
         val message =

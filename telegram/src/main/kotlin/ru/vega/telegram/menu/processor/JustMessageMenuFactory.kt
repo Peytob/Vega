@@ -9,9 +9,10 @@ import ru.vega.telegram.model.Menu
 @Component
 class JustMessageMenuFactory : MenuFactory {
 
-    fun create(message: String): Menu {
+    fun create(message: String, additionalButtons: List<Button> = emptyList()): Menu {
 
         val buttons = matrix<Button> {
+            additionalButtons.forEach(::row)
             row(makeReturnButton())
         }
 
