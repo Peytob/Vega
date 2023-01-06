@@ -1,4 +1,4 @@
-package ru.vega.backend.controller
+package ru.vega.backend.controller.higher
 
 import org.apache.logging.log4j.util.Strings.EMPTY
 import org.springframework.data.domain.Page
@@ -15,8 +15,8 @@ import java.util.*
 import javax.validation.constraints.Min
 
 @RestController
-@RequestMapping("/speciality")
-class SpecialityController(
+@RequestMapping("/higher/speciality")
+class HigherSpecialityController(
     private val specialityCrudService: SpecialityCrudService,
     private val specialityMapper: SpecialityMapper
 ) {

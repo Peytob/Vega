@@ -1,4 +1,4 @@
-package ru.vega.backend.controller
+package ru.vega.backend.controller.higher
 
 import org.apache.logging.log4j.util.Strings
 import org.springframework.data.domain.Page
@@ -17,8 +17,8 @@ import java.util.*
 import javax.validation.constraints.Min
 
 @RestController
-@RequestMapping("/university")
-class UniversityController(
+@RequestMapping("/higher/university")
+class HigherUniversityController(
     private val universityCrudService: UniversityCrudService,
     private val universityMapper: UniversityMapper,
     private val universitySpecialityCrudService: UniversitySpecialityCrudService,

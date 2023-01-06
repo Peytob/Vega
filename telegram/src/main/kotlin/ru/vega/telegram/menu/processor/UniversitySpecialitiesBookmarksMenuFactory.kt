@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component
 import ru.vega.telegram.exception.EntityNotFound
 import ru.vega.telegram.menu.Button
 import ru.vega.telegram.model.Menu
+import ru.vega.telegram.service.SpecialityService
 import ru.vega.telegram.service.UniversitySpecialityService
 import ru.vega.telegram.service.UserService
 
@@ -15,6 +16,7 @@ import ru.vega.telegram.service.UserService
 class UniversitySpecialitiesBookmarksMenuFactory(
     private val userService: UserService,
     private val universitySpecialityService: UniversitySpecialityService,
+    private val specialityService: SpecialityService,
     private val universitySpecialityMenuFactory: UniversitySpecialityMenuFactory
 ) : MenuFactory {
 
@@ -26,18 +28,23 @@ class UniversitySpecialitiesBookmarksMenuFactory(
         val userBookmarks = userService.getBookmarks(userId.chatId) ?: throw EntityNotFound("User with id $userId not found")
 
         val buttons = matrix<Button> {
-            userBookmarks.map {
-                val speciality = universitySpecialityService.getById(it) ?: run {
-                    logger.error("University speciality not found...")
-                    return@map null
+            userBookmarks.mapNotNull {
+                val universitySpeciality = universitySpecialityService.getById(it) ?: run {
+                    logger.error("University speciality {} not found", it)
+                    return@mapNotNull null
                 }
-                Button(speciality.speciality.title, uuidAsByteString(speciality.id)) { session ->
+
+                val speciality = specialityService.getById(universitySpeciality.speciality) ?: run {
+                    logger.error("Speciality {} not found", universitySpeciality.speciality)
+                    return@mapNotNull null
+                }
+
+                Button(speciality.title, uuidAsByteString(speciality.id)) { session ->
                     val menu = universitySpecialityMenuFactory.create(it, session.user.id)
                     session.menuHistory.pushNextMenu(menu)
                 }
             }
-                .filterNotNull()
-                .forEach { row(it) }
+            .forEach(::row)
 
             row(makeReturnButton())
         }

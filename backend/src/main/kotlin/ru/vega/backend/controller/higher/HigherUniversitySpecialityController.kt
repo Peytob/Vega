@@ -1,4 +1,4 @@
-package ru.vega.backend.controller
+package ru.vega.backend.controller.higher
 
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
@@ -13,7 +13,7 @@ import java.util.UUID
 
 @RestController
 @RequestMapping("/universitySpeciality")
-class UniversitySpecialityController(
+class HigherUniversitySpecialityController(
     private val universitySpecialityMapper: UniversitySpecialityMapper,
     private val universitySpecialityCrudService: UniversitySpecialityCrudService
 ) {

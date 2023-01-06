@@ -4,11 +4,12 @@ import dev.inmo.tgbotapi.utils.matrix
 import dev.inmo.tgbotapi.utils.row
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.stereotype.Component
-import ru.vega.model.dto.university.UniversitySpecialityDto
+import ru.vega.model.dto.speciality.SpecialityDto
 import ru.vega.model.utils.Pageable
 import ru.vega.telegram.configuration.MenuProperties
 import ru.vega.telegram.menu.Button
 import ru.vega.telegram.model.Menu
+import ru.vega.telegram.service.SpecialityService
 import ru.vega.telegram.service.UniversitySpecialityService
 import java.util.*
 
@@ -17,6 +18,7 @@ import java.util.*
 class UniversitySpecialitiesMenuFactory(
     private val universitySpecialityService: UniversitySpecialityService,
     private val universitySpecialityMenuFactory: UniversitySpecialityMenuFactory,
+    private val specialityService: SpecialityService,
     private val menuProperties: MenuProperties
 ) : MenuFactory {
 
@@ -28,6 +30,7 @@ class UniversitySpecialitiesMenuFactory(
         val buttons = matrix<Button> {
 
             specialities.content
+                .mapNotNull { specialityService.getById(it.speciality) }
                 .map(::makeSpecialityButton)
                 .forEach { row(it) }
 
@@ -43,13 +46,13 @@ class UniversitySpecialitiesMenuFactory(
             if (specialities.empty)
                 "В данном университете специальности еще не заполнены :С"
             else
-                "Какая специальности в ${specialities.content.first().university.shortTitle} тебе интересна?"
+                "Какая специальности тебе интересна?"
 
         return Menu(buttons, message)
     }
 
-    private fun makeSpecialityButton(speciality: UniversitySpecialityDto) =
-        Button(speciality.speciality.title, uuidAsByteString(speciality.id)) { session ->
+    private fun makeSpecialityButton(speciality: SpecialityDto) =
+        Button(speciality.title, uuidAsByteString(speciality.id)) { session ->
             val nextMenu = universitySpecialityMenuFactory.create(speciality.id, session.user.id)
             session.menuHistory.pushNextMenu(nextMenu)
         }

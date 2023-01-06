@@ -1,4 +1,4 @@
-package ru.vega.backend.controller
+package ru.vega.backend.controller.higher
 
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
@@ -9,11 +9,11 @@ import ru.vega.backend.exception.EntityNotFoundException
 import ru.vega.backend.mapper.DisciplineMapper
 import ru.vega.backend.service.DisciplineCrudService
 import ru.vega.model.dto.discipline.DisciplineDto
-import java.util.UUID
+import java.util.*
 
 @RestController
-@RequestMapping("/discipline")
-class DisciplineController(
+@RequestMapping("/higher/discipline")
+class HigherDisciplineController(
     private val disciplineCrudService: DisciplineCrudService,
     private val disciplineMapper: DisciplineMapper
 ) {

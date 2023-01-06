@@ -1,14 +1,12 @@
 package ru.vega.model.dto.university
 
-import ru.vega.model.dto.discipline.DisciplinesSetDto
-import ru.vega.model.dto.speciality.SpecialityDto
-import java.util.UUID
+import java.util.*
 
 data class UniversitySpecialityDto(
     val id: UUID,
-    val speciality: SpecialityDto,
-    val university: UniversityDto,
-    val disciplinesSets: Collection<DisciplinesSetDto>,
+    val speciality: UUID,
+    val university: UUID,
+    val disciplinesSets: Collection<UUID>,
     val budgetPlaces: Int?,
     val contractPlaces: Int?,
     val budgetPassingScore: Int?,

@@ -5,11 +5,14 @@ import dev.inmo.tgbotapi.utils.matrix
 import dev.inmo.tgbotapi.utils.row
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
+import ru.vega.model.dto.speciality.SpecialityDto
 import ru.vega.model.dto.university.UniversityDto
 import ru.vega.model.dto.university.UniversitySpecialityDto
 import ru.vega.telegram.exception.EntityNotFound
 import ru.vega.telegram.menu.Button
 import ru.vega.telegram.model.Menu
+import ru.vega.telegram.service.SpecialityService
+import ru.vega.telegram.service.UniversityService
 import ru.vega.telegram.service.UniversitySpecialityService
 import ru.vega.telegram.service.UserService
 import java.util.*
@@ -18,6 +21,8 @@ import java.util.*
 class UniversitySpecialityMenuFactory(
     private val universitySpecialityService: UniversitySpecialityService,
     private val userService: UserService,
+    private val specialityService: SpecialityService,
+    private val universityService: UniversityService,
     private val justMessageMenuFactory: JustMessageMenuFactory
 ) : MenuFactory {
 
@@ -26,21 +31,27 @@ class UniversitySpecialityMenuFactory(
     var universityDetailsMenuFactory: UniversityDetailsMenuFactory? = null
 
     fun create(universitySpecialityId: UUID, userId: UserId): Menu {
-        val specialityDto = universitySpecialityService.getById(universitySpecialityId)
+        val universitySpeciality = universitySpecialityService.getById(universitySpecialityId)
             ?: throw EntityNotFound("University speciality with ID $universitySpecialityId not found")
 
-        val buttons = matrix<Button> {
-            row(makeUniversityButton(specialityDto.university))
+        val university = universityService.getById(universitySpeciality.university)
+            ?: throw EntityNotFound("University with ID ${universitySpeciality.university} not found")
 
-            if (userService.containsBookmark(userId.chatId, specialityDto.id)) {
+        val speciality = specialityService.getById(universitySpeciality.speciality)
+            ?: throw EntityNotFound("Speciality with ID ${universitySpeciality.speciality} not found")
+
+        val buttons = matrix<Button> {
+            row(makeUniversityButton(university))
+
+            if (userService.containsBookmark(userId.chatId, universitySpeciality.id)) {
                 val deleteBookmark = Button("Убрать из закладок", "deleteBookmark") {
-                    userService.deleteBookmark(userId.chatId, specialityDto.id)
+                    userService.deleteBookmark(userId.chatId, universitySpeciality.id)
                     it.menuHistory.changeCurrentMenu(justMessageMenuFactory.create("Закладка удалена!"))
                 }
                 row(deleteBookmark)
             } else {
                 val createBookmark = Button("Добавить в закладки", "createBookmark") {
-                    userService.createBookmark(userId.chatId, specialityDto.id)
+                    userService.createBookmark(userId.chatId, universitySpeciality.id)
                     it.menuHistory.changeCurrentMenu(justMessageMenuFactory.create("Закладка создана!"))
                 }
                 row(createBookmark)
@@ -49,7 +60,7 @@ class UniversitySpecialityMenuFactory(
             row(makeReturnButton())
         }
 
-        val message = makeMessage(specialityDto)
+        val message = makeMessage(universitySpeciality, speciality, university)
 
         return Menu(buttons, message)
     }
@@ -62,29 +73,29 @@ class UniversitySpecialityMenuFactory(
             }
     }
 
-    private fun makeMessage(speciality: UniversitySpecialityDto): String {
-        val budgetSummary = when (speciality.budgetPlaces) {
+    private fun makeMessage(universitySpeciality: UniversitySpecialityDto, speciality: SpecialityDto, university: UniversityDto): String {
+        val budgetSummary = when (universitySpeciality.budgetPlaces) {
             0 -> "*Бюджетная основа отсутствует*"
             else -> """
-                Количество бюджетных мест: *${speciality.budgetPlaces ?: "Неизвестно"}*
-                Проходной балл на бюджетную основу: *${speciality.budgetPassingScore ?: "Неизвестно"}*
+                Количество бюджетных мест: *${universitySpeciality.budgetPlaces ?: "Неизвестно"}*
+                Проходной балл на бюджетную основу: *${universitySpeciality.budgetPassingScore ?: "Неизвестно"}*
             """.trimIndent()
         }
 
-        val contractSummary = when (speciality.contractPlaces) {
+        val contractSummary = when (universitySpeciality.contractPlaces) {
             0 -> "*Договорная основа отсутствует*"
             else -> """
-                Количество мест по договору: *${speciality.contractPlaces ?: "Неизвестно"}*
-                Проходной балл на договор: *${speciality.contractPassingScore ?: "Неизвестно"}*
-                Цена договора (очно, руб): *${parseContractPrice(speciality.intramuralPrice)}*
-                Цена договора (заочно, руб): *${parseContractPrice(speciality.absentiaPrice)}*
-                Цена договора (очно-заочно, руб): *${parseContractPrice(speciality.partTimePrice)}*
+                Количество мест по договору: *${universitySpeciality.contractPlaces ?: "Неизвестно"}*
+                Проходной балл на договор: *${universitySpeciality.contractPassingScore ?: "Неизвестно"}*
+                Цена договора (очно, руб): *${parseContractPrice(universitySpeciality.intramuralPrice)}*
+                Цена договора (заочно, руб): *${parseContractPrice(universitySpeciality.absentiaPrice)}*
+                Цена договора (очно-заочно, руб): *${parseContractPrice(universitySpeciality.partTimePrice)}*
             """.trimIndent()
         }
 
         return """
-                *Специальность ${speciality.speciality.title} в ${speciality.university.shortTitle}*.
-                ${speciality.speciality.description}
+                *Специальность ${speciality.title} в ${university.shortTitle}*.
+                ${speciality.description}
                 $budgetSummary
                 $contractSummary
             """.trimIndent()

@@ -1,4 +1,4 @@
-package ru.vega.backend.controller
+package ru.vega.backend.controller.higher
 
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
@@ -22,8 +22,8 @@ import javax.validation.constraints.Min
 import javax.validation.constraints.NotEmpty
 
 @RestController
-@RequestMapping("/disciplinesSet")
-class DisciplinesSetController(
+@RequestMapping("/higher/disciplinesSet")
+class HigherDisciplinesSetController(
     private val disciplinesSetCrudService: DisciplinesSetCrudService,
     private val disciplineCrudService: DisciplineCrudService,
     private val disciplinesSetsMapper: DisciplinesSetsMapper,

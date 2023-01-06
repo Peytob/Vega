@@ -4,20 +4,27 @@ import dev.inmo.tgbotapi.utils.matrix
 import dev.inmo.tgbotapi.utils.row
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.stereotype.Component
+import ru.vega.model.dto.speciality.SpecialityDto
+import ru.vega.model.dto.university.UniversityDto
 import ru.vega.model.dto.university.UniversitySpecialityDto
 import ru.vega.model.utils.Page
 import ru.vega.model.utils.Pageable
 import ru.vega.telegram.configuration.MenuProperties
+import ru.vega.telegram.exception.EntityNotFound
 import ru.vega.telegram.menu.Button
 import ru.vega.telegram.model.Menu
 import ru.vega.telegram.model.entity.SessionSpeciality
 import ru.vega.telegram.service.DisciplinesSetService
+import ru.vega.telegram.service.SpecialityService
+import ru.vega.telegram.service.UniversityService
 import ru.vega.telegram.service.UniversitySpecialityService
 
 @Component
 @EnableConfigurationProperties(MenuProperties::class)
 class SpecialityResultMenuFactory(
     private val universitySpecialityService: UniversitySpecialityService,
+    private val universityService: UniversityService,
+    private val specialityService: SpecialityService,
     private val disciplinesSetService: DisciplinesSetService,
     private val menuProperties: MenuProperties,
     private val universitySpecialityMenuFactory: UniversitySpecialityMenuFactory
@@ -30,7 +37,11 @@ class SpecialityResultMenuFactory(
 
             universitySpecialitiesPage.content
                 .map {
-                    makeUniversitySelectButton(it)
+                    val university = universityService.getById(it.university) ?:
+                        throw EntityNotFound("University with id ${it.university} not found")
+                    val speciality = specialityService.getById(it.speciality) ?:
+                        throw EntityNotFound("Speciality with id ${it.speciality} not found")
+                    makeUniversitySelectButton(speciality, university)
                 }
                 .forEach(::row)
 
@@ -51,8 +62,8 @@ class SpecialityResultMenuFactory(
         return Menu(buttons, message)
     }
 
-    private fun makeUniversitySelectButton(speciality: UniversitySpecialityDto) =
-        Button("${speciality.speciality.title} (${speciality.university.shortTitle})", uuidAsByteString(speciality.id)) {
+    private fun makeUniversitySelectButton(speciality: SpecialityDto, university: UniversityDto) =
+        Button("${speciality.title} (${university.shortTitle})", uuidAsByteString(speciality.id)) {
             val nextMenu = universitySpecialityMenuFactory.create(speciality.id, it.user.id)
             it.menuHistory.pushNextMenu(nextMenu)
         }
