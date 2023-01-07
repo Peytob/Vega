@@ -23,7 +23,7 @@ class RemoteDisciplinesSetService(
     override fun getDisciplinesSet(disciplinesIds: Set<UUID>): DisciplinesSetDto? {
         logger.info("Updating available disciplinesSet for set $disciplinesIds from remote")
 
-        val uri = UriComponentsBuilder.fromUriString("/disciplinesSet")
+        val uri = UriComponentsBuilder.fromUriString("/higher/disciplinesSet")
             .queryParam("discipline", disciplinesIds)
             .build()
             .toUriString()

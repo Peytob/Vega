@@ -12,7 +12,7 @@ import ru.vega.model.dto.university.UniversitySpecialityDto
 import java.util.UUID
 
 @RestController
-@RequestMapping("/universitySpeciality")
+@RequestMapping("/higher/universitySpeciality")
 class HigherUniversitySpecialityController(
     private val universitySpecialityMapper: UniversitySpecialityMapper,
     private val universitySpecialityCrudService: UniversitySpecialityCrudService

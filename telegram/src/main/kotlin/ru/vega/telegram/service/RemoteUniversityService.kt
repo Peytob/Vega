@@ -7,9 +7,7 @@ import org.springframework.core.ParameterizedTypeReference
 import org.springframework.http.HttpMethod
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestTemplate
-import org.springframework.web.client.getForObject
 import org.springframework.web.util.UriComponentsBuilder
-import ru.vega.model.dto.tutor.TutorDto
 import ru.vega.model.dto.university.UniversityDto
 import ru.vega.model.utils.Page
 import ru.vega.model.utils.Pageable
@@ -51,6 +49,6 @@ class RemoteUniversityService(
         logger.info("Updating university with id {} from remote", universityId)
 
         return restTemplate
-            .getForObject("/university/{id}", UniversityDto::class.java, universityId)
+            .getForObject("/higher/university/{id}", UniversityDto::class.java, universityId)
     }
 }

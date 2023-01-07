@@ -36,7 +36,7 @@ class RemoteUniversitySpecialityService(
                 "$score for page $pageable")
 
         val uri = UriComponentsBuilder
-            .fromUriString("/disciplinesSet/{disciplineSetId}/specialities")
+            .fromUriString("/higher/disciplinesSet/{disciplineSetId}/specialities")
             .queryParam("scoreFilter", score ?: Int.MAX_VALUE)
             .queryParam("page", pageable.page)
             .queryParam("size", pageable.size)
@@ -60,7 +60,7 @@ class RemoteUniversitySpecialityService(
         logger.info("Updating university specialities for university with id $universityId for page $pageable")
 
         val uri = UriComponentsBuilder
-            .fromUriString("/university/{universityId}/specialities")
+            .fromUriString("/higher/university/{universityId}/specialities")
             .queryParam("page", pageable.page)
             .queryParam("size", pageable.size)
             .buildAndExpand(universityId)
@@ -81,6 +81,6 @@ class RemoteUniversitySpecialityService(
         logger.info("Updating university speciality with id {} from remote", id)
 
         return restTemplate
-            .getForObject("/universitySpeciality/{id}", UniversitySpecialityDto::class.java, id)
+            .getForObject("/higher/universitySpeciality/{id}", UniversitySpecialityDto::class.java, id)
     }
 }

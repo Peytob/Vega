@@ -23,7 +23,7 @@ class RemoteDisciplinesService(
         logger.info("Getting all disciplines from remote")
 
         return restTemplate
-            .getForObject("/discipline", Array<DisciplineDto>::class.java)!!
+            .getForObject("/higher/discipline", Array<DisciplineDto>::class.java)!!
             .toList()
     }
 
@@ -32,6 +32,6 @@ class RemoteDisciplinesService(
         logger.info("Updating discipline with id {} from remote", id)
 
         return restTemplate
-            .getForObject("/discipline/{id}", DisciplineDto::class.java, id)
+            .getForObject("/higher/discipline/{id}", DisciplineDto::class.java, id)
     }
 }
