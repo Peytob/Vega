@@ -16,6 +16,9 @@ open class SpecialityEntity(
     @get:Column(columnDefinition = "TEXT")
     open var description: String? = null,
 
+    @get:ManyToOne
+    open var direction: DirectionEntity? = null,
+
     // Фактически, код специальности уже содержит информацию о том, что по уровню образования
     @get:Enumerated(EnumType.STRING)
     @get:Column(nullable = false)

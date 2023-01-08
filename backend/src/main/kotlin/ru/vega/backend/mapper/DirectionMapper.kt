@@ -2,13 +2,13 @@ package ru.vega.backend.mapper
 
 import org.mapstruct.InjectionStrategy
 import org.mapstruct.Mapper
-import ru.vega.backend.entity.SpecialityEntity
-import ru.vega.model.dto.speciality.SpecialityDto
+import ru.vega.backend.entity.DirectionEntity
+import ru.vega.model.dto.direction.DirectionDto
 
 @Mapper(
     componentModel = "spring",
     injectionStrategy = InjectionStrategy.CONSTRUCTOR)
-interface SpecialityMapper {
+interface DirectionMapper {
 
-    fun toSpecialityDto(speciality: SpecialityEntity): SpecialityDto
+    fun toDto(directionEntity: DirectionEntity): DirectionDto
 }

@@ -10,4 +10,6 @@ interface SpecialityCrudService {
     fun getById(id: UUID): SpecialityEntity?
 
     fun getPage(titleFilter: String, pageable: Pageable): Page<SpecialityEntity>
+
+    fun getPageByDirection(directionId: UUID, pageable: Pageable): Page<SpecialityEntity>
 }

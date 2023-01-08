@@ -18,4 +18,7 @@ class SpecialityCrudServiceImpl(
 
     override fun getPage(titleFilter: String, pageable: Pageable): Page<SpecialityEntity> =
         specialityRepository.findAllByTitleContainingIgnoreCase(titleFilter, pageable)
+
+    override fun getPageByDirection(directionId: UUID, pageable: Pageable): Page<SpecialityEntity> =
+        specialityRepository.findAllByDirectionContainingIgnoreCase(directionId, pageable)
 }
