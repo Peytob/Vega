@@ -9,6 +9,7 @@ import ru.vega.backend.exception.EntityNotFoundException
 import ru.vega.backend.mapper.DisciplineMapper
 import ru.vega.backend.service.DisciplineCrudService
 import ru.vega.model.dto.discipline.DisciplineDto
+import ru.vega.model.enumeration.EducationGrade
 import java.util.*
 
 @RestController
@@ -20,7 +21,7 @@ class HigherDisciplineController(
 
     @GetMapping
     fun getAll(): ResponseEntity<Collection<DisciplineDto>> {
-        val disciplines = disciplineCrudService.getAll()
+        val disciplines = disciplineCrudService.getByAllEducationGrade(EducationGrade.HIGH)
         return ResponseEntity.ok(disciplineMapper.toDisciplineDto(disciplines))
     }
 
