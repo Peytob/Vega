@@ -9,7 +9,7 @@ import ru.vega.telegram.menu.Button
 import ru.vega.telegram.model.Menu
 
 @Component
-@ConditionalOnProperty(prefix = "telegram.bot", name= ["start-menu"], havingValue = "HIGHER")
+@ConditionalOnProperty(prefix = "telegram.bot", name= ["start-menu"], havingValue = "HIGH")
 class HigherStartMenuFactory(
     private val disciplineDetailsSelectMenuFactory: DisciplineDetailsSelectMenuFactory,
     private val questionSelectMenuFactory: QuestionSelectionMenuFactory,

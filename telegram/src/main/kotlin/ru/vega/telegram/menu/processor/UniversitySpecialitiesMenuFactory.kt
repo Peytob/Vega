@@ -4,9 +4,10 @@ import dev.inmo.tgbotapi.utils.matrix
 import dev.inmo.tgbotapi.utils.row
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.stereotype.Component
-import ru.vega.model.dto.speciality.SpecialityDto
+import ru.vega.model.dto.university.UniversitySpecialityDto
 import ru.vega.model.utils.Pageable
 import ru.vega.telegram.configuration.MenuProperties
+import ru.vega.telegram.exception.EntityNotFound
 import ru.vega.telegram.menu.Button
 import ru.vega.telegram.model.Menu
 import ru.vega.telegram.service.SpecialityService
@@ -30,7 +31,6 @@ class UniversitySpecialitiesMenuFactory(
         val buttons = matrix<Button> {
 
             specialities.content
-                .mapNotNull { specialityService.getById(it.speciality) }
                 .map(::makeSpecialityButton)
                 .forEach { row(it) }
 
@@ -51,9 +51,13 @@ class UniversitySpecialitiesMenuFactory(
         return Menu(buttons, message)
     }
 
-    private fun makeSpecialityButton(speciality: SpecialityDto) =
-        Button(speciality.title, uuidAsByteString(speciality.id)) { session ->
-            val nextMenu = universitySpecialityMenuFactory.create(speciality.id, session.user.id)
+    private fun makeSpecialityButton(universitySpeciality: UniversitySpecialityDto): Button {
+        val speciality = specialityService.getById(universitySpeciality.speciality) ?:
+            throw EntityNotFound("Speciality with id ${universitySpeciality.speciality} not found")
+
+        return Button(speciality.title, uuidAsByteString(universitySpeciality.id)) { session ->
+            val nextMenu = universitySpecialityMenuFactory.create(universitySpeciality.id, session.user.id)
             session.menuHistory.pushNextMenu(nextMenu)
         }
+    }
 }

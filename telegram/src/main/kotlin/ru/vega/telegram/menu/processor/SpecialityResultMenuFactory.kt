@@ -18,6 +18,7 @@ import ru.vega.telegram.service.DisciplinesSetService
 import ru.vega.telegram.service.SpecialityService
 import ru.vega.telegram.service.UniversityService
 import ru.vega.telegram.service.UniversitySpecialityService
+import java.util.*
 
 @Component
 @EnableConfigurationProperties(MenuProperties::class)
@@ -41,7 +42,7 @@ class SpecialityResultMenuFactory(
                         throw EntityNotFound("University with id ${it.university} not found")
                     val speciality = specialityService.getById(it.speciality) ?:
                         throw EntityNotFound("Speciality with id ${it.speciality} not found")
-                    makeUniversitySelectButton(speciality, university)
+                    makeUniversitySelectButton(speciality, university, it.id)
                 }
                 .forEach(::row)
 
@@ -62,9 +63,9 @@ class SpecialityResultMenuFactory(
         return Menu(buttons, message)
     }
 
-    private fun makeUniversitySelectButton(speciality: SpecialityDto, university: UniversityDto) =
-        Button("${speciality.title} (${university.shortTitle})", uuidAsByteString(speciality.id)) {
-            val nextMenu = universitySpecialityMenuFactory.create(speciality.id, it.user.id)
+    private fun makeUniversitySelectButton(speciality: SpecialityDto, university: UniversityDto, universitySpecialityId: UUID) =
+        Button("${speciality.title} (${university.shortTitle})", uuidAsByteString(universitySpecialityId)) {
+            val nextMenu = universitySpecialityMenuFactory.create(universitySpecialityId, it.user.id)
             it.menuHistory.pushNextMenu(nextMenu)
         }
 
