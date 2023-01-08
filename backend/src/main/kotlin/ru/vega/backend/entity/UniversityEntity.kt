@@ -1,9 +1,7 @@
 package ru.vega.backend.entity
 
-import javax.persistence.Column
-import javax.persistence.Entity
-import javax.persistence.ManyToOne
-import javax.persistence.Table
+import ru.vega.model.enumeration.EducationGrade
+import javax.persistence.*
 
 @Entity
 @Table(name = "university")
@@ -25,5 +23,9 @@ open class UniversityEntity(
     open var site: String? = null,
 
     @get:ManyToOne(optional = false)
-    open var town: TownEntity? = null
+    open var town: TownEntity? = null,
+
+    @get:Column(nullable = false)
+    @get:Enumerated(EnumType.STRING)
+    open var grade: EducationGrade? = null
 ) : AbstractEntity()

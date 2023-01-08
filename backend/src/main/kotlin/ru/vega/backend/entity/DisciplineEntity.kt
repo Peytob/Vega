@@ -1,8 +1,7 @@
 package ru.vega.backend.entity
 
-import javax.persistence.Column
-import javax.persistence.Entity
-import javax.persistence.Table
+import ru.vega.model.enumeration.EducationGrade
+import javax.persistence.*
 
 @Entity
 @Table(name = "discipline")
@@ -27,5 +26,9 @@ open class DisciplineEntity(
     open var sdamGiaLink: String? = null,
 
     @get:Column(nullable = false)
-    open var descriptionYear: Int? = null
+    open var descriptionYear: Int? = null,
+
+    @get:Column(nullable = false)
+    @get:Enumerated(EnumType.STRING)
+    open var grade: EducationGrade? = null
 ) : AbstractEntity()

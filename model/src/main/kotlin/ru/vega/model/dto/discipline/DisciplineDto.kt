@@ -1,5 +1,6 @@
 package ru.vega.model.dto.discipline
 
+import ru.vega.model.enumeration.EducationGrade
 import java.util.UUID
 
 data class DisciplineDto(
@@ -10,5 +11,6 @@ data class DisciplineDto(
     val lastMiddleScore: Int,
     val passingScore: Int,
     val sdamGiaLink: String,
-    val descriptionYear: Int
+    val descriptionYear: Int,
+    val grade: EducationGrade
 )

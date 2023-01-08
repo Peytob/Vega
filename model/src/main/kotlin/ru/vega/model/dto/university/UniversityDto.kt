@@ -1,5 +1,6 @@
 package ru.vega.model.dto.university
 
+import ru.vega.model.enumeration.EducationGrade
 import java.util.*
 
 data class UniversityDto(
@@ -9,5 +10,6 @@ data class UniversityDto(
     val description: String,
     val address: String,
     val site: String,
-    val town: String
+    val town: String,
+    val grade: EducationGrade
 )
