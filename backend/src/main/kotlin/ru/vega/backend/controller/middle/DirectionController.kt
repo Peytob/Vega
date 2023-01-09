@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
+import ru.vega.backend.exception.EntityNotFoundException
 import ru.vega.backend.mapper.DirectionMapper
 import ru.vega.backend.mapper.SpecialityMapper
 import ru.vega.backend.service.DirectionCrudService
@@ -41,13 +42,15 @@ class DirectionController(
     }
 
     @GetMapping("/{id}/specialities")
-    fun getDirectionSpecialities(@PathVariable(name = "directionId") id: UUID,
+    fun getDirectionSpecialities(@PathVariable id: UUID,
             @RequestParam(value = "page", defaultValue = "0") @Min(0) page: Int,
             @RequestParam(value = "size", defaultValue = "10") @Min(1) size: Int,
             @RequestParam(value = "sortDir", defaultValue = "ASC") sortDir: Sort.Direction
     ): ResponseEntity<Page<SpecialityDto>> {
         val pageable = PageRequest.of(page, size, Sort.by(sortDir, "title"))
-        val specialityPage = specialityCrudService.getPageByDirection(id, pageable)
+        val direction = directionCrudService.getById(id) ?:
+            throw EntityNotFoundException(id, "direction")
+        val specialityPage = specialityCrudService.getPageByDirection(direction, pageable)
         val specialities = specialityPage.map(specialityMapper::toSpecialityDto)
         return ResponseEntity.ok(specialities)
     }

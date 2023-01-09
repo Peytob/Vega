@@ -7,7 +7,7 @@ import javax.persistence.*
 @Table(name = "discipline")
 open class DisciplineEntity(
 
-    @get:Column(unique = true, nullable = false)
+    @get:Column(nullable = false)
     open var title: String? = null,
 
     @get:Column(nullable = false, columnDefinition = "TEXT")

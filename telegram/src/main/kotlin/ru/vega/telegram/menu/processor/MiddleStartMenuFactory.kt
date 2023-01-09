@@ -12,7 +12,8 @@ import ru.vega.telegram.service.DisciplinesService
 @ConditionalOnProperty(prefix = "telegram.bot", name= ["start-menu"], havingValue = "MIDDLE")
 class MiddleStartMenuFactory(
     private val disciplinesService: DisciplinesService,
-    private val disciplineDetailsSelectMenuFactory: DisciplineDetailsSelectMenuFactory
+    private val disciplineDetailsSelectMenuFactory: DisciplineDetailsSelectMenuFactory,
+    private val directionSelectMenuFactory: DirectionSelectMenuFactory
 ) : StartMenuFactory {
 
     override fun create(): Menu {
@@ -22,8 +23,9 @@ class MiddleStartMenuFactory(
                     val disciplines = disciplinesService.getMiddle()
                     session.menuHistory.pushNextMenu(disciplineDetailsSelectMenuFactory.create(disciplines))
                 },
-                Button("Специальности", "speciality9") {
-
+                Button("Специальности", "speciality9") { session ->
+                    val menu = directionSelectMenuFactory.create(0)
+                    session.menuHistory.pushNextMenu(menu)
                 }
             )
         }

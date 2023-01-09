@@ -24,7 +24,7 @@ class RemoteDisciplinesService(
         logger.info("Updating discipline with id {} from remote", id)
 
         return restTemplate
-            .getForObject("/higher/discipline/{id}", DisciplineDto::class.java, id)
+            .getForObject("/discipline/{id}", DisciplineDto::class.java, id)
     }
 
     @Cacheable("MiddleDisciplines")
