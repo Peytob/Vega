@@ -7,10 +7,14 @@ import org.springframework.stereotype.Component
 import ru.vega.telegram.configuration.ExternalResourcesProperties
 import ru.vega.telegram.menu.Button
 import ru.vega.telegram.model.Menu
+import ru.vega.telegram.service.DisciplinesService
+
+// TODO Как-то декомпозировать, тут слишком много всего
 
 @Component
-@ConditionalOnProperty(prefix = "telegram.bot", name= ["start-menu"], havingValue = "HIGH")
+@ConditionalOnProperty(prefix = "telegram.bot", name= ["start-menu"], havingValue = "HIGHER")
 class HigherStartMenuFactory(
+    private val disciplinesService: DisciplinesService,
     private val disciplineDetailsSelectMenuFactory: DisciplineDetailsSelectMenuFactory,
     private val questionSelectMenuFactory: QuestionSelectionMenuFactory,
     private val specialitiesDisciplinesSelectMenuFactory: SpecialitiesDisciplinesSelectMenuFactory,
@@ -26,7 +30,8 @@ class HigherStartMenuFactory(
         val buttons = matrix<Button> {
             row(
                 Button("Предметы", "disciplines") { session ->
-                    session.menuHistory.pushNextMenu(disciplineDetailsSelectMenuFactory.create())
+                    val disciplines = disciplinesService.getHigher()
+                    session.menuHistory.pushNextMenu(disciplineDetailsSelectMenuFactory.create(disciplines))
                 },
 
                 Button("Специальности", "specialities") { session ->

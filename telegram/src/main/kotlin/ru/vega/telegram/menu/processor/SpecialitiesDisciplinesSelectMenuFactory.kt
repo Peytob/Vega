@@ -15,7 +15,7 @@ class SpecialitiesDisciplinesSelectMenuFactory(
 ) : MenuFactory {
 
     fun create(selectedDisciplines: Collection<UUID>): Menu {
-        val disciplines = disciplinesService.getAll()
+        val disciplines = disciplinesService.getHigher()
 
         val buttons = matrix<Button> {
             makeDisciplinesButtonsMatrix(disciplines, selectedDisciplines) { discipline, session ->

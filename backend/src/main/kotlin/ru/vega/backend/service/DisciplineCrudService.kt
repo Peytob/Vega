@@ -11,4 +11,5 @@ interface DisciplineCrudService {
     fun getById(id: UUID): DisciplineEntity?
 
     fun getByAllEducationGrade(educationGrade: EducationGrade): Collection<DisciplineEntity>
+    fun getAll(): Collection<DisciplineEntity>
 }

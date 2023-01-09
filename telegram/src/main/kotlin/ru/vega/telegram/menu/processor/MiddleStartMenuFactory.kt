@@ -6,18 +6,21 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.stereotype.Component
 import ru.vega.telegram.menu.Button
 import ru.vega.telegram.model.Menu
+import ru.vega.telegram.service.DisciplinesService
 
 @Component
 @ConditionalOnProperty(prefix = "telegram.bot", name= ["start-menu"], havingValue = "MIDDLE")
 class MiddleStartMenuFactory(
-//    private val d
+    private val disciplinesService: DisciplinesService,
+    private val disciplineDetailsSelectMenuFactory: DisciplineDetailsSelectMenuFactory
 ) : StartMenuFactory {
 
     override fun create(): Menu {
         val buttons = matrix<Button> {
             row(
-                Button("Предметы", "disciplines9") {
-
+                Button("Предметы", "disciplines9") { session ->
+                    val disciplines = disciplinesService.getMiddle()
+                    session.menuHistory.pushNextMenu(disciplineDetailsSelectMenuFactory.create(disciplines))
                 },
                 Button("Специальности", "speciality9") {
 

@@ -5,7 +5,9 @@ import java.util.UUID
 
 interface DisciplinesService {
 
-    fun getAll(): Collection<DisciplineDto>
-
     fun getById(id: UUID): DisciplineDto?
+
+    fun getHigher(): Collection<DisciplineDto>
+
+    fun getMiddle(): Collection<DisciplineDto>
 }

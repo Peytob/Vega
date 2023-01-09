@@ -15,6 +15,9 @@ class DisciplineCrudServiceImpl(
     override fun getByAllEducationGrade(educationGrade: EducationGrade): Collection<DisciplineEntity> =
         disciplineRepository.findAllByGrade(educationGrade)
 
+    override fun getAll(): Collection<DisciplineEntity> =
+        disciplineRepository.findAll()
+
     override fun getById(id: UUID): DisciplineEntity? =
         disciplineRepository.findByIdOrNull(id)
 

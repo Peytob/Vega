@@ -1,10 +1,7 @@
-package ru.vega.backend.controller.higher
+package ru.vega.backend.controller
 
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 import ru.vega.backend.exception.EntityNotFoundException
 import ru.vega.backend.mapper.DisciplineMapper
 import ru.vega.backend.service.DisciplineCrudService
@@ -13,15 +10,20 @@ import ru.vega.model.enumeration.EducationGrade
 import java.util.*
 
 @RestController
-@RequestMapping("/higher/discipline")
-class HigherDisciplineController(
+@RequestMapping("/discipline")
+class DisciplineController(
     private val disciplineCrudService: DisciplineCrudService,
     private val disciplineMapper: DisciplineMapper
 ) {
 
     @GetMapping
-    fun getAll(): ResponseEntity<Collection<DisciplineDto>> {
-        val disciplines = disciplineCrudService.getByAllEducationGrade(EducationGrade.HIGH)
+    fun getAll(@RequestParam(required = false) filter: EducationGrade?): ResponseEntity<Collection<DisciplineDto>> {
+        val disciplines = if (filter != null) {
+            disciplineCrudService.getByAllEducationGrade(filter)
+        } else {
+            disciplineCrudService.getAll()
+        }
+
         return ResponseEntity.ok(disciplineMapper.toDisciplineDto(disciplines))
     }
 

@@ -17,7 +17,7 @@ class TutorSelectDisciplineMenuFactory(
 
     fun create(): Menu {
 
-        val disciplines = disciplinesService.getAll()
+        val disciplines = disciplinesService.getHigher()
 
         val buttons = matrix<Button> {
             makeDisciplinesButtonsMatrix(disciplines) { discipline, session ->
