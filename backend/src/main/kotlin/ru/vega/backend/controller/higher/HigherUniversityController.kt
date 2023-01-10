@@ -4,8 +4,10 @@ import org.apache.logging.log4j.util.Strings
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import org.springframework.web.server.ResponseStatusException
 import ru.vega.backend.exception.EntityNotFoundException
 import ru.vega.backend.mapper.UniversityMapper
 import ru.vega.backend.mapper.UniversitySpecialityMapper
@@ -13,6 +15,7 @@ import ru.vega.backend.service.UniversityCrudService
 import ru.vega.backend.service.UniversitySpecialityCrudService
 import ru.vega.model.dto.university.UniversityDto
 import ru.vega.model.dto.university.UniversitySpecialityDto
+import ru.vega.model.enumeration.EducationGrade
 import java.util.*
 import javax.validation.constraints.Min
 
@@ -32,7 +35,7 @@ class HigherUniversityController(
             @RequestParam(value = "sortDir", defaultValue = "ASC") sortDir: Sort.Direction
     ): ResponseEntity<Page<UniversityDto>> {
         val pageable = PageRequest.of(page, size, Sort.by(sortDir, "title"))
-        val universitiesEntitiesPage = universityCrudService.getPage(titleFilter, pageable)
+        val universitiesEntitiesPage = universityCrudService.getPage(titleFilter, pageable, EducationGrade.HIGH)
         val universities = universitiesEntitiesPage.map(universityMapper::toDto)
         return ResponseEntity.ok(universities)
     }
@@ -41,6 +44,11 @@ class HigherUniversityController(
     fun getUniversity(@PathVariable id: UUID): ResponseEntity<UniversityDto> {
         val university = universityCrudService.getById(id) ?:
             throw EntityNotFoundException(id, "university")
+
+        if (university.grade != EducationGrade.HIGH) {
+            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "This is not high grade university")
+        }
+
         return ResponseEntity.ok(universityMapper.toDto(university))
     }
 

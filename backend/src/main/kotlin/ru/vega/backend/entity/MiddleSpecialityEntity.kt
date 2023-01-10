@@ -14,7 +14,11 @@ open class MiddleSpecialityEntity(
     @get:ManyToOne(optional = false)
     open var university: UniversityEntity,
 
-    open var middleScore: Int? = null,
+    open var grade9acceptance: Boolean,
+
+    open var grade11acceptance: Boolean,
+
+    open var middleScore: Float? = null,
 
     open var budgetPlaces: Int? = null,
 

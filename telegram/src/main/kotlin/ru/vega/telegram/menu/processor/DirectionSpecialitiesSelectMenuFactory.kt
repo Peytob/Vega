@@ -13,6 +13,7 @@ import ru.vega.telegram.service.SpecialityService
 @Component
 class DirectionSpecialitiesSelectMenuFactory(
     private val specialityService: SpecialityService,
+    private val directionSpecialitiesMenuFactory: DirectionSpecialitiesMenuFactory,
     private val menuProperties: MenuProperties
 ) : MenuFactory {
 
