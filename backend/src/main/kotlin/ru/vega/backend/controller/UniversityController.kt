@@ -1,4 +1,4 @@
-package ru.vega.backend.controller.higher
+package ru.vega.backend.controller
 
 import org.apache.logging.log4j.util.Strings
 import org.springframework.data.domain.Page
@@ -20,8 +20,8 @@ import java.util.*
 import javax.validation.constraints.Min
 
 @RestController
-@RequestMapping("/higher/university")
-class HigherUniversityController(
+@RequestMapping("/university")
+class UniversityController(
     private val universityCrudService: UniversityCrudService,
     private val universityMapper: UniversityMapper,
     private val universitySpecialityCrudService: UniversitySpecialityCrudService,
@@ -30,12 +30,18 @@ class HigherUniversityController(
 
     @GetMapping
     fun get(@RequestParam(defaultValue = Strings.EMPTY) titleFilter: String,
+            @RequestParam(required = false) gradeFilter: EducationGrade?,
             @RequestParam(value = "page", defaultValue = "0") @Min(0) page: Int,
             @RequestParam(value = "size", defaultValue = "10") @Min(1) size: Int,
             @RequestParam(value = "sortDir", defaultValue = "ASC") sortDir: Sort.Direction
     ): ResponseEntity<Page<UniversityDto>> {
         val pageable = PageRequest.of(page, size, Sort.by(sortDir, "title"))
-        val universitiesEntitiesPage = universityCrudService.getPage(titleFilter, pageable, EducationGrade.HIGH)
+        val universitiesEntitiesPage = if (gradeFilter != null) {
+            universityCrudService.getPage(titleFilter, pageable, gradeFilter)
+        } else {
+            universityCrudService.getPage(titleFilter, pageable)
+        }
+
         val universities = universitiesEntitiesPage.map(universityMapper::toDto)
         return ResponseEntity.ok(universities)
     }
@@ -45,14 +51,10 @@ class HigherUniversityController(
         val university = universityCrudService.getById(id) ?:
             throw EntityNotFoundException(id, "university")
 
-        if (university.grade != EducationGrade.HIGH) {
-            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "This is not high grade university")
-        }
-
         return ResponseEntity.ok(universityMapper.toDto(university))
     }
 
-    @GetMapping("/{id}/specialities")
+    @GetMapping("/{id}/highSpecialities")
     fun getSpecialities(@PathVariable id: UUID,
                         @RequestParam(value = "page", defaultValue = "0") @Min(0) page: Int,
                         @RequestParam(value = "size", defaultValue = "10") @Min(1) size: Int,

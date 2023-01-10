@@ -44,11 +44,11 @@ class RemoteUniversityService(
         ).body!!
     }
 
-    @Cacheable("Universities")
+    @Cacheable("HighGradeUniversities")
     override fun getById(universityId: UUID): UniversityDto? {
         logger.info("Updating university with id {} from remote", universityId)
 
         return restTemplate
-            .getForObject("/higher/university/{id}", UniversityDto::class.java, universityId)
+            .getForObject("/university/{id}", UniversityDto::class.java, universityId)
     }
 }

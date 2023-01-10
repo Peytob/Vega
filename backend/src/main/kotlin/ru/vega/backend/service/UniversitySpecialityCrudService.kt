@@ -2,10 +2,8 @@ package ru.vega.backend.service
 
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
-import ru.vega.backend.entity.DisciplinesSetEntity
-import ru.vega.backend.entity.UniversityEntity
-import ru.vega.backend.entity.UniversitySpecialityEntity
-import java.util.UUID
+import ru.vega.backend.entity.*
+import java.util.*
 
 interface UniversitySpecialityCrudService {
 
@@ -19,4 +17,6 @@ interface UniversitySpecialityCrudService {
     fun getById(id: UUID): UniversitySpecialityEntity?
 
     fun getByUniversity(university: UniversityEntity, pageable: Pageable): Page<UniversitySpecialityEntity>
+
+    fun getMiddleByDirection(direction: DirectionEntity, pageable: Pageable): Page<MiddleSpecialityEntity>
 }

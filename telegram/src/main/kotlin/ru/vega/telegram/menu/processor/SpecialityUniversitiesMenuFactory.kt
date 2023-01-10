@@ -1,12 +1,10 @@
 package ru.vega.telegram.menu.processor
 
 import org.springframework.stereotype.Component
-import ru.vega.model.dto.direction.DirectionDto
-import ru.vega.telegram.model.Menu
 import ru.vega.telegram.service.UniversitySpecialityService
 
 @Component
-class DirectionSpecialitiesMenuFactory(
+class SpecialityUniversitiesMenuFactory(
     private val specialityService: UniversitySpecialityService
 ) : MenuFactory {
 

@@ -9,14 +9,14 @@ import javax.persistence.Table
 open class MiddleSpecialityEntity(
 
     @get:ManyToOne(optional = false)
-    open var speciality: SpecialityEntity,
+    open var speciality: SpecialityEntity? = null,
 
     @get:ManyToOne(optional = false)
-    open var university: UniversityEntity,
+    open var university: UniversityEntity? = null,
 
-    open var grade9acceptance: Boolean,
+    open var grade9acceptance: Boolean? = null,
 
-    open var grade11acceptance: Boolean,
+    open var grade11acceptance: Boolean? = null,
 
     open var middleScore: Float? = null,
 

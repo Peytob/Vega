@@ -3,7 +3,9 @@ package ru.vega.backend.mapper
 import org.mapstruct.InjectionStrategy
 import org.mapstruct.Mapper
 import org.mapstruct.Mapping
+import ru.vega.backend.entity.MiddleSpecialityEntity
 import ru.vega.backend.entity.UniversitySpecialityEntity
+import ru.vega.model.dto.university.MiddleSpecialityDto
 import ru.vega.model.dto.university.UniversitySpecialityDto
 
 @Mapper(
@@ -16,4 +18,8 @@ interface UniversitySpecialityMapper {
     @Mapping(target = "speciality", qualifiedByName = ["extractId"])
     @Mapping(target = "university", qualifiedByName = ["extractId"])
     fun toDto(universitySpecialityEntity: UniversitySpecialityEntity): UniversitySpecialityDto
+
+    @Mapping(target = "speciality", qualifiedByName = ["extractId"])
+    @Mapping(target = "university", qualifiedByName = ["extractId"])
+    fun toDto(middleSpecialityEntity: MiddleSpecialityEntity): MiddleSpecialityDto
 }

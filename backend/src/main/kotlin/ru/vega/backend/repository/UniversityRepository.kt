@@ -15,4 +15,6 @@ interface UniversityRepository : JpaRepository<UniversityEntity, UUID> {
     fun findAllByTitleContainingIgnoreCaseAndGrade(titleFilter: String, pageable: Pageable, grade: EducationGrade): Page<UniversityEntity>
 
     fun findByTown(town: TownEntity, pageable: Pageable): Page<UniversityEntity>
+
+    fun findAllByTitleContainingIgnoreCase(titleFilter: String, pageable: Pageable): Page<UniversityEntity>
 }

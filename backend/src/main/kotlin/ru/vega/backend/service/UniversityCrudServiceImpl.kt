@@ -18,6 +18,9 @@ class UniversityCrudServiceImpl(
     override fun getPage(titleFilter: String, pageable: Pageable, grade: EducationGrade) =
         universityRepository.findAllByTitleContainingIgnoreCaseAndGrade(titleFilter, pageable, grade)
 
+    override fun getPage(titleFilter: String, pageable: Pageable) =
+        universityRepository.findAllByTitleContainingIgnoreCase(titleFilter, pageable)
+
     override fun getById(id: UUID): UniversityEntity? =
         universityRepository.findByIdOrNull(id)
 

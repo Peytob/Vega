@@ -4,16 +4,17 @@ import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
-import ru.vega.backend.entity.DisciplinesSetEntity
-import ru.vega.backend.entity.UniversityEntity
-import ru.vega.backend.entity.UniversitySpecialityEntity
+import ru.vega.backend.entity.*
+import ru.vega.backend.repository.MiddleSpecialityRepository
 import ru.vega.backend.repository.UniversitySpecialityRepository
-import java.util.UUID
+import java.util.*
 
 @Service
 class UniversitySpecialityCrudServiceImpl(
-    private val universitySpecialityRepository: UniversitySpecialityRepository
+    private val universitySpecialityRepository: UniversitySpecialityRepository,
+    private val middleSpecialityRepository: MiddleSpecialityRepository
 ) : UniversitySpecialityCrudService {
+
     override fun search(
         disciplinesSet: DisciplinesSetEntity,
         scoreFilter: Int,
@@ -27,4 +28,7 @@ class UniversitySpecialityCrudServiceImpl(
 
     override fun getByUniversity(university: UniversityEntity, pageable: Pageable): Page<UniversitySpecialityEntity> =
         universitySpecialityRepository.findByUniversity(university, pageable)
+
+    override fun getMiddleByDirection(direction: DirectionEntity, pageable: Pageable): Page<MiddleSpecialityEntity> =
+        middleSpecialityRepository.findBySpecialityDirection(direction, pageable)
 }

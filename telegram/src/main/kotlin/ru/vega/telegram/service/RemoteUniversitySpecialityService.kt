@@ -8,7 +8,9 @@ import org.springframework.http.HttpMethod
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestTemplate
 import org.springframework.web.util.UriComponentsBuilder
+import ru.vega.model.dto.direction.DirectionDto
 import ru.vega.model.dto.discipline.DisciplinesSetDto
+import ru.vega.model.dto.university.MiddleSpecialityDto
 import ru.vega.model.dto.university.UniversitySpecialityDto
 import ru.vega.model.utils.Page
 import ru.vega.model.utils.Pageable
@@ -82,5 +84,29 @@ class RemoteUniversitySpecialityService(
 
         return restTemplate
             .getForObject("/higher/universitySpeciality/{id}", UniversitySpecialityDto::class.java, id)
+    }
+
+    @Cacheable("MiddleUniversitySpecialitiesByDirection")
+    override fun getMiddleSpecialitiesByDirection(
+        direction: DirectionDto,
+        pageable: Pageable
+    ): Page<MiddleSpecialityDto> {
+        logger.info("Updating middle university specialities for direction $direction for page $pageable")
+
+        val uri = UriComponentsBuilder
+            .fromUriString("/middle/direction/{directionId}/universitySpecialities")
+            .queryParam("page", pageable.page)
+            .queryParam("size", pageable.size)
+            .buildAndExpand(direction.id)
+            .toUriString()
+
+        val typeReference = object : ParameterizedTypeReference<Page<MiddleSpecialityDto>>() {}
+
+        return restTemplate.exchange(
+            uri,
+            HttpMethod.GET,
+            null,
+            typeReference
+        ).body!!
     }
 }

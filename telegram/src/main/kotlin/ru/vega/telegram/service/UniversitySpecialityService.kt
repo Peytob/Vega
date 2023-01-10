@@ -1,6 +1,8 @@
 package ru.vega.telegram.service
 
+import ru.vega.model.dto.direction.DirectionDto
 import ru.vega.model.dto.discipline.DisciplinesSetDto
+import ru.vega.model.dto.university.MiddleSpecialityDto
 import ru.vega.model.dto.university.UniversitySpecialityDto
 import ru.vega.model.utils.Page
 import ru.vega.model.utils.Pageable
@@ -13,4 +15,5 @@ interface UniversitySpecialityService {
     fun getUniversitySpecialities(universityId: UUID, pageable: Pageable): Page<UniversitySpecialityDto>
 
     fun getById(id: UUID): UniversitySpecialityDto?
+    fun getMiddleSpecialitiesByDirection(direction: DirectionDto, pageable: Pageable): Page<MiddleSpecialityDto>
 }

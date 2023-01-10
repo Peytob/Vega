@@ -11,7 +11,8 @@ interface UniversityCrudService {
 
     fun getPage(titleFilter: String, pageable: Pageable, grade: EducationGrade): Page<UniversityEntity>
 
-    fun getById(id: UUID): UniversityEntity?
+    fun getPage(titleFilter: String, pageable: Pageable): Page<UniversityEntity>
 
+    fun getById(id: UUID): UniversityEntity?
     fun getPageByTown(town: TownEntity, pageable: Pageable): Page<UniversityEntity>
 }
