@@ -8,14 +8,13 @@ import org.springframework.http.HttpMethod
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestTemplate
 import org.springframework.web.util.UriComponentsBuilder
-import ru.vega.model.dto.direction.DirectionDto
 import ru.vega.model.dto.discipline.DisciplinesSetDto
 import ru.vega.model.dto.university.MiddleSpecialityDto
 import ru.vega.model.dto.university.UniversitySpecialityDto
 import ru.vega.model.utils.Page
 import ru.vega.model.utils.Pageable
 import ru.vega.telegram.model.enums.EducationForm
-import java.util.UUID
+import java.util.*
 
 @Service
 class RemoteUniversitySpecialityService(
@@ -86,18 +85,19 @@ class RemoteUniversitySpecialityService(
             .getForObject("/higher/universitySpeciality/{id}", UniversitySpecialityDto::class.java, id)
     }
 
-    @Cacheable("MiddleUniversitySpecialitiesByDirection")
-    override fun getMiddleSpecialitiesByDirection(
-        direction: DirectionDto,
+    @Cacheable("MiddleSpecialitiesBySpeciality")
+    override fun getMiddleSpecialitiesBySpeciality(
+        specialityId: UUID,
         pageable: Pageable
     ): Page<MiddleSpecialityDto> {
-        logger.info("Updating middle university specialities for direction $direction for page $pageable")
+        logger.info("Updating middle university specialities for direction $specialityId for page $pageable")
 
         val uri = UriComponentsBuilder
-            .fromUriString("/middle/direction/{directionId}/universitySpecialities")
+            .fromUriString("/middle/universitySpeciality/search")
             .queryParam("page", pageable.page)
             .queryParam("size", pageable.size)
-            .buildAndExpand(direction.id)
+            .queryParam("speciality", specialityId)
+            .build()
             .toUriString()
 
         val typeReference = object : ParameterizedTypeReference<Page<MiddleSpecialityDto>>() {}

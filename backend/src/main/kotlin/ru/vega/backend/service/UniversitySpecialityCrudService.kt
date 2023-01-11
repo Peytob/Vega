@@ -17,6 +17,8 @@ interface UniversitySpecialityCrudService {
     fun getById(id: UUID): UniversitySpecialityEntity?
 
     fun getByUniversity(university: UniversityEntity, pageable: Pageable): Page<UniversitySpecialityEntity>
-
-    fun getMiddleByDirection(direction: DirectionEntity, pageable: Pageable): Page<MiddleSpecialityEntity>
+    fun getMiddleSpecialitiesPage(
+        speciality: SpecialityEntity,
+        pageable: Pageable
+    ): Page<MiddleSpecialityEntity>
 }

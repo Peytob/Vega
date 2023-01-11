@@ -15,6 +15,12 @@ class UniversitySpecialityCrudServiceImpl(
     private val middleSpecialityRepository: MiddleSpecialityRepository
 ) : UniversitySpecialityCrudService {
 
+    override fun getMiddleSpecialitiesPage(
+        speciality: SpecialityEntity,
+        pageable: Pageable
+    ): Page<MiddleSpecialityEntity> =
+        middleSpecialityRepository.findBySpeciality(speciality, pageable)
+
     override fun search(
         disciplinesSet: DisciplinesSetEntity,
         scoreFilter: Int,
@@ -28,7 +34,4 @@ class UniversitySpecialityCrudServiceImpl(
 
     override fun getByUniversity(university: UniversityEntity, pageable: Pageable): Page<UniversitySpecialityEntity> =
         universitySpecialityRepository.findByUniversity(university, pageable)
-
-    override fun getMiddleByDirection(direction: DirectionEntity, pageable: Pageable): Page<MiddleSpecialityEntity> =
-        middleSpecialityRepository.findBySpecialityDirection(direction, pageable)
 }
