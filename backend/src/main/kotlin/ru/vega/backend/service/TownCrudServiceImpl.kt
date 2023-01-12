@@ -8,7 +8,9 @@ import ru.vega.backend.entity.DistrictEntity
 import ru.vega.backend.entity.TownEntity
 import ru.vega.backend.repository.DistrictRepository
 import ru.vega.backend.repository.TownRepository
-import java.util.UUID
+import ru.vega.model.enumeration.EducationGrade
+import ru.vega.model.enumeration.TownType
+import java.util.*
 
 @Service
 class TownCrudServiceImpl(
@@ -25,6 +27,12 @@ class TownCrudServiceImpl(
     override fun getTownById(townId: UUID): TownEntity? =
         townRepository.findByIdOrNull(townId)
 
+    override fun getTownsByType(pageable: Pageable, typeFilter: TownType): Page<TownEntity> =
+        townRepository.findByType(pageable, typeFilter)
+
     override fun getDistrictPageByTown(town: TownEntity, pageable: Pageable): Page<DistrictEntity> =
         districtRepository.findByTown(town, pageable)
+
+    override fun getTownsWithUniversities(pageable: Pageable, gradeFilter: EducationGrade, townType: TownType): Page<TownEntity> =
+        townRepository.findMiddleTowns(pageable, gradeFilter, townType)
 }

@@ -10,6 +10,7 @@ import org.springframework.web.client.RestTemplate
 import org.springframework.web.util.UriComponentsBuilder
 import ru.vega.model.dto.town.DistrictDto
 import ru.vega.model.dto.town.TownDto
+import ru.vega.model.enumeration.TownType
 import ru.vega.model.utils.Page
 import ru.vega.model.utils.Pageable
 import java.util.*
@@ -57,6 +58,25 @@ class RemoteTownService(
             HttpMethod.GET,
             null,
             object : ParameterizedTypeReference<Page<DistrictDto>>() {}
+        ).body!!
+    }
+
+    @Cacheable("MiddleTownsPage")
+    override fun getMiddleTownsPage(pageable: Pageable, townType: TownType): Page<TownDto> {
+        logger.info("Updating available towns with middle grade universities for page $pageable")
+
+        val uri = UriComponentsBuilder
+            .fromUriString("/town/legacy/filtered")
+            .queryParam("page", pageable.page)
+            .queryParam("size", pageable.size)
+            .queryParam("typeFilter", townType)
+            .toUriString()
+
+        return restTemplate.exchange(
+            uri,
+            HttpMethod.GET,
+            null,
+            object : ParameterizedTypeReference<Page<TownDto>>() {}
         ).body!!
     }
 }

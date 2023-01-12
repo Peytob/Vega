@@ -4,13 +4,16 @@ import dev.inmo.tgbotapi.utils.matrix
 import dev.inmo.tgbotapi.utils.row
 import org.springframework.stereotype.Component
 import ru.vega.model.enumeration.TownType
+import ru.vega.model.utils.Pageable
+import ru.vega.telegram.configuration.MenuProperties
 import ru.vega.telegram.menu.Button
 import ru.vega.telegram.model.Menu
 import ru.vega.telegram.model.entity.Session
+import ru.vega.telegram.service.TownService
 
 @Component
 class TownTypeSelectMenyFactory(
-
+    private val selectSpecifiedTownMenuFactory: SelectSpecifiedTownMenuFactory
 ) : MenuFactory {
 
     fun create(): Menu {
@@ -44,6 +47,6 @@ class TownTypeSelectMenyFactory(
     }
 
     private fun onTownSelected(townType: TownType, session: Session) {
-
+        session.menuHistory.pushNextMenu(selectSpecifiedTownMenuFactory.create(0, townType))
     }
 }
