@@ -16,6 +16,7 @@ import ru.vega.telegram.service.UniversitySpecialityService
 class SpecialityUniversitiesMenuFactory(
     private val specialityService: UniversitySpecialityService,
     private val universityService: UniversityService,
+    private val middleSpecialityDetailsMenuFactory: MiddleSpecialityDetailsMenuFactory,
     private val menuProperties: MenuProperties
 ) : MenuFactory {
 
@@ -31,8 +32,9 @@ class SpecialityUniversitiesMenuFactory(
                     val university = universityService.getById(it.university) ?:
                         throw EntityNotFound("University with id ${it.university} not found")
 
-                    Button(university.title, uuidAsByteString(university.id)) {
-
+                    Button(university.title, uuidAsByteString(university.id)) { session ->
+                        val menu = middleSpecialityDetailsMenuFactory.create(it.id, session.user.id)
+                        session.menuHistory.pushNextMenu(menu)
                     }
                 }
                 .forEach(::row)

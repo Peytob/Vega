@@ -21,4 +21,6 @@ interface UniversitySpecialityCrudService {
         speciality: SpecialityEntity,
         pageable: Pageable
     ): Page<MiddleSpecialityEntity>
+
+    fun getMiddleById(id: UUID): MiddleSpecialityEntity?
 }

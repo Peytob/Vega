@@ -19,6 +19,7 @@ external-links:
   telegram-suggestion-chat: https://t.me/+Xu730w6PuTliMjBi
   spo-bot-url: https://t.me/VegaSPO_bot
   service-contact: https://t.me/kuanpa
+  vega-bot: https://t.me/VegaUnivers_bot
 
 cache.duration: # Duration of caches.
   session: 10m

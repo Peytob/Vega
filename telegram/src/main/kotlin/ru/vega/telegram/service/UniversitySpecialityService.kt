@@ -14,4 +14,5 @@ interface UniversitySpecialityService {
     fun getUniversitySpecialities(universityId: UUID, pageable: Pageable): Page<UniversitySpecialityDto>
     fun getById(id: UUID): UniversitySpecialityDto?
     fun getMiddleSpecialitiesBySpeciality(specialityId: UUID, pageable: Pageable): Page<MiddleSpecialityDto>
+    fun getMiddleById(universitySpecialityId: UUID): MiddleSpecialityDto?
 }

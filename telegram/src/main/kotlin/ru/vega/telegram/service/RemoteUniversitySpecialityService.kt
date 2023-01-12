@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service
 import org.springframework.web.client.RestTemplate
 import org.springframework.web.util.UriComponentsBuilder
 import ru.vega.model.dto.discipline.DisciplinesSetDto
+import ru.vega.model.dto.tutor.TutorDto
 import ru.vega.model.dto.university.MiddleSpecialityDto
 import ru.vega.model.dto.university.UniversitySpecialityDto
 import ru.vega.model.utils.Page
@@ -108,5 +109,13 @@ class RemoteUniversitySpecialityService(
             null,
             typeReference
         ).body!!
+    }
+
+    @Cacheable("MiddleSpeciality")
+    override fun getMiddleById(universitySpecialityId: UUID) : MiddleSpecialityDto? {
+        logger.info("Updating middle university speciality with id $universitySpecialityId")
+
+        return restTemplate
+            .getForObjectOrNull("/middle/universitySpeciality/{id}", MiddleSpecialityDto::class.java, universitySpecialityId)
     }
 }

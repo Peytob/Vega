@@ -21,6 +21,9 @@ class UniversitySpecialityCrudServiceImpl(
     ): Page<MiddleSpecialityEntity> =
         middleSpecialityRepository.findBySpeciality(speciality, pageable)
 
+    override fun getMiddleById(id: UUID): MiddleSpecialityEntity? =
+        middleSpecialityRepository.findByIdOrNull(id)
+
     override fun search(
         disciplinesSet: DisciplinesSetEntity,
         scoreFilter: Int,

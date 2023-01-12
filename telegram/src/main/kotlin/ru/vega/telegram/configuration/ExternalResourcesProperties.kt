@@ -12,5 +12,6 @@ data class ExternalResourcesProperties(
     val telegramSuggestionChat: URI,
     val telegramVegaChat: URI,
     val vkGroup: URI,
-    val serviceContact: URI
+    val serviceContact: URI,
+    val vegaBot: URI
 )
